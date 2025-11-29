@@ -1,0 +1,50 @@
+# ----------------------------------------
+# PYTHON VIRTUAL ENVIRONMENTS AND BUILD ARTIFACTS
+# ----------------------------------------
+# Ignore all virtual environment folders, regardless of name (venv, .venv, etc.)
+# The trailing slash (/) ensures only directories are matched.
+**/venv/
+**/.venv/
+**/venv2/
+
+# Python compiled files
+__pycache__/
+*.pyc
+
+# Python metadata/other temporary folders
+*.egg-info/
+build/
+dist/
+
+# ----------------------------------------
+# SECRETS AND LOGS
+# ----------------------------------------
+# Environment file (must be ignored wherever it is located)
+.env
+.env.*
+
+# Logs and debug files
+logs
+*.log
+npm-debug.log*
+
+# ----------------------------------------
+# NODE/FRONTEND ARTIFACTS (from existing file)
+# ----------------------------------------
+node_modules
+dist-ssr
+*.local
+
+# ----------------------------------------
+# EDITOR AND OS FILES (from existing file)
+# ----------------------------------------
+# Visual Studio Code / IDE files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
