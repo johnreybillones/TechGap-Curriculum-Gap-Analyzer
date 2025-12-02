@@ -3,7 +3,7 @@ import { FileText, ChevronDown } from 'lucide-react';
 
 export default function CurriculumGapAnalyzer() {
   const [selectedProgram, setSelectedProgram] = useState('DLSU-D CS-Intelligent Systems');
-  const [selectedCareer, setSelectedCareer] = useState('Software Engineer / Developer');
+  const [selectedCareer, setSelectedCareer] = useState('Data Scientist');
   const [isProgramOpen, setIsProgramOpen] = useState(false);
   const [isCareerOpen, setIsCareerOpen] = useState(false);
 
@@ -15,21 +15,31 @@ export default function CurriculumGapAnalyzer() {
   ];
 
   const careerOpportunities = [
-    'Software Engineer / Developer',
-    'Web Developer (Front-End, Back-End, Full-Stack)',
-    'Mobile App Developer',
-    'Game Developer',
     'Data Scientist',
-    'Machine Learning Engineer',
-    'Cybersecurity Analyst',
-    'Ethical Hacker / Penetration Tester',
-    'Security Engineer',
-    'Systems Administrator',
-    'Network Administrator',
-    'Cloud Engineer',
-    'DevOps Engineer',
-    'Database Administrator (DBA)',
-    'Database Developer'
+    'Data Analyst',
+    'Data Architect',
+    'Data Engineer',
+    'Statistics',
+    'Database Administrator',
+    'Business Analyst',
+    'Data and Analytics Manager',
+    'Machine Learning',
+    'Artificial Intelligence',
+    'Deep Learning',
+    'Business Intelligence Analyst',
+    'Data Visualization Expert',
+    'Data Quality Manager',
+    'Big Data Engineer',
+    'Data Warehousing',
+    'Technology Integration',
+    'IT Consultant',
+    'IT Systems Administrator',
+    'Cloud Architect',
+    'Technical Operations',
+    'Cloud Services Developer',
+    'Full Stack Developer',
+    'Information Security Analyst',
+    'Network Architect'
   ];
 
   return (
