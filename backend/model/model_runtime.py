@@ -1,6 +1,6 @@
 from functools import lru_cache
 from pathlib import Path
-from typing import Any
+from typing import Any, List, Optional
 
 import joblib
 import numpy as np
@@ -141,7 +141,7 @@ def get_siamese_model() -> SiameseNetwork:
 
 def _run_sklearn_feature_model(
     model: Any,
-    features: list[float],
+    features: List[float],
     model_name: str,
 ):
     """
@@ -169,7 +169,7 @@ def _run_sklearn_feature_model(
 # Public inference functions
 # ==========================
 
-def run_lr_coarse_inference(features: list[float]):
+def run_lr_coarse_inference(features: List[float]):
     """
     Inference for the coarse Logistic Regression model (real job-family labels).
     Input: 384-d SBERT embedding.
@@ -178,7 +178,7 @@ def run_lr_coarse_inference(features: list[float]):
     return _run_sklearn_feature_model(model, features, "lr_coarse")
 
 
-def run_lr_clusters_inference(features: list[float]):
+def run_lr_clusters_inference(features: List[float]):
     """
     Inference for the Logistic Regression model trained on KMeans clusters.
     Input: 384-d SBERT embedding.
@@ -187,7 +187,7 @@ def run_lr_clusters_inference(features: list[float]):
     return _run_sklearn_feature_model(model, features, "lr_clusters")
 
 
-def run_siamese_inference(features: list[float]):
+def run_siamese_inference(features: List[float]):
     """
     Project a 384-d SBERT embedding through the Siamese projector.
 
@@ -219,7 +219,7 @@ def run_siamese_inference(features: list[float]):
 def run_inference(
     model_type: str,
     *,
-    features: list[float] | None = None,
+    features: Optional[List[float]] = None,
 ):
     """
     Unified entry point for inference.
