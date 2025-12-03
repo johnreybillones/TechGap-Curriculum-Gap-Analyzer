@@ -1,0 +1,82 @@
+curriculum_track,job_title,job_cluster,score,rank_small,model,computed_at
+CS Intelligent Systems,"Data Scientist, Personalization",Cluster_1,0.9989714622497559,1,sbert+siamese_kmeans,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Research Intern,Cluster_1,0.9988883137702942,2,sbert+siamese_kmeans,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Sr. Data Scientist,Cluster_1,0.9988366365432739,3,sbert+siamese_kmeans,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Research Software Development Engineer in Artificial Intelligence (Req.
+10064)",Cluster_1,0.9988014698028564,4,sbert+siamese_kmeans,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Deep Learning Systems Engineer,Cluster_1,0.998744010925293,5,sbert+siamese_kmeans,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Research Intern - Machine Learning + Data Visualization,Cluster_1,0.9986820220947266,6,sbert+siamese_kmeans,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Sr. Software Engineer,Cluster_1,0.9986616373062134,7,sbert+siamese_kmeans,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Software Scientist I - Machine Learning & NLP,Cluster_1,0.99860018491745,8,sbert+siamese_kmeans,2025-12-02T14:09:53.935173
+CS Intelligent Systems,CTO Residency Program,Cluster_1,0.9985945224761963,9,sbert+siamese_kmeans,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Movidius Deep Learning Data Scientist,Cluster_1,0.9984859228134155,10,sbert+siamese_kmeans,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Deep Learning Compiler Engineer,Cluster_1,0.998467206954956,11,sbert+siamese_kmeans,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,Cluster_1,0.9984328150749207,12,sbert+siamese_kmeans,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,Cluster_1,0.9984263777732849,13,sbert+siamese_kmeans,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Software Engineer, Deep Learning",Cluster_1,0.9984084367752075,14,sbert+siamese_kmeans,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Movidius Deep Learning Data Scientist,Cluster_1,0.9984083771705627,15,sbert+siamese_kmeans,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",Cluster_1,0.9983989000320435,16,sbert+siamese_kmeans,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning,Cluster_1,0.9983962774276733,17,sbert+siamese_kmeans,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Principal Audio Engineer,Cluster_1,0.9983912110328674,18,sbert+siamese_kmeans,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Autonomous Driving - Sensor Data Fusion Research Engineer,Cluster_1,0.9983726739883423,19,sbert+siamese_kmeans,2025-12-02T14:09:53.935173
+CS Intelligent Systems,NLP Data Scientist,Cluster_1,0.9983574748039246,20,sbert+siamese_kmeans,2025-12-02T14:09:53.935173
+CS Game Development,.Net Web Developer- Movimento,Cluster_0,0.9980074167251587,1,sbert+siamese_kmeans,2025-12-02T14:09:54.679584
+CS Game Development,"Systems Engineer, Test and Integration",Cluster_0,0.9977588653564453,2,sbert+siamese_kmeans,2025-12-02T14:09:54.679584
+CS Game Development,Contractor - Software Developer,Cluster_0,0.9973767399787903,3,sbert+siamese_kmeans,2025-12-02T14:09:54.679584
+CS Game Development,"Software Architect, Infotainment & Cockpit",Cluster_0,0.9973763227462769,4,sbert+siamese_kmeans,2025-12-02T14:09:54.679584
+CS Game Development,"Software Architect, Infotainment & Cockpit",Cluster_0,0.9973763227462769,5,sbert+siamese_kmeans,2025-12-02T14:09:54.679584
+CS Game Development,ATSV-Product Test Architect,Cluster_0,0.9973361492156982,6,sbert+siamese_kmeans,2025-12-02T14:09:54.679584
+CS Game Development,Game Balancer,Cluster_0,0.9973004460334778,7,sbert+siamese_kmeans,2025-12-02T14:09:54.679584
+CS Game Development,User Researcher 2,Cluster_0,0.9972197413444519,8,sbert+siamese_kmeans,2025-12-02T14:09:54.679584
+CS Game Development,Product Data Management Specialist - Entry Level,Cluster_0,0.997117817401886,9,sbert+siamese_kmeans,2025-12-02T14:09:54.679584
+CS Game Development,Senior Technical Writer,Cluster_0,0.9970692992210388,10,sbert+siamese_kmeans,2025-12-02T14:09:54.679584
+CS Game Development,Full-stack Software Engineer - Java/J2EE,Cluster_0,0.9969964027404785,11,sbert+siamese_kmeans,2025-12-02T14:09:54.679584
+CS Game Development,Remote Hortonworks/Big Data Developer- Big Data Engineer,Cluster_0,0.9969125986099243,12,sbert+siamese_kmeans,2025-12-02T14:09:54.679584
+CS Game Development,Web Developer - Full Stack,Cluster_0,0.9968827366828918,13,sbert+siamese_kmeans,2025-12-02T14:09:54.679584
+CS Game Development,Machine Learning Engineer,Cluster_0,0.9966665506362915,14,sbert+siamese_kmeans,2025-12-02T14:09:54.679584
+CS Game Development,Simulation Engineer Summer Intern,Cluster_0,0.9966176152229309,15,sbert+siamese_kmeans,2025-12-02T14:09:54.679584
+CS Game Development,Full Stack J2EE,Cluster_0,0.9966156482696533,16,sbert+siamese_kmeans,2025-12-02T14:09:54.679584
+CS Game Development,Data Integration Engineer - Java,Cluster_0,0.9965881109237671,17,sbert+siamese_kmeans,2025-12-02T14:09:54.679584
+CS Game Development,RPA DEVELOPER-ROBOTIC PROCESS AUTOMATION,Cluster_0,0.9965808391571045,18,sbert+siamese_kmeans,2025-12-02T14:09:54.679584
+CS Game Development,IT – OT requirement,Cluster_0,0.9965767860412598,19,sbert+siamese_kmeans,2025-12-02T14:09:54.679584
+CS Game Development,Java Developer : Messaging/JMS Services,Cluster_0,0.996541440486908,20,sbert+siamese_kmeans,2025-12-02T14:09:54.679584
+IT Network Technology,SFDC Release Engineer,Cluster_0,0.9992901086807251,1,sbert+siamese_kmeans,2025-12-02T14:09:55.821901
+IT Network Technology,Technical Requirements Engineer 2,Cluster_0,0.999001145362854,2,sbert+siamese_kmeans,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,Cluster_0,0.9987058043479919,3,sbert+siamese_kmeans,2025-12-02T14:09:55.821901
+IT Network Technology,Technical Consultant - HCM,Cluster_0,0.998505711555481,4,sbert+siamese_kmeans,2025-12-02T14:09:55.821901
+IT Network Technology,Technical Consultant - HCM,Cluster_0,0.998505711555481,5,sbert+siamese_kmeans,2025-12-02T14:09:55.821901
+IT Network Technology,Telecom Architect (BSS),Cluster_0,0.9984765648841858,6,sbert+siamese_kmeans,2025-12-02T14:09:55.821901
+IT Network Technology,Telecom Architect (BSS),Cluster_0,0.9984765648841858,7,sbert+siamese_kmeans,2025-12-02T14:09:55.821901
+IT Network Technology,Database Administrator,Cluster_0,0.9984382390975952,8,sbert+siamese_kmeans,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,Cluster_0,0.998235821723938,9,sbert+siamese_kmeans,2025-12-02T14:09:55.821901
+IT Network Technology,Director of Enterprise Applications,Cluster_0,0.9981465339660645,10,sbert+siamese_kmeans,2025-12-02T14:09:55.821901
+IT Network Technology,Database/System Administrator,Cluster_0,0.9980146884918213,11,sbert+siamese_kmeans,2025-12-02T14:09:55.821901
+IT Network Technology,Administrator Database Infrastructure,Cluster_0,0.9979469776153564,12,sbert+siamese_kmeans,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,Cluster_0,0.9977499842643738,13,sbert+siamese_kmeans,2025-12-02T14:09:55.821901
+IT Network Technology,Data Center Engineer,Cluster_0,0.997700572013855,14,sbert+siamese_kmeans,2025-12-02T14:09:55.821901
+IT Network Technology,Python Integration Engineer,Cluster_0,0.9976266622543335,15,sbert+siamese_kmeans,2025-12-02T14:09:55.821901
+IT Network Technology,.NET Developer-Entry Level,Cluster_0,0.9974609613418579,16,sbert+siamese_kmeans,2025-12-02T14:09:55.821901
+IT Network Technology,Systems Administrator I,Cluster_0,0.9972639679908752,17,sbert+siamese_kmeans,2025-12-02T14:09:55.821901
+IT Network Technology,Solutions Architect - Oil and Gas,Cluster_0,0.9972228407859802,18,sbert+siamese_kmeans,2025-12-02T14:09:55.821901
+IT Network Technology,Administrator - Desktop Support,Cluster_0,0.9971299171447754,19,sbert+siamese_kmeans,2025-12-02T14:09:55.821901
+IT Network Technology,Administrator - Desktop Support,Cluster_0,0.9971299171447754,20,sbert+siamese_kmeans,2025-12-02T14:09:55.821901
+IT Web Development,Systems Administrator II,Cluster_0,0.9988024234771729,1,sbert+siamese_kmeans,2025-12-02T14:09:56.696856
+IT Web Development,Junior Engineer,Cluster_2,0.9975500702857971,2,sbert+siamese_kmeans,2025-12-02T14:09:56.696856
+IT Web Development,Associate Solution Architect,Cluster_0,0.9971786737442017,3,sbert+siamese_kmeans,2025-12-02T14:09:56.696856
+IT Web Development,Applications Architect (Front-end),Cluster_0,0.9970882534980774,4,sbert+siamese_kmeans,2025-12-02T14:09:56.696856
+IT Web Development,RPG Developer,Cluster_0,0.9970155358314514,5,sbert+siamese_kmeans,2025-12-02T14:09:56.696856
+IT Web Development,Senior Systems/Network Administrator (Virtualization),Cluster_0,0.9966030120849609,6,sbert+siamese_kmeans,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,Cluster_2,0.9965048432350159,7,sbert+siamese_kmeans,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,Cluster_2,0.9965048432350159,8,sbert+siamese_kmeans,2025-12-02T14:09:56.696856
+IT Web Development,"Consultant, Systems Application (Connex)",Cluster_0,0.9959250688552856,9,sbert+siamese_kmeans,2025-12-02T14:09:56.696856
+IT Web Development,Network Engineer,Cluster_0,0.995317280292511,10,sbert+siamese_kmeans,2025-12-02T14:09:56.696856
+IT Web Development,Associate Information Security Analyst,Cluster_0,0.9952703714370728,11,sbert+siamese_kmeans,2025-12-02T14:09:56.696856
+IT Web Development,Desktop Support Analyst,Cluster_2,0.9951673150062561,12,sbert+siamese_kmeans,2025-12-02T14:09:56.696856
+IT Web Development,Service Development Architect-Allstream,Cluster_0,0.9948160648345947,13,sbert+siamese_kmeans,2025-12-02T14:09:56.696856
+IT Web Development,ESD 113-CRISC Systems Analyst I and II (Student Information),Cluster_0,0.9947575330734253,14,sbert+siamese_kmeans,2025-12-02T14:09:56.696856
+IT Web Development,Middleware Developer,Cluster_0,0.9946156740188599,15,sbert+siamese_kmeans,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,Cluster_0,0.9944099187850952,16,sbert+siamese_kmeans,2025-12-02T14:09:56.696856
+IT Web Development,Junior Incident Response Analyst,Cluster_2,0.994382917881012,17,sbert+siamese_kmeans,2025-12-02T14:09:56.696856
+IT Web Development,Technical Support Specialist Intern 8 hrs- IT1823,Cluster_0,0.9939226508140564,18,sbert+siamese_kmeans,2025-12-02T14:09:56.696856
+IT Web Development,Systems Administrator I,Cluster_0,0.9934442639350891,19,sbert+siamese_kmeans,2025-12-02T14:09:56.696856
+IT Web Development,Network Engineer,Cluster_0,0.9927356243133545,20,sbert+siamese_kmeans,2025-12-02T14:09:56.696856
