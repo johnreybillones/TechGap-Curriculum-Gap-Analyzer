@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from models import JobSkill, JobRole, Skill
+from app.database import SessionLocal
+from app.models import JobSkill, JobRole, Skill
 from pydantic import BaseModel
 from typing import List
 
@@ -24,7 +24,7 @@ class JobSkillCreate(JobSkillBase):
 
 class JobSkillOut(JobSkillBase):
     class Config:
-        orm_mode = True  # or from_attributes = True on Pydantic v2
+        from_attributes = True  # Pydantic v2 (previously orm_mode)
 
 # ------------------ ROUTES ------------------
 

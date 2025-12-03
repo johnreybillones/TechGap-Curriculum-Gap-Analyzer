@@ -1,11 +1,12 @@
 from fastapi import APIRouter, HTTPException, Depends
-from typing import Annotated, Literal
+from typing_extensions import Annotated
+from typing import Literal, Union, List, Optional
 from pydantic import BaseModel, Field, field_validator, model_validator
 from sqlalchemy.orm import Session
 import json
-from database import SessionLocal
-from models import MatchResult, Embedding
-from ml.model_runtime import run_inference
+from app.database import SessionLocal
+from app.models import MatchResult, Embedding
+from model.model_runtime import run_inference
 
 router = APIRouter(tags=["Predict"])  # main.py applies /predict
 
@@ -16,9 +17,9 @@ DEFAULT_MODEL_TYPE: MODEL_TYPES = "siamese"
 
 class PredictIn(BaseModel):
     model_type: MODEL_TYPES = DEFAULT_MODEL_TYPE
-    text: str | None = None
+    text: Optional[str] = None
     features: Annotated[
-        list[float] | None,
+        Optional[List[float]],
         Field(default=None, min_length=EXPECTED_FEATURES, max_length=EXPECTED_FEATURES),
     ] = None
 
@@ -41,8 +42,8 @@ class PredictIn(BaseModel):
 
 class PredictAndSaveIn(PredictIn):
     curriculum_id: int
-    job_id: int | None = None
-    model_name: str | None = None
+    job_id: Optional[int] = None
+    model_name: Optional[str] = None
     save_embedding: bool = False
 
 

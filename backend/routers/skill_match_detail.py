@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from models import SkillMatchDetail, Curriculum, JobRole, Skill
+from app.database import SessionLocal
+from app.models import SkillMatchDetail, Curriculum, JobRole, Skill
 from pydantic import BaseModel
 from typing import List, Literal
 from datetime import datetime

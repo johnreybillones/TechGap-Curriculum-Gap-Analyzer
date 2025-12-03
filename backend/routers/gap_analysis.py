@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from models import GapAnalysis, Course, Skill
+from app.database import SessionLocal
+from app.models import GapReport, Curriculum, Skill
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import date
@@ -28,19 +28,19 @@ class GapAnalysisCreate(GapAnalysisBase):
 class GapAnalysisOut(GapAnalysisBase):
     report_id: int
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Routes
 @router.post("/", response_model=GapAnalysisOut)
 def create_report(data: GapAnalysisCreate, db: Session = Depends(get_db)):
-    course = db.query(Course).filter(Course.course_id == data.course_id).first()
+    course = db.query(Curriculum).filter(Curriculum.curriculum_id == data.course_id).first()
     if not course:
         raise HTTPException(status_code=404, detail="Course not found")
     skill = db.query(Skill).filter(Skill.skill_id == data.missing_skill_id).first()
     if not skill:
         raise HTTPException(status_code=404, detail="Skill not found")
 
-    new_report = GapAnalysis(**data.dict())
+    new_report = GapReport(**data.dict())
     db.add(new_report)
     db.commit()
     db.refresh(new_report)

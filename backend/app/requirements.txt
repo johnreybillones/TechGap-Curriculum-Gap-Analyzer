@@ -8,3 +8,4 @@ scikit-learn
 torch
 joblib
 numpy
+typing_extensions
