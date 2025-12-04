@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from app.database import SessionLocal
 from app.models import Skill
@@ -45,8 +45,12 @@ def create_skill(data: SkillCreate, db: Session = Depends(get_db)):
 
 
 @router.get("/", response_model=List[SkillOut])
-def get_all_skills(db: Session = Depends(get_db)):
-    return db.query(Skill).all()
+def get_all_skills(
+    db: Session = Depends(get_db),
+    limit: int = Query(100, ge=1, le=500, description="Max rows to return"),
+    offset: int = Query(0, ge=0, description="Rows to skip"),
+):
+    return db.query(Skill).offset(offset).limit(limit).all()
 
 
 @router.get("/{skill_id}", response_model=SkillOut)

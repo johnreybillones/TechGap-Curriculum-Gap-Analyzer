@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from app.database import SessionLocal
 from app.models import JobSkill, JobRole, Skill
@@ -56,8 +56,12 @@ def create_job_skill(data: JobSkillCreate, db: Session = Depends(get_db)):
     return new_job_skill
 
 @router.get("/", response_model=List[JobSkillOut])
-def get_all_job_skills(db: Session = Depends(get_db)):
-    return db.query(JobSkill).all()
+def get_all_job_skills(
+    db: Session = Depends(get_db),
+    limit: int = Query(100, ge=1, le=500, description="Max rows to return"),
+    offset: int = Query(0, ge=0, description="Rows to skip"),
+):
+    return db.query(JobSkill).offset(offset).limit(limit).all()
 
 @router.get("/{job_id}/{skill_id}", response_model=JobSkillOut)
 def get_job_skill(job_id: int, skill_id: int, db: Session = Depends(get_db)):

@@ -9,10 +9,12 @@ from routers import (
     skill,
     match_result,
     skill_match_detail,
+    gap_analysis,
 )
 from routers import routers as predict
 
 app = FastAPI(title="TechGap API")
+
 
 app.include_router(curriculum.router)
 app.include_router(job_role.router)
@@ -23,6 +25,7 @@ app.include_router(match_result.router)
 app.include_router(gap_report.router)
 app.include_router(skill.router)
 app.include_router(skill_match_detail.router)
+app.include_router(gap_analysis.router)
 app.include_router(predict.router, prefix="/predict", tags=["Predict"])
 
 
