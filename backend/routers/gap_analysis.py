@@ -3,6 +3,7 @@ from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.database import SessionLocal
@@ -194,3 +195,79 @@ def delete_report(report_id: int, db: Session = Depends(get_db)):
     db.delete(report)
     db.commit()
     return {"message": "GapAnalysis report deleted successfully"}
+
+
+# -----------------------
+# Options endpoint to surface only rows with data
+# -----------------------
+@router.get("/api/options")
+def get_options(db: Session = Depends(get_db)):
+    """
+    Return curriculum and job options that have associated skill match data
+    (fallback to all if none). Labels use track/course_title for curricula
+    and query/title for jobs. Duplicate labels are resolved by keeping the
+    one with the most match records.
+    """
+    # Curriculum candidates from SkillMatchDetail
+    curr_counts = (
+        db.query(
+            SkillMatchDetail.curriculum_id.label("cid"),
+            func.count().label("cnt"),
+        )
+        .group_by(SkillMatchDetail.curriculum_id)
+        .all()
+    )
+    job_counts = (
+        db.query(
+            SkillMatchDetail.job_id.label("jid"),
+            func.count().label("cnt"),
+        )
+        .group_by(SkillMatchDetail.job_id)
+        .all()
+    )
+
+    # Helper to pick best by label
+    def build_curr_options(ids_with_counts):
+        opts = {}
+        for cid, cnt in ids_with_counts:
+            row = db.query(Curriculum).filter(Curriculum.curriculum_id == cid).first()
+            if not row:
+                continue
+            label = row.track or row.course_title or f"Curriculum {cid}"
+            if label not in opts or cnt > opts[label]["count"]:
+                opts[label] = {"id": cid, "label": label, "count": cnt}
+        return list(opts.values())
+
+    def build_job_options(ids_with_counts):
+        opts = {}
+        for jid, cnt in ids_with_counts:
+            row = db.query(JobRole).filter(JobRole.job_id == jid).first()
+            if not row:
+                continue
+            label = row.query or row.title or f"Job {jid}"
+            if label not in opts or cnt > opts[label]["count"]:
+                opts[label] = {"id": jid, "label": label, "count": cnt}
+        return list(opts.values())
+
+    curriculum_options = build_curr_options(curr_counts)
+    job_options = build_job_options(job_counts)
+
+    # Fallback to all if none
+    if not curriculum_options:
+        curriculum_options = [
+            {
+                "id": c.curriculum_id,
+                "label": c.track or c.course_title or f"Curriculum {c.curriculum_id}",
+            }
+            for c in db.query(Curriculum).all()
+        ]
+    if not job_options:
+        job_options = [
+            {"id": j.job_id, "label": j.query or j.title or f"Job {j.job_id}"}
+            for j in db.query(JobRole).all()
+        ]
+
+    return {
+        "curricula": curriculum_options,
+        "jobs": job_options,
+    }
