@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FileText, ChevronDown, BarChart3, CheckCircle, AlertCircle, BookOpen } from 'lucide-react';
+import { FileText, ChevronDown, BarChart3, CheckCircle, AlertCircle, BookOpen, Target, Award } from 'lucide-react';
 
 export default function CurriculumGapAnalyzer() {
 
@@ -258,20 +258,42 @@ export default function CurriculumGapAnalyzer() {
                             <h3 className="text-2xl font-bold text-gray-900">Analysis Results</h3>
                         </div>
 
-                        {/* High Level Metrics */}
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                        {/* High Level Metrics - UPDATED GRID FOR 5 ITEMS */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-6">
+                            {/* Metric 1: Coverage (Low value - The Gap) */}
                             <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-                                <p className="text-sm text-gray-500 font-medium mb-1">Curriculum Coverage</p>
+                                <div className="flex items-center gap-2 mb-1">
+                                    <Target className="w-4 h-4 text-orange-500" />
+                                    <p className="text-sm text-gray-500 font-medium">Job Coverage</p>
+                                </div>
                                 <p className="text-3xl font-bold text-indigo-600">{results.coverage}</p>
+                                <p className="text-xs text-gray-400 mt-1">Matched / Required</p>
                             </div>
+
+                            {/* Metric 2: Relevance (High value - The Quality) - NEW */}
+                            <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm border-l-4 border-l-emerald-500">
+                                <div className="flex items-center gap-2 mb-1">
+                                    <Award className="w-4 h-4 text-emerald-500" />
+                                    <p className="text-sm text-gray-500 font-medium">Relevance</p>
+                                </div>
+                                <p className="text-3xl font-bold text-emerald-600">{results.relevance || 'N/A'}</p>
+                                <p className="text-xs text-gray-400 mt-1">Useful Course Content</p>
+                            </div>
+
+                            {/* Metric 3: Alignment */}
                             <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-                                <p className="text-sm text-gray-500 font-medium mb-1">Semantic Alignment</p>
+                                <p className="text-sm text-gray-500 font-medium mb-1">Skill Alignment</p>
                                 <p className="text-3xl font-bold text-indigo-600">{results.alignment}</p>
+                                <p className="text-xs text-gray-400 mt-1">Semantic similarity</p>
                             </div>
+
+                            {/* Metric 4: Matches */}
                             <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
                                 <p className="text-sm text-gray-500 font-medium mb-1">Matching Skills</p>
                                 <p className="text-3xl font-bold text-emerald-600">{results.matchingSkills}</p>
                             </div>
+
+                            {/* Metric 5: Gaps */}
                             <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
                                 <p className="text-sm text-gray-500 font-medium mb-1">Missing Skills</p>
                                 <p className="text-3xl font-bold text-red-500">{results.missingSkills}</p>

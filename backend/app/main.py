@@ -16,16 +16,12 @@ from routers import routers as predict
 
 app = FastAPI(title="TechGap API")
 
-# Allow local dev frontend
-origins = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-]
-
+# Allow all origins for local dev; tighten for production if needed
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_origin_regex=".*",
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
