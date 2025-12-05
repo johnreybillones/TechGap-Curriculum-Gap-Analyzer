@@ -23,6 +23,62 @@ from app.models import (
 
 router = APIRouter(tags=["Gap Analysis"])
 
+SKILL_CSV_PATH = (
+    Path(__file__).resolve().parent.parent
+    / "csvs"
+    / "generated csv from model and ung model file"
+    / "skill_match_detail.csv"
+)
+
+# In-memory caches to avoid re-reading large CSVs on every request
+_CSV_ROWS = None
+_CSV_BY_TRACK = None
+_OPTIONS_CACHE = None
+_GAP_CSV_CACHE = None
+
+# -----------------------
+# Helpers
+# -----------------------
+def load_skill_csv():
+    """Load skill_match_detail.csv once and index by lowercased track."""
+    global _CSV_ROWS, _CSV_BY_TRACK
+    if _CSV_ROWS is not None and _CSV_BY_TRACK is not None:
+        return
+    _CSV_ROWS = []
+    _CSV_BY_TRACK = {}
+    if not SKILL_CSV_PATH.exists():
+        return
+    with SKILL_CSV_PATH.open(newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            _CSV_ROWS.append(row)
+            track = row.get("curriculum_track", "")
+            key = track.lower()
+            _CSV_BY_TRACK.setdefault(key, []).append(row)
+
+
+def load_gap_csv():
+    """Load gap_report.csv once."""
+    global _GAP_CSV_CACHE
+    if _GAP_CSV_CACHE is not None:
+        return
+    gap_path = (
+        Path(__file__).resolve().parent.parent
+        / "csvs"
+        / "generated csv from model and ung model file"
+        / "gap_report.csv"
+    )
+    _GAP_CSV_CACHE = []
+    if not gap_path.exists():
+        return
+    with gap_path.open(newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        _GAP_CSV_CACHE.extend(list(reader))
+
+
+def invalidate_options_cache():
+    global _OPTIONS_CACHE
+    _OPTIONS_CACHE = None
 
 # -----------------------
 # Dependencies & Schemas
@@ -68,8 +124,8 @@ def analyze(request: AnalysisRequest, db: Session = Depends(get_db)):
        - Result: Only skills found in BOTH the Curriculum and THIS Job.
        
     2. Missing Skills:
-       - Source: Union of DB (GapReport) and CSV.
-       - Filter: Intersected with 'Target Job Skills' (from JobSkill table).
+       - Source: Union of DB (GapReport), Gap CSV, AND Skill Match CSV (status=gap).
+       - Filter: Intersected with 'Target Job Skills' (DB + CSV).
        - Result: Only skills found in THIS Job but MISSING from Curriculum.
        
     3. Metrics:
@@ -90,7 +146,27 @@ def analyze(request: AnalysisRequest, db: Session = Depends(get_db)):
         if not name: return ""
         return re.sub(r'[^a-z0-9]', '', name.lower())
 
-    # 2. Get Target Job Skills (The "Requirement List" for THIS Job)
+    # ---------------------------------------------------------
+    # PRE-CALCULATION: Identify relevant CSV rows for this Job/Track
+    # ---------------------------------------------------------
+    load_skill_csv()
+    csv_job_rows = []
+    
+    if _CSV_BY_TRACK:
+        track_label = (curriculum.track or curriculum.course_title or "").lower()
+        job_label = (job.query or job.title or "").lower()
+        
+        # Look in the specific track
+        for row in _CSV_BY_TRACK.get(track_label, []):
+            jt = row.get("job_title", "").lower()
+            # Fuzzy match: e.g. "Data Scientist" in "Senior Data Scientist"
+            if job_label and (job_label in jt or jt in job_label):
+                csv_job_rows.append(row)
+
+    # ---------------------------------------------------------
+    # STEP 2: Get Target Job Skills (The "Requirement List" for THIS Job)
+    # ---------------------------------------------------------
+    
     # Priority A: From Database
     job_skill_rows = (
         db.query(Skill.skill_name)
@@ -100,22 +176,13 @@ def analyze(request: AnalysisRequest, db: Session = Depends(get_db)):
     )
     target_job_skills_norm = {normalize_skill(r.skill_name) for r in job_skill_rows}
 
-    # Priority B: From CSV (If DB is empty)
-    csv_path_detail = Path(__file__).resolve().parent.parent / "csvs" / "generated csv from model and ung model file" / "skill_match_detail.csv"
-    
-    if not target_job_skills_norm and csv_path_detail.exists():
-        job_label = (job.query or job.title or "").lower()
-        
-        with csv_path_detail.open(newline="", encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                jt = row.get("job_title", "").lower()
-                # Loose match for job title
-                if job_label and (job_label in jt or jt in job_label):
-                    # Add ALL skills associated with this job (Matches AND Gaps)
-                    s_name = row.get("skill_name", "").strip()
-                    if s_name:
-                        target_job_skills_norm.add(normalize_skill(s_name))
+    # Priority B: Augment from CSV (ALWAYS run this to enrich sparse DB data)
+    # This reads ALL skills listed for this job in the CSV (matches, gaps, etc.)
+    # because if it's in the CSV, the job implies it requires it.
+    for row in csv_job_rows:
+        s_name = row.get("skill_name", "").strip()
+        if s_name:
+            target_job_skills_norm.add(normalize_skill(s_name))
 
     # 3. Get Curriculum Skills (DB Inventory)
     curriculum_skill_rows = (
@@ -152,32 +219,20 @@ def analyze(request: AnalysisRequest, db: Session = Depends(get_db)):
                     covered_names_norm.add(normalize_skill(s_name))
                     similarity_scores.append(d.similarity_score)
 
-    # 2. From CSV (Merge if available)
-    if csv_path_detail.exists():
-        job_label = (job.query or job.title or "").lower()
-        track_label = (curriculum.track or curriculum.course_title or "").lower()
-        
-        with csv_path_detail.open(newline="", encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                if row.get("curriculum_track", "").lower() != track_label: continue
-                
-                jt = row.get("job_title", "").lower()
-                if job_label and (job_label in jt or jt in job_label):
-                    if row.get("status", "").lower() in ("match", "partial"):
-                        s_name = row.get("skill_name", "").strip()
-                        if s_name:
-                            # Avoid duplicates via normalized check
-                            if normalize_skill(s_name) not in covered_names_norm:
-                                covered_names.add(s_name)
-                                covered_names_norm.add(normalize_skill(s_name))
-                                try:
-                                    similarity_scores.append(float(row.get("similarity_score", 0)))
-                                except:
-                                    pass
+    # 2. From CSV (Using pre-filtered rows)
+    for row in csv_job_rows:
+        if row.get("status", "").lower() in ("match", "partial"):
+            s_name = row.get("skill_name", "").strip()
+            if s_name and normalize_skill(s_name) not in covered_names_norm:
+                covered_names.add(s_name)
+                covered_names_norm.add(normalize_skill(s_name))
+                try:
+                    similarity_scores.append(float(row.get("similarity_score", 0)))
+                except Exception:
+                    pass
 
     # =========================================================
-    # PART B: POTENTIAL GAPS (Merge DB + CSV)
+    # PART B: POTENTIAL GAPS (Merge DB + Gap CSV + Match CSV)
     # =========================================================
     raw_gap_pool = set() # Stores actual names
     raw_gap_pool_norm = {} # Maps normalized -> original name
@@ -192,21 +247,28 @@ def analyze(request: AnalysisRequest, db: Session = Depends(get_db)):
                 raw_gap_pool.add(s_name)
                 raw_gap_pool_norm[normalize_skill(s_name)] = s_name
 
-    # 2. From CSV (GapReport fallback)
-    csv_path_gaps = Path(__file__).resolve().parent.parent / "csvs" / "generated csv from model and ung model file" / "gap_report.csv"
-    if csv_path_gaps.exists():
+    # 2. From GapReport CSV
+    load_gap_csv()
+    if _GAP_CSV_CACHE:
         track_label = (curriculum.track or curriculum.course_title or "").lower()
-        with csv_path_gaps.open(newline="", encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                if row.get("curriculum_track", "").lower() == track_label:
-                    rec = row.get("recommendation", "")
-                    match = re.search(r":\s*(.*?)$", rec)
-                    if match:
-                        s_name = match.group(1).strip()
-                        if normalize_skill(s_name) not in raw_gap_pool_norm:
-                            raw_gap_pool.add(s_name)
-                            raw_gap_pool_norm[normalize_skill(s_name)] = s_name
+        for row in _GAP_CSV_CACHE:
+            if row.get("curriculum_track", "").lower() == track_label:
+                rec = row.get("recommendation", "")
+                match = re.search(r":\s*(.*?)$", rec)
+                if match:
+                    s_name = match.group(1).strip()
+                    if normalize_skill(s_name) not in raw_gap_pool_norm:
+                        raw_gap_pool.add(s_name)
+                        raw_gap_pool_norm[normalize_skill(s_name)] = s_name
+
+    # 3. From Skill Match CSV (Explicit Gaps)
+    # If the CSV explicitly says "gap", we add it to the pool.
+    for row in csv_job_rows:
+        if row.get("status", "").lower() == "gap":
+            s_name = row.get("skill_name", "").strip()
+            if s_name and normalize_skill(s_name) not in raw_gap_pool_norm:
+                raw_gap_pool.add(s_name)
+                raw_gap_pool_norm[normalize_skill(s_name)] = s_name
 
     # =========================================================
     # PART C: STRICT JOB-SPECIFIC FILTERING
@@ -317,20 +379,27 @@ def delete_report(report_id: int, db: Session = Depends(get_db)):
 
 @router.get("/api/options")
 def get_options(db: Session = Depends(get_db)):
+    global _OPTIONS_CACHE
+    if _OPTIONS_CACHE is not None:
+        return _OPTIONS_CACHE
+
     curr_counts = (
         db.query(SkillMatchDetail.curriculum_id.label("cid"), func.count().label("cnt"))
-        .group_by(SkillMatchDetail.curriculum_id).all()
+        .group_by(SkillMatchDetail.curriculum_id)
+        .all()
     )
     job_counts = (
         db.query(SkillMatchDetail.job_id.label("jid"), func.count().label("cnt"))
-        .group_by(SkillMatchDetail.job_id).all()
+        .group_by(SkillMatchDetail.job_id)
+        .all()
     )
 
     def build_curr_options(ids_with_counts):
         opts = {}
         for cid, cnt in ids_with_counts:
             row = db.query(Curriculum).filter(Curriculum.curriculum_id == cid).first()
-            if not row: continue
+            if not row:
+                continue
             label = row.track or row.course_title or f"Curriculum {cid}"
             if label not in opts or cnt > opts[label]["count"]:
                 opts[label] = {"id": cid, "label": label, "count": cnt}
@@ -340,7 +409,8 @@ def get_options(db: Session = Depends(get_db)):
         opts = {}
         for jid, cnt in ids_with_counts:
             row = db.query(JobRole).filter(JobRole.job_id == jid).first()
-            if not row: continue
+            if not row:
+                continue
             label = row.query or row.title or f"Job {jid}"
             if label not in opts or cnt > opts[label]["count"]:
                 opts[label] = {"id": jid, "label": label, "count": cnt}
@@ -350,8 +420,14 @@ def get_options(db: Session = Depends(get_db)):
     job_options = build_job_options(job_counts)
 
     if not curriculum_options:
-        curriculum_options = [{"id": c.curriculum_id, "label": c.track or c.course_title} for c in db.query(Curriculum).all()]
+        curriculum_options = [
+            {"id": c.curriculum_id, "label": c.track or c.course_title}
+            for c in db.query(Curriculum).all()
+        ]
     if not job_options:
-        job_options = [{"id": j.job_id, "label": j.query or j.title} for j in db.query(JobRole).all()]
+        job_options = [
+            {"id": j.job_id, "label": j.query or j.title} for j in db.query(JobRole).all()
+        ]
 
-    return {"curricula": curriculum_options, "jobs": job_options}
+    _OPTIONS_CACHE = {"curricula": curriculum_options, "jobs": job_options}
+    return _OPTIONS_CACHE

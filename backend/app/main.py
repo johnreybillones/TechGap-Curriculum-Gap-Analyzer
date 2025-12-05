@@ -43,3 +43,14 @@ app.include_router(predict.router, prefix="/predict", tags=["Predict"])
 @app.get("/")
 def root():
     return {"message": "Curriculum Gap Analyzer API is running"}
+
+
+@app.on_event("startup")
+def preload_caches():
+    # Warm caches for faster first requests
+    try:
+        gap_analysis.load_skill_csv()
+        gap_analysis.load_gap_csv()
+        gap_analysis.invalidate_options_cache()
+    except Exception:
+        pass
