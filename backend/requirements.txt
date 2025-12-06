@@ -10,7 +10,4 @@ torch
 joblib
 numpy
 typing_extensions
-
-# JavaScript dependencies for frontend visualization
-npm
-recharts
+google-generativeai>=0.3.0

@@ -1,3 +1,6 @@
+import os
+import google.generativeai as genai
+
 from datetime import date
 from typing import List, Optional
 import re
@@ -290,3 +293,74 @@ def delete_report(report_id: int, db: Session = Depends(get_db)):
     db.delete(report)
     db.commit()
     return {"message": "Deleted"}
+
+# Initialize Gemini (Make sure you set GOOGLE_API_KEY in your environment variables)
+# If testing locally, you can temporarily hardcode it, but env var is safer.
+if os.getenv("GOOGLE_API_KEY"):
+    genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+
+class RecommendationRequest(BaseModel):
+    job_title: str
+    curriculum_title: str
+    missing_skills: List[str]
+    coverage_score: float
+
+@router.post("/api/recommend")
+def generate_recommendation(request: RecommendationRequest):
+    # Check if API key is present
+    if not os.getenv("GOOGLE_API_KEY"):
+        return {"recommendation": "⚠️ API Key missing. Please set GOOGLE_API_KEY in your backend environment."}
+
+    try:
+        # Limit skills to avoid token overflow
+        skills_list = ", ".join(request.missing_skills[:20])
+        
+        # --- UPDATED PROMPT TO FOLLOW SCOPE & DELIMITATIONS ---
+        prompt = f"""
+        Act as a Senior Curriculum Developer for the College of Information and Computer Studies (CICS).
+        
+        CONTEXT:
+        We are analyzing the alignment between the official CICS syllabi (academic reference) and industry-required skills (public job datasets) for the role of "{request.job_title}".
+        
+        DATA:
+        - Curriculum: "{request.curriculum_title}"
+        - Current Match Score: {request.coverage_score}%
+        - Critical MISSING Skills: {skills_list}
+
+        TASK:
+        Provide a strategic summary and 3 actionable recommendations to update the OFFICIAL SYLLABUS.
+
+        CONSTRAINTS (STRICTLY FOLLOW):
+        1. Focus ONLY on modifying the core subjects/syllabi (e.g., adding new topics, updating lab exercises, modernizing tools).
+        2. Do NOT suggest internships, seminars, OJT, or informal learning (these are outside the scope of this study).
+        3. Do NOT suggest General Education changes.
+        4. Keep recommendations technical and specific to the computing field.
+
+        FORMAT:
+        - Executive Summary (2-3 sentences)
+        - 3 Bulleted Recommendations (Bold the key action)
+        """
+        # -------------------------------------------------------
+        
+        # Prefer the modern SDK, fall back to legacy generate_text if GenerativeModel is unavailable
+        if hasattr(genai, "GenerativeModel"):
+            model = genai.GenerativeModel(model = genai.GenerativeModel('models/gemini-1.5-flash'))
+            response = model.generate_content(prompt)
+            text = getattr(response, "text", None) or str(response)
+        else:
+            # Legacy client in version 0.1.0rc1 (does not have GenerativeModel)
+            response = genai.generate_text(
+                model="models/text-bison-001",
+                prompt=prompt
+            )
+            text = getattr(response, "result", None)
+            if not text and isinstance(response, dict):
+                text = response.get("generated_text") or response.get("result")
+            if not text:
+                text = str(response)
+
+        return {"recommendation": text}
+        
+    except Exception as e:
+        print(f"Gemini API Error: {e}")
+        return {"recommendation": "Unable to generate AI recommendations at this time. Please try again later."}

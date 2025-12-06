@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import ReactMarkdown from 'react-markdown'; // Optional: If you want to render bolding/lists nicely
 import { 
     ChevronDown, 
     BarChart3, 
@@ -6,7 +7,9 @@ import {
     AlertCircle, 
     BookOpen, 
     Target, 
-    Layers, 
+    Layers,
+    Sparkles, // <--- New Icon
+    Loader2   // <--- Loading Icon
 } from 'lucide-react';
 import { 
     PieChart, 
@@ -17,38 +20,31 @@ import {
     XAxis, 
     YAxis, 
     CartesianGrid, 
-    Tooltip, 
     Legend, 
     ResponsiveContainer 
 } from 'recharts';
 
-// Custom Smooth Scroll Helper (Slower than native scrollIntoView)
+// Custom Smooth Scroll Helper
 const smoothScroll = (target, duration) => {
     if (!target) return;
     const targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
     const startPosition = window.pageYOffset;
-    // Subtract a little offset (80px) for the sticky header
     const distance = targetPosition - startPosition - 80; 
     let startTime = null;
 
     const animation = (currentTime) => {
         if (startTime === null) startTime = currentTime;
         const timeElapsed = currentTime - startTime;
-        
-        // Easing function: easeInOutQuad for smooth acceleration/deceleration
         const ease = (t, b, c, d) => {
             t /= d / 2;
             if (t < 1) return c / 2 * t * t + b;
             t--;
             return -c / 2 * (t * (t - 2) - 1) + b;
         };
-
         const run = ease(timeElapsed, startPosition, distance, duration);
         window.scrollTo(0, run);
-
         if (timeElapsed < duration) requestAnimationFrame(animation);
     };
-
     requestAnimationFrame(animation);
 };
 
@@ -58,6 +54,12 @@ export default function CurriculumGapAnalyzer() {
     const [showResults, setShowResults] = useState(false);
     const [results, setResults] = useState(null);
     const [loading, setLoading] = useState(false);
+    
+    // --- New AI Recommendation State ---
+    const [recommendation, setRecommendation] = useState('');
+    const [recLoading, setRecLoading] = useState(false);
+    // -----------------------------------
+
     const [error, setError] = useState('');
     const [programs, setPrograms] = useState([]);
     const [careers, setCareers] = useState([]);
@@ -68,9 +70,9 @@ export default function CurriculumGapAnalyzer() {
     const [optionsLoading, setOptionsLoading] = useState(true);
     const [optionsError, setOptionsError] = useState('');
 
-    // Ref for scroll target
     const summaryRef = useRef(null);
 
+    // ... (Keep existing useEffect for loadOptions) ...
     useEffect(() => {
         const loadOptions = async () => {
             try {
@@ -100,11 +102,16 @@ export default function CurriculumGapAnalyzer() {
         loadOptions();
     }, []);
 
+
     const handleAnalyze = async () => {
         setLoading(true);
+        setRecLoading(true); // Start AI loading
+        setRecommendation(''); // Reset previous AI result
         setError('');
         setShowResults(false);
+        
         try {
+            // 1. Run Main Analysis
             const response = await fetch(`${API_BASE}/api/analyze`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -120,15 +127,37 @@ export default function CurriculumGapAnalyzer() {
             setResults(data);
             setShowResults(true);
 
-            // Trigger custom smooth scroll with 2000ms duration (2 seconds)
+            // Scroll to results
             setTimeout(() => {
                 smoothScroll(summaryRef.current, 2000);
             }, 100);
+
+            setLoading(false); // Stop main loading
+
+            // 2. Run AI Recommendation (Chained request)
+            const aiResponse = await fetch(`${API_BASE}/api/recommend`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    job_title: selectedCareer?.label,
+                    curriculum_title: selectedProgram?.label,
+                    missing_skills: data.gaps,
+                    coverage_score: data.coverage_score
+                })
+            });
+
+            if (aiResponse.ok) {
+                const aiData = await aiResponse.json();
+                setRecommendation(aiData.recommendation);
+            } else {
+                setRecommendation("Could not fetch AI insights.");
+            }
 
         } catch (err) {
             setError(err.message);
         } finally {
             setLoading(false);
+            setRecLoading(false);
         }
     };
 
@@ -301,7 +330,6 @@ export default function CurriculumGapAnalyzer() {
                                 color="text-red-500"
                                 icon={<AlertCircle className="w-5 h-5 text-red-500" />}
                             />
-                            {/* CHANGED: Now displays Job Coverage, icon changed to BarChart3 to use existing imports */}
                             <StatCard 
                                 label="Job Coverage" 
                                 value={results.coverage} 
@@ -310,6 +338,37 @@ export default function CurriculumGapAnalyzer() {
                                 icon={<BarChart3 className="w-5 h-5 text-indigo-600" />}
                             />
                         </div>
+
+                         {/* --- NEW: AI Recommendation Section --- */}
+                         <div className="bg-gradient-to-r from-indigo-50 to-white p-6 rounded-2xl shadow-sm border border-indigo-100 mb-8 relative overflow-hidden">
+                            <div className="absolute top-0 right-0 p-4 opacity-10">
+                                <Sparkles className="w-24 h-24 text-indigo-600" />
+                            </div>
+                            
+                            <div className="flex items-center gap-3 mb-4 relative z-10">
+                                <div className="p-2 bg-indigo-600 rounded-lg shadow-md">
+                                    <Sparkles className="w-5 h-5 text-white" />
+                                </div>
+                                <h3 className="text-xl font-bold text-indigo-900">AI Strategic Recommendations</h3>
+                            </div>
+
+                            {recLoading ? (
+                                <div className="flex items-center gap-3 text-indigo-600 py-4 animate-pulse">
+                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                    <span className="font-medium">Gemini is analyzing the curriculum gaps...</span>
+                                </div>
+                            ) : recommendation ? (
+                                <div className="prose prose-indigo max-w-none text-slate-700 bg-white/60 p-4 rounded-xl border border-indigo-50/50 backdrop-blur-sm">
+                                    {/* Using whitespace-pre-wrap to respect newlines from Gemini */}
+                                    <div className="whitespace-pre-wrap font-medium leading-relaxed">
+                                        {recommendation}
+                                    </div>
+                                </div>
+                            ) : (
+                                <p className="text-slate-500 italic">Analysis complete. Waiting for AI insights...</p>
+                            )}
+                        </div>
+                        {/* -------------------------------------- */}
 
                         {/* 2. Visualizations Section (Charts) */}
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
@@ -334,7 +393,6 @@ export default function CurriculumGapAnalyzer() {
                                                     <Cell key={`cell-${index}`} fill={entry.color} />
                                                 ))}
                                             </Pie>
-                                            {/* Tooltip component has been removed */}
                                             <Legend verticalAlign="bottom" height={36} iconType="circle" />
                                         </PieChart>
                                     </ResponsiveContainer>
@@ -358,10 +416,6 @@ export default function CurriculumGapAnalyzer() {
                                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                                             <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#94a3b8'}} />
                                             <YAxis axisLine={false} tickLine={false} tick={{fill: '#94a3b8'}} />
-                                            <Tooltip 
-                                                cursor={{fill: '#f8fafc'}}
-                                                contentStyle={{ backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                                            />
                                             <Legend iconType="circle" />
                                             <Bar dataKey="Matches" name="Matches" fill="#10b981" radius={[4, 4, 0, 0]} />
                                             <Bar dataKey="Gaps" name="Missing Gaps" fill="#ef4444" radius={[4, 4, 0, 0]} />
