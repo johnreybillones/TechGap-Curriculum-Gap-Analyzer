@@ -1,3 +1,4 @@
+# Python dependencies for the backend application
 fastapi
 sqlalchemy
 pydantic
@@ -9,3 +10,4 @@ torch
 joblib
 numpy
 typing_extensions
+google-generativeai>=0.3.0
