@@ -25,7 +25,6 @@ router = APIRouter(tags=["Gap Analysis"])
 _OPTIONS_CACHE = None
 
 # --- CONFIGURATION: JOBS TO HIDE ---
-# These jobs will NEVER appear in the dropdown, even if they exist in the DB.
 BLACKLIST_JOBS = {
     "statistics",
     "business analyst",
@@ -42,7 +41,6 @@ def invalidate_options_cache():
     _OPTIONS_CACHE = None
 
 def normalize_string(text: str) -> str:
-    """Aggressive normalization for deduplication."""
     if not text: return ""
     return re.sub(r'[^a-z0-9]', '', text.lower())
 
@@ -78,13 +76,6 @@ class AnalysisRequest(BaseModel):
 # -----------------------
 # CORE LOGIC (DB Only)
 # -----------------------
-# ... existing imports ...
-
-# Find the function _calculate_gap_analysis and replace it with this:
-
-# ... (Imports remain the same)
-
-# ... (Keep existing setup code until _calculate_gap_analysis)
 
 def _calculate_gap_analysis(curriculum_id: int, job_id: int, db: Session):
     # 1. Fetch Entities
@@ -115,8 +106,6 @@ def _calculate_gap_analysis(curriculum_id: int, job_id: int, db: Session):
     # 4. Process Results
     if db_details:
         for row, skill_name in db_details:
-            # STRICT LOGIC: If it's not a match, it's a gap.
-            # We ignore 'partial' status as requested.
             if row.status == 'match':
                 matches.append(skill_name)
             else:
@@ -131,9 +120,14 @@ def _calculate_gap_analysis(curriculum_id: int, job_id: int, db: Session):
     
     total_job_needs = match_count + gap_count
     
-    # Fallback for division by zero
+    # Avoid division by zero
     if total_curriculum_skills == 0:
         total_curriculum_skills = match_count if match_count > 0 else 1
+
+    # Logic for Curriculum Relevance (Option B):
+    # Relevance = (Skills Matched / Total Curriculum Skills)
+    # Irrelevant = (Total Curriculum Skills - Skills Matched)
+    irrelevant_count = max(0, total_curriculum_skills - match_count)
 
     coverage = (match_count / total_job_needs) if total_job_needs > 0 else 0.0
     relevance = (match_count / total_curriculum_skills) if total_curriculum_skills > 0 else 0.0
@@ -142,12 +136,14 @@ def _calculate_gap_analysis(curriculum_id: int, job_id: int, db: Session):
     return {
         "coverage": f"{coverage * 100:.1f}%",
         "relevance": f"{relevance * 100:.1f}%",
-        "coverage_score": coverage * 100,   # Raw number for frontend charts
-        "relevance_score": relevance * 100, # Raw number for frontend charts
+        "coverage_score": round(coverage * 100, 1),
+        "relevance_score": round(relevance * 100, 1),
         
-        # Breakdown counts
+        # Counts
         "matchingSkills": match_count,
         "missingSkills": gap_count,
+        "totalCurriculumSkills": total_curriculum_skills,
+        "irrelevantSkills": irrelevant_count,
         
         # Detailed Lists
         "exact": matches,
@@ -164,60 +160,47 @@ def analyze(request: AnalysisRequest, db: Session = Depends(get_db)):
 
 
 # -----------------------
-# Filtered Options Endpoint (Deduplicated + Blacklist)
+# Filtered Options Endpoint
 # -----------------------
 @router.get("/api/options")
 def get_options(db: Session = Depends(get_db)):
-    """
-    Returns Curricula and Jobs that exist in SkillMatchDetail.
-    DEDUPLICATES options by name.
-    REMOVES blacklisted jobs.
-    """
     global _OPTIONS_CACHE
     if _OPTIONS_CACHE is not None:
         return _OPTIONS_CACHE
 
-    # 1. Get IDs that actually have data
     valid_curriculum_ids = db.query(SkillMatchDetail.curriculum_id).distinct().all()
     valid_job_ids = db.query(SkillMatchDetail.job_id).distinct().all()
     
     c_ids = [row[0] for row in valid_curriculum_ids]
     j_ids = [row[0] for row in valid_job_ids]
 
-    # 2. Fetch Entities
     curricula = db.query(Curriculum).filter(Curriculum.curriculum_id.in_(c_ids)).all()
     jobs = db.query(JobRole).filter(JobRole.job_id.in_(j_ids)).all()
 
-    # 3. Format & Deduplicate Curricula
     curriculum_options = []
     seen_c = set()
     for c in curricula:
         label = c.track or c.course_title or ""
         norm = normalize_string(label)
-        
         if norm and norm not in seen_c:
             curriculum_options.append({"id": c.curriculum_id, "label": label})
             seen_c.add(norm)
     
-    # 4. Format & Deduplicate Jobs (WITH BLACKLIST CHECK)
     job_options = []
     seen_j = set()
     for j in jobs:
         label = j.query or j.title or ""
-        
-        # --- BLACKLIST CHECK ---
-        # Check if the exact label (lowercase) is in our banned list
         if label.lower().strip() in BLACKLIST_JOBS:
             continue
-            
         norm = normalize_string(label)
-        
         if norm and norm not in seen_j:
             job_options.append({"id": j.job_id, "label": label})
             seen_j.add(norm)
 
     _OPTIONS_CACHE = {"curricula": curriculum_options, "jobs": job_options}
     return _OPTIONS_CACHE
+
+# ... (Keep the Debug and CRUD endpoints below this line exactly as they were in your file)
 
 
 # -----------------------
