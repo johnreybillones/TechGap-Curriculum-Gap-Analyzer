@@ -16,6 +16,13 @@ __pycache__/
 build/
 dist/
 
+# Database files
+*.sql
+*.sqlite
+
+# Specifically ignore the large database dump by its full path to handle spaces
+"backend/techgap database file/techgap_storeddb.sql"
+
 # ----------------------------------------
 # SECRETS AND LOGS
 # ----------------------------------------

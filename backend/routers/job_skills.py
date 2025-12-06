@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from models import JobSkill, JobPosting, Skill
+from app.database import SessionLocal
+from app.models import JobSkill, JobRole, Skill
 from pydantic import BaseModel
 from typing import List
 
@@ -25,12 +25,12 @@ class JobSkillCreate(JobSkillBase):
 
 class JobSkillOut(JobSkillBase):
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Routes
 @router.post("/", response_model=JobSkillOut)
 def create_jobskill(data: JobSkillCreate, db: Session = Depends(get_db)):
-    job = db.query(JobPosting).filter(JobPosting.job_id == data.job_id).first()
+    job = db.query(JobRole).filter(JobRole.job_id == data.job_id).first()
     if not job:
         raise HTTPException(status_code=404, detail="Job not found")
     skill = db.query(Skill).filter(Skill.skill_id == data.skill_id).first()

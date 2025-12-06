@@ -1,0 +1,823 @@
+curriculum_track,job_title,skill_name,similarity_score,status,model,computed_at
+CS Intelligent Systems,"Data Scientist, Personalization",oop,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Personalization",machine learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Personalization",less,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Personalization",excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Personalization",recommender systems,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Personalization",lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Personalization",python,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Personalization",sql,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Personalization",statistics,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Research Intern,tensorflow,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Research Intern,deep learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Research Intern,pytorch,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Research Intern,machine learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Research Intern,perl,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Research Intern,reinforcement learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Research Intern,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Research Intern,python,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Research Intern,natural language processing,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Sr. Data Scientist,agile,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Sr. Data Scientist,machine learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Sr. Data Scientist,data analytics,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Sr. Data Scientist,python,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Sr. Data Scientist,sql,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Sr. Data Scientist,data quality,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Sr. Data Scientist,statistics,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Research Software Development Engineer in Artificial Intelligence (Req.
+10064)",nodejs,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Research Software Development Engineer in Artificial Intelligence (Req.
+10064)",shell,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Research Software Development Engineer in Artificial Intelligence (Req.
+10064)",machine learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Research Software Development Engineer in Artificial Intelligence (Req.
+10064)",java,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Research Software Development Engineer in Artificial Intelligence (Req.
+10064)",aws,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Research Software Development Engineer in Artificial Intelligence (Req.
+10064)",scala,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Research Software Development Engineer in Artificial Intelligence (Req.
+10064)",graphql,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Research Software Development Engineer in Artificial Intelligence (Req.
+10064)",vue,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Research Software Development Engineer in Artificial Intelligence (Req.
+10064)",excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Research Software Development Engineer in Artificial Intelligence (Req.
+10064)",react,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Research Software Development Engineer in Artificial Intelligence (Req.
+10064)",python,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Research Software Development Engineer in Artificial Intelligence (Req.
+10064)",lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Research Software Development Engineer in Artificial Intelligence (Req.
+10064)",distributed systems,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Research Software Development Engineer in Artificial Intelligence (Req.
+10064)",git,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Research Software Development Engineer in Artificial Intelligence (Req.
+10064)",natural language processing,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Research Software Development Engineer in Artificial Intelligence (Req.
+10064)",artificial intelligence,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Research Software Development Engineer in Artificial Intelligence (Req.
+10064)",javascript,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Deep Learning Systems Engineer,deep learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Deep Learning Systems Engineer,machine learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Deep Learning Systems Engineer,feature engineering,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Deep Learning Systems Engineer,computer vision,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Deep Learning Systems Engineer,c++,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Deep Learning Systems Engineer,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Deep Learning Systems Engineer,python,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Deep Learning Systems Engineer,nlp,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Deep Learning Systems Engineer,c/c++,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Deep Learning Systems Engineer,natural language processing,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Research Intern - Machine Learning + Data Visualization,express,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Research Intern - Machine Learning + Data Visualization,aws,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Research Intern - Machine Learning + Data Visualization,data visualization,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Research Intern - Machine Learning + Data Visualization,less,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Research Intern - Machine Learning + Data Visualization,ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Research Intern - Machine Learning + Data Visualization,excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Research Intern - Machine Learning + Data Visualization,ips,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Research Intern - Machine Learning + Data Visualization,artificial intelligence,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Sr. Software Engineer,machine learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Sr. Software Engineer,aws,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Sr. Software Engineer,data visualization,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Sr. Software Engineer,excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Sr. Software Engineer,python,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Sr. Software Engineer,pandas,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Sr. Software Engineer,spark,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Sr. Software Engineer,sql,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Software Scientist I - Machine Learning & NLP,oop,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Software Scientist I - Machine Learning & NLP,nosql,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Software Scientist I - Machine Learning & NLP,hadoop,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Software Scientist I - Machine Learning & NLP,machine learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Software Scientist I - Machine Learning & NLP,java,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Software Scientist I - Machine Learning & NLP,perl,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Software Scientist I - Machine Learning & NLP,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Software Scientist I - Machine Learning & NLP,python,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Software Scientist I - Machine Learning & NLP,nlp,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Software Scientist I - Machine Learning & NLP,object oriented programming,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Software Scientist I - Machine Learning & NLP,distributed systems,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Software Scientist I - Machine Learning & NLP,docker,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Software Scientist I - Machine Learning & NLP,sql,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Software Scientist I - Machine Learning & NLP,statistics,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,CTO Residency Program,deep learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,CTO Residency Program,nifi,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,CTO Residency Program,oop,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,CTO Residency Program,machine learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,CTO Residency Program,express,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,CTO Residency Program,ips,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,CTO Residency Program,less,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,CTO Residency Program,ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,CTO Residency Program,wan,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,CTO Residency Program,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,CTO Residency Program,aks,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,CTO Residency Program,artificial intelligence,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Movidius Deep Learning Data Scientist,tensorflow,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Movidius Deep Learning Data Scientist,deep learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Movidius Deep Learning Data Scientist,nifi,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Movidius Deep Learning Data Scientist,data analytics,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Movidius Deep Learning Data Scientist,machine learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Movidius Deep Learning Data Scientist,computer vision,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Movidius Deep Learning Data Scientist,express,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Movidius Deep Learning Data Scientist,excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Movidius Deep Learning Data Scientist,reinforcement learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Movidius Deep Learning Data Scientist,bayesian,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Movidius Deep Learning Data Scientist,artificial intelligence,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Deep Learning Compiler Engineer,deep learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Deep Learning Compiler Engineer,express,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Deep Learning Compiler Engineer,wan,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Deep Learning Compiler Engineer,c++,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Deep Learning Compiler Engineer,excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Deep Learning Compiler Engineer,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Deep Learning Compiler Engineer,c/c++,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Deep Learning Compiler Engineer,software engineering,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Deep Learning Compiler Engineer,natural language processing,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Deep Learning Compiler Engineer,artificial intelligence,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,oop,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,feature engineering,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,data warehousing,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,data visualization,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,scala,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,sas,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,data pipeline,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,git,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,snowflake,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,data pipelines,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,artificial intelligence,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,sql,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,statistics,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,data wrangling,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,machine learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,etl,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,less,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,oop,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,feature engineering,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,data warehousing,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,data visualization,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,scala,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,sas,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,data pipeline,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,git,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,snowflake,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,data pipelines,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,artificial intelligence,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,sql,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,statistics,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,data wrangling,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,machine learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,etl,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Data Scientist,less,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Software Engineer, Deep Learning",deep learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Software Engineer, Deep Learning",machine learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Software Engineer, Deep Learning",feature engineering,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Software Engineer, Deep Learning",computer vision,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Software Engineer, Deep Learning",c++,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Software Engineer, Deep Learning",python,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Movidius Deep Learning Data Scientist,tensorflow,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Movidius Deep Learning Data Scientist,deep learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Movidius Deep Learning Data Scientist,nifi,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Movidius Deep Learning Data Scientist,data analytics,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Movidius Deep Learning Data Scientist,machine learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Movidius Deep Learning Data Scientist,computer vision,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Movidius Deep Learning Data Scientist,express,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Movidius Deep Learning Data Scientist,excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Movidius Deep Learning Data Scientist,reinforcement learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Movidius Deep Learning Data Scientist,bayesian,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Movidius Deep Learning Data Scientist,artificial intelligence,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",deep learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",nosql,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",oop,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",keras,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",data visualization,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",scala,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",numpy,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",python,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",pandas,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",spark,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",mongodb,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",scikit-learn,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",hbase,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",cassandra,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",d3.js,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",git,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",sql,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",statistics,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",tensorflow,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",machine learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",data mining,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",wan,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",hive,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,"Data Scientist, Digital",matlab,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning,deep learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning,oop,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning,hadoop,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning,machine learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning,wan,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning,scala,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning,nlp,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning,software engineering,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning,spark,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Principal Audio Engineer,deep learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Principal Audio Engineer,aws,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Principal Audio Engineer,scala,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Principal Audio Engineer,excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Principal Audio Engineer,python,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Principal Audio Engineer,sas,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Principal Audio Engineer,c/c++,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Principal Audio Engineer,natural language processing,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Principal Audio Engineer,agile,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Principal Audio Engineer,c++,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Principal Audio Engineer,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Principal Audio Engineer,confluence,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Principal Audio Engineer,jira,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Principal Audio Engineer,git,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Principal Audio Engineer,kanban,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Principal Audio Engineer,statistics,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Principal Audio Engineer,tensorflow,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Principal Audio Engineer,bitbucket,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Principal Audio Engineer,machine learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Principal Audio Engineer,microsoft office,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Machine Learning Principal Audio Engineer,linux,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,Autonomous Driving - Sensor Data Fusion Research Engineer,ids,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,NLP Data Scientist,deep learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,NLP Data Scientist,machine learning,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,NLP Data Scientist,java,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,NLP Data Scientist,aws,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,NLP Data Scientist,html,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,NLP Data Scientist,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,NLP Data Scientist,python,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,NLP Data Scientist,nlp,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,NLP Data Scientist,r language,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Intelligent Systems,NLP Data Scientist,natural language processing,1.0,match,keyword_overlap_v1,2025-12-02T14:09:53.935173
+CS Game Development,.Net Web Developer- Movimento,microsoft sql server,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,.Net Web Developer- Movimento,python,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,.Net Web Developer- Movimento,sql server,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,.Net Web Developer- Movimento,c/c++,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,.Net Web Developer- Movimento,software engineering,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,.Net Web Developer- Movimento,continuous integration,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,.Net Web Developer- Movimento,database design,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,.Net Web Developer- Movimento,java,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,.Net Web Developer- Movimento,c++,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,.Net Web Developer- Movimento,asp.net,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,.Net Web Developer- Movimento,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,.Net Web Developer- Movimento,storm,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,.Net Web Developer- Movimento,html,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,.Net Web Developer- Movimento,css,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,.Net Web Developer- Movimento,ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,.Net Web Developer- Movimento,git,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,.Net Web Developer- Movimento,sql,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,.Net Web Developer- Movimento,full stack,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,.Net Web Developer- Movimento,wan,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,.Net Web Developer- Movimento,javascript,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,"Systems Engineer, Test and Integration",java,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,"Systems Engineer, Test and Integration",wan,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,"Systems Engineer, Test and Integration",unit testing,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,"Systems Engineer, Test and Integration",excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,"Systems Engineer, Test and Integration",perl,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,"Systems Engineer, Test and Integration",lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,"Systems Engineer, Test and Integration",python,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,"Systems Engineer, Test and Integration",configuration management,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Contractor - Software Developer,nifi,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Contractor - Software Developer,agile,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Contractor - Software Developer,scrum,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Contractor - Software Developer,unit testing,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Contractor - Software Developer,software engineering,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Contractor - Software Developer,continuous integration,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,"Software Architect, Infotainment & Cockpit",lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,"Software Architect, Infotainment & Cockpit",lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,ATSV-Product Test Architect,scrum,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,ATSV-Product Test Architect,express,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,ATSV-Product Test Architect,soa,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,ATSV-Product Test Architect,sas,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,ATSV-Product Test Architect,continuous integration,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,ATSV-Product Test Architect,agile,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,ATSV-Product Test Architect,soap,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,ATSV-Product Test Architect,java,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,ATSV-Product Test Architect,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,ATSV-Product Test Architect,jira,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,ATSV-Product Test Architect,ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,ATSV-Product Test Architect,bdd,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,ATSV-Product Test Architect,web services,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,ATSV-Product Test Architect,git,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,ATSV-Product Test Architect,continuous delivery,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,ATSV-Product Test Architect,sql,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,ATSV-Product Test Architect,mysql,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,ATSV-Product Test Architect,ips,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,ATSV-Product Test Architect,oracle,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,ATSV-Product Test Architect,jenkins,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,ATSV-Product Test Architect,data validation,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Game Balancer,oop,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Game Balancer,express,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Game Balancer,aws,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Game Balancer,less,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Game Balancer,ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Game Balancer,excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Game Balancer,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Game Balancer,statistics,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,User Researcher 2,machine learning,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,User Researcher 2,data analytics,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,User Researcher 2,express,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,User Researcher 2,aws,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,User Researcher 2,less,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,User Researcher 2,ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,User Researcher 2,excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,User Researcher 2,wan,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,User Researcher 2,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,User Researcher 2,data analysis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Product Data Management Specialist - Entry Level,r programming,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Product Data Management Specialist - Entry Level,ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Product Data Management Specialist - Entry Level,oracle,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Product Data Management Specialist - Entry Level,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Product Data Management Specialist - Entry Level,microsoft office,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Product Data Management Specialist - Entry Level,linux,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Product Data Management Specialist - Entry Level,unix,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Senior Technical Writer,agile,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Senior Technical Writer,machine learning,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Senior Technical Writer,github,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Senior Technical Writer,html,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Senior Technical Writer,css,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Senior Technical Writer,ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Senior Technical Writer,microservices,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Senior Technical Writer,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Senior Technical Writer,nlp,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Senior Technical Writer,git,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Senior Technical Writer,natural language processing,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Full-stack Software Engineer - Java/J2EE,agile,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Full-stack Software Engineer - Java/J2EE,machine learning,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Full-stack Software Engineer - Java/J2EE,java,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Full-stack Software Engineer - Java/J2EE,hibernate,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Full-stack Software Engineer - Java/J2EE,wan,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Full-stack Software Engineer - Java/J2EE,web services,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Full-stack Software Engineer - Java/J2EE,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Full-stack Software Engineer - Java/J2EE,spring,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Full-stack Software Engineer - Java/J2EE,cybersecurity,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Full-stack Software Engineer - Java/J2EE,software engineering,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Full-stack Software Engineer - Java/J2EE,javascript,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Remote Hortonworks/Big Data Developer- Big Data Engineer,oop,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Remote Hortonworks/Big Data Developer- Big Data Engineer,hadoop,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Remote Hortonworks/Big Data Developer- Big Data Engineer,scrum,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Remote Hortonworks/Big Data Developer- Big Data Engineer,data ingestion,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Remote Hortonworks/Big Data Developer- Big Data Engineer,express,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Remote Hortonworks/Big Data Developer- Big Data Engineer,scala,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Remote Hortonworks/Big Data Developer- Big Data Engineer,python,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Remote Hortonworks/Big Data Developer- Big Data Engineer,spark,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Remote Hortonworks/Big Data Developer- Big Data Engineer,design patterns,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Remote Hortonworks/Big Data Developer- Big Data Engineer,agile,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Remote Hortonworks/Big Data Developer- Big Data Engineer,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Remote Hortonworks/Big Data Developer- Big Data Engineer,data lake,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Remote Hortonworks/Big Data Developer- Big Data Engineer,react,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Remote Hortonworks/Big Data Developer- Big Data Engineer,sap hana,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Remote Hortonworks/Big Data Developer- Big Data Engineer,git,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Remote Hortonworks/Big Data Developer- Big Data Engineer,less,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Remote Hortonworks/Big Data Developer- Big Data Engineer,wan,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Remote Hortonworks/Big Data Developer- Big Data Engineer,oracle,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Remote Hortonworks/Big Data Developer- Big Data Engineer,devops,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Remote Hortonworks/Big Data Developer- Big Data Engineer,hive,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Web Developer - Full Stack,laravel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Web Developer - Full Stack,agile,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Web Developer - Full Stack,scrum,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Web Developer - Full Stack,system design,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Web Developer - Full Stack,java,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Web Developer - Full Stack,php,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Web Developer - Full Stack,unit testing,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Web Developer - Full Stack,microservices,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Web Developer - Full Stack,vue,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Web Developer - Full Stack,new relic,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Web Developer - Full Stack,vue.js,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Web Developer - Full Stack,sql queries,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Web Developer - Full Stack,continuous integration,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Web Developer - Full Stack,sql,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Web Developer - Full Stack,javascript,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Machine Learning Engineer,tensorflow,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Machine Learning Engineer,deep learning,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Machine Learning Engineer,machine learning,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Machine Learning Engineer,c++,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Machine Learning Engineer,python,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Simulation Engineer Summer Intern,aws,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Simulation Engineer Summer Intern,ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Simulation Engineer Summer Intern,excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Simulation Engineer Summer Intern,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Simulation Engineer Summer Intern,ids,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Full Stack J2EE,integration testing,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Full Stack J2EE,java,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Full Stack J2EE,css,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Full Stack J2EE,html,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Full Stack J2EE,angular,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Full Stack J2EE,ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Full Stack J2EE,unit testing,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Full Stack J2EE,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Full Stack J2EE,git,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Full Stack J2EE,javascript,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Data Integration Engineer - Java,nifi,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Data Integration Engineer - Java,java,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Data Integration Engineer - Java,excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Data Integration Engineer - Java,data integration,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,RPA DEVELOPER-ROBOTIC PROCESS AUTOMATION,agile,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,RPA DEVELOPER-ROBOTIC PROCESS AUTOMATION,machine learning,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,RPA DEVELOPER-ROBOTIC PROCESS AUTOMATION,scrum,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,RPA DEVELOPER-ROBOTIC PROCESS AUTOMATION,java,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,RPA DEVELOPER-ROBOTIC PROCESS AUTOMATION,html,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,RPA DEVELOPER-ROBOTIC PROCESS AUTOMATION,ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,RPA DEVELOPER-ROBOTIC PROCESS AUTOMATION,sql,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,RPA DEVELOPER-ROBOTIC PROCESS AUTOMATION,javascript,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,IT – OT requirement,machine learning,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,IT – OT requirement,data analytics,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,IT – OT requirement,azure,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,IT – OT requirement,aws,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,IT – OT requirement,less,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,IT – OT requirement,ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,IT – OT requirement,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,IT – OT requirement,git,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,IT – OT requirement,microsoft office,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Java Developer : Messaging/JMS Services,apache,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Java Developer : Messaging/JMS Services,agile,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Java Developer : Messaging/JMS Services,machine learning,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Java Developer : Messaging/JMS Services,application monitoring,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Java Developer : Messaging/JMS Services,java,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Java Developer : Messaging/JMS Services,ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Java Developer : Messaging/JMS Services,c++,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Java Developer : Messaging/JMS Services,scala,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Java Developer : Messaging/JMS Services,perl,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Java Developer : Messaging/JMS Services,wan,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Java Developer : Messaging/JMS Services,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Java Developer : Messaging/JMS Services,python,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Java Developer : Messaging/JMS Services,bash,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Java Developer : Messaging/JMS Services,software development lifecycle,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Java Developer : Messaging/JMS Services,cybersecurity,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Java Developer : Messaging/JMS Services,ldap,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Java Developer : Messaging/JMS Services,virtualization,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+CS Game Development,Java Developer : Messaging/JMS Services,software engineering,1.0,match,keyword_overlap_v1,2025-12-02T14:09:54.679584
+IT Network Technology,SFDC Release Engineer,wan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,SFDC Release Engineer,excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,SFDC Release Engineer,perl,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,SFDC Release Engineer,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,SFDC Release Engineer,python,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,SFDC Release Engineer,devops,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,SFDC Release Engineer,saas,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,SFDC Release Engineer,linux,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,SFDC Release Engineer,configuration management,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,SFDC Release Engineer,php,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Technical Requirements Engineer 2,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Technical Requirements Engineer 2,excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,s3,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,agile,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,java,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,css,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,html,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,web services,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,jquery,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,sql server,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,api development,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,sql,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,javascript,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Technical Consultant - HCM,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Technical Consultant - HCM,ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Technical Consultant - HCM,integration testing,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Technical Consultant - HCM,excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Technical Consultant - HCM,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Technical Consultant - HCM,ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Technical Consultant - HCM,integration testing,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Technical Consultant - HCM,excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Telecom Architect (BSS),mpls,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Telecom Architect (BSS),less,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Telecom Architect (BSS),data integration,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Telecom Architect (BSS),mpls,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Telecom Architect (BSS),less,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Telecom Architect (BSS),data integration,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Database Administrator,sas,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Database Administrator,microsoft sql server,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Database Administrator,express,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Database Administrator,etl,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Database Administrator,aws,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Database Administrator,ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Database Administrator,ips,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Database Administrator,excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Database Administrator,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Database Administrator,ssrs,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Database Administrator,linux,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Database Administrator,sql server,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Database Administrator,sql,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Database Administrator,disaster recovery,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Database Administrator,db2,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,s3,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,agile,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,java,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,css,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,html,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,web services,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,jquery,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,sql server,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,api development,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,sql,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,javascript,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Director of Enterprise Applications,business intelligence,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Director of Enterprise Applications,perl,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Director of Enterprise Applications,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Director of Enterprise Applications,software development lifecycle,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Director of Enterprise Applications,sql server,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Director of Enterprise Applications,sql,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Director of Enterprise Applications,windows server,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Database/System Administrator,express,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Database/System Administrator,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Database/System Administrator,patch management,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Database/System Administrator,oracle,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Administrator Database Infrastructure,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Administrator Database Infrastructure,backup and recovery,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Administrator Database Infrastructure,scala,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Administrator Database Infrastructure,sql,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,s3,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,agile,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,java,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,css,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,html,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,web services,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,jquery,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,sql server,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,api development,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,sql,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Software Developer,javascript,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Data Center Engineer,networking,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Data Center Engineer,less,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Data Center Engineer,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Data Center Engineer,switching,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Data Center Engineer,firewall,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Data Center Engineer,routing,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Data Center Engineer,f5,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Data Center Engineer,juniper,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Data Center Engineer,vpn,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Data Center Engineer,sas,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Python Integration Engineer,java,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Python Integration Engineer,django,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Python Integration Engineer,etl,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Python Integration Engineer,excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Python Integration Engineer,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Python Integration Engineer,python,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Python Integration Engineer,postgres,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Python Integration Engineer,jquery,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Python Integration Engineer,saas,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Python Integration Engineer,front-end,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Python Integration Engineer,git,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Python Integration Engineer,linux,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Python Integration Engineer,pandas,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Python Integration Engineer,sql,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Python Integration Engineer,software engineering,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Python Integration Engineer,javascript,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Python Integration Engineer,unix,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Python Integration Engineer,statistics,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,.NET Developer-Entry Level,soap,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,.NET Developer-Entry Level,vb.net,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,.NET Developer-Entry Level,soa,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,.NET Developer-Entry Level,web services,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,.NET Developer-Entry Level,asp.net,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,.NET Developer-Entry Level,t-sql,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,.NET Developer-Entry Level,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,.NET Developer-Entry Level,ssrs,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,.NET Developer-Entry Level,sql server,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,.NET Developer-Entry Level,artificial intelligence,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,.NET Developer-Entry Level,sql,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Systems Administrator I,shell,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Systems Administrator I,dhcp,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Systems Administrator I,networking,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Systems Administrator I,ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Systems Administrator I,scala,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Systems Administrator I,group policy,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Systems Administrator I,paas,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Systems Administrator I,routing,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Systems Administrator I,saas,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Systems Administrator I,vmware,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Systems Administrator I,powershell,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Systems Administrator I,dns,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Systems Administrator I,iaas,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Systems Administrator I,office 365,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Systems Administrator I,windows server,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Systems Administrator I,active directory,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Solutions Architect - Oil and Gas,oop,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Solutions Architect - Oil and Gas,networking,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Solutions Architect - Oil and Gas,ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Solutions Architect - Oil and Gas,excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Solutions Architect - Oil and Gas,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Solutions Architect - Oil and Gas,git,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Administrator - Desktop Support,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Administrator - Desktop Support,configuration management,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Administrator - Desktop Support,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Network Technology,Administrator - Desktop Support,configuration management,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:55.821901
+IT Web Development,Systems Administrator II,group policy,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Systems Administrator II,vmware,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Systems Administrator II,linux,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Systems Administrator II,windows server,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Systems Administrator II,active directory,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Junior Engineer,java,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Junior Engineer,networking,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Junior Engineer,ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Junior Engineer,c++,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Junior Engineer,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Junior Engineer,elt,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Associate Solution Architect,tdd,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Associate Solution Architect,ci/cd,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Associate Solution Architect,agile,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Associate Solution Architect,soap,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Associate Solution Architect,java,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Associate Solution Architect,azure,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Associate Solution Architect,scrum,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Associate Solution Architect,angular,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Associate Solution Architect,soa,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Associate Solution Architect,vue,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Associate Solution Architect,vue.js,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Associate Solution Architect,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Associate Solution Architect,angularjs,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Associate Solution Architect,javascript,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Applications Architect (Front-end),nosql,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Applications Architect (Front-end),design patterns,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Applications Architect (Front-end),agile,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Applications Architect (Front-end),soap,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Applications Architect (Front-end),html,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Applications Architect (Front-end),css,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Applications Architect (Front-end),java,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Applications Architect (Front-end),scrum,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Applications Architect (Front-end),less,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Applications Architect (Front-end),soa,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Applications Architect (Front-end),excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Applications Architect (Front-end),lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Applications Architect (Front-end),git,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Applications Architect (Front-end),kanban,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Applications Architect (Front-end),sql,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Applications Architect (Front-end),software engineering,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Applications Architect (Front-end),continuous integration,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Applications Architect (Front-end),javascript,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,RPG Developer,integration testing,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,RPG Developer,ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,RPG Developer,unit testing,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,RPG Developer,object oriented programming,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,RPG Developer,network security,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,RPG Developer,artificial intelligence,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Systems/Network Administrator (Virtualization),less,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Systems/Network Administrator (Virtualization),wan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Systems/Network Administrator (Virtualization),ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Systems/Network Administrator (Virtualization),lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Systems/Network Administrator (Virtualization),spring,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Systems/Network Administrator (Virtualization),vmware,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Systems/Network Administrator (Virtualization),virtualization,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Systems/Network Administrator (Virtualization),eks,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,splunk,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,networking,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,aws,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,azure,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,mpls,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,less,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,wan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,wireless lan,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,ips,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,switching,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,firewall,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,routing,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,git,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,vpn,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,virtualization,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,data analysis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,splunk,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,networking,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,aws,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,azure,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,mpls,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,less,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,wan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,wireless lan,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,ips,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,switching,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,firewall,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,routing,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,git,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,vpn,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,virtualization,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Senior Network Engineer,data analysis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Network Engineer,load balancer,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Network Engineer,aws,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Network Engineer,ips,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Network Engineer,networking,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Network Engineer,less,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Network Engineer,wan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Network Engineer,excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Network Engineer,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Network Engineer,switching,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Network Engineer,network security,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Associate Information Security Analyst,splunk,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Associate Information Security Analyst,dhcp,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Associate Information Security Analyst,java,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Associate Information Security Analyst,scala,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Associate Information Security Analyst,tcp/ip,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Associate Information Security Analyst,spring,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Associate Information Security Analyst,information security,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Associate Information Security Analyst,siem,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Associate Information Security Analyst,vpn,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Associate Information Security Analyst,dns,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Desktop Support Analyst,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Desktop Support Analyst,network security,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Desktop Support Analyst,ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Service Development Architect-Allstream,agile,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Service Development Architect-Allstream,redhat,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Service Development Architect-Allstream,networking,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Service Development Architect-Allstream,asp.net,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Service Development Architect-Allstream,perl,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Service Development Architect-Allstream,oracle,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Service Development Architect-Allstream,excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Service Development Architect-Allstream,python,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Service Development Architect-Allstream,switching,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Service Development Architect-Allstream,routing,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Service Development Architect-Allstream,vmware,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Service Development Architect-Allstream,linux,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Service Development Architect-Allstream,sql,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Service Development Architect-Allstream,php,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,ESD 113-CRISC Systems Analyst I and II (Student Information),lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,ESD 113-CRISC Systems Analyst I and II (Student Information),ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,ESD 113-CRISC Systems Analyst I and II (Student Information),scala,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,ESD 113-CRISC Systems Analyst I and II (Student Information),data analysis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Middleware Developer,informatica,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Middleware Developer,agile,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Middleware Developer,soap,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Middleware Developer,java,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Middleware Developer,sql,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Middleware Developer,scala,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Middleware Developer,soa,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Middleware Developer,oracle,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Middleware Developer,restful apis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Middleware Developer,restful api,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Middleware Developer,db2,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Middleware Developer,javascript,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,oop,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,nifi,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,kubernetes,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,hadoop,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,aws,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,scala,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,python,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,cloudformation,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,spark,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,mongodb,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,java,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,angular,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,nlp,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,kafka,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,ci/cd,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,stream processing,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,cassandra,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,react,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,saas,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,angularjs,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,sql,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,backend,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,mysql,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,machine learning,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,less,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,microservices,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,devops,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,reactjs,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Chief Architect,javascript,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Junior Incident Response Analyst,agile,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Junior Incident Response Analyst,networking,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Junior Incident Response Analyst,tcp/ip,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Junior Incident Response Analyst,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Junior Incident Response Analyst,ids,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Junior Incident Response Analyst,cybersecurity,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Junior Incident Response Analyst,linux,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Junior Incident Response Analyst,dns,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Junior Incident Response Analyst,unix,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Technical Support Specialist Intern 8 hrs- IT1823,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Technical Support Specialist Intern 8 hrs- IT1823,ips,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Technical Support Specialist Intern 8 hrs- IT1823,ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Technical Support Specialist Intern 8 hrs- IT1823,microsoft office,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Systems Administrator I,shell,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Systems Administrator I,dhcp,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Systems Administrator I,networking,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Systems Administrator I,ssis,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Systems Administrator I,scala,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Systems Administrator I,group policy,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Systems Administrator I,paas,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Systems Administrator I,routing,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Systems Administrator I,saas,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Systems Administrator I,vmware,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Systems Administrator I,powershell,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Systems Administrator I,dns,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Systems Administrator I,iaas,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Systems Administrator I,office 365,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Systems Administrator I,windows server,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Systems Administrator I,active directory,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Network Engineer,load balancer,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Network Engineer,aws,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Network Engineer,ips,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Network Engineer,networking,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Network Engineer,less,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Network Engineer,wan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Network Engineer,excel,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Network Engineer,lan,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Network Engineer,switching,0.0,gap,keyword_overlap_v1,2025-12-02T14:09:56.696856
+IT Web Development,Network Engineer,network security,1.0,match,keyword_overlap_v1,2025-12-02T14:09:56.696856

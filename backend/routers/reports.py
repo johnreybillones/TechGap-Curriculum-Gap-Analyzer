@@ -6,8 +6,8 @@ from typing import List
 
 # Import modules from your existing backend structure
 # Assuming get_db is a standard function in database.py
-from database import SessionLocal 
-from models import Course, Skill, JobPosting, JobSkill, GapAnalysis 
+from app.database import SessionLocal 
+from app.models import Curriculum, Skill, JobRole, JobSkill 
 
 
 # --- Pydantic Schemas for API Response ---

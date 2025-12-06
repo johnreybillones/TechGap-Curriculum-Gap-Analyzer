@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from models import Skill
+from app.database import SessionLocal
+from app.models import Skill
 from pydantic import BaseModel
 from typing import List
 
@@ -25,7 +25,7 @@ class SkillCreate(SkillBase):
 class SkillOut(SkillBase):
     skill_id: int
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Routes
 @router.post("/", response_model=SkillOut)

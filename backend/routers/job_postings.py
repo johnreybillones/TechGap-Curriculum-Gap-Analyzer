@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from models import JobPosting
+from app.database import SessionLocal
+from app.models import JobRole
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import date
@@ -29,12 +29,12 @@ class JobPostingCreate(JobPostingBase):
 class JobPostingOut(JobPostingBase):
     job_id: int
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Routes
 @router.post("/", response_model=JobPostingOut)
 def create_jobposting(data: JobPostingCreate, db: Session = Depends(get_db)):
-    job = JobPosting(**data.dict())
+    job = JobRole(**data.dict())
     db.add(job)
     db.commit()
     db.refresh(job)
@@ -42,20 +42,20 @@ def create_jobposting(data: JobPostingCreate, db: Session = Depends(get_db)):
 
 @router.get("/", response_model=List[JobPostingOut])
 def get_jobpostings(db: Session = Depends(get_db)):
-    return db.query(JobPosting).all()
+    return db.query(JobRole).all()
 
 @router.get("/{job_id}", response_model=JobPostingOut)
 def get_jobposting(job_id: int, db: Session = Depends(get_db)):
-    job = db.query(JobPosting).filter(JobPosting.job_id == job_id).first()
+    job = db.query(JobRole).filter(JobRole.job_id == job_id).first()
     if not job:
-        raise HTTPException(status_code=404, detail="JobPosting not found")
+        raise HTTPException(status_code=404, detail="Job not found")
     return job
 
 @router.put("/{job_id}", response_model=JobPostingOut)
 def update_jobposting(job_id: int, data: JobPostingBase, db: Session = Depends(get_db)):
-    job = db.query(JobPosting).filter(JobPosting.job_id == job_id).first()
+    job = db.query(JobRole).filter(JobRole.job_id == job_id).first()
     if not job:
-        raise HTTPException(status_code=404, detail="JobPosting not found")
+        raise HTTPException(status_code=404, detail="Job not found")
     for key, value in data.dict().items():
         setattr(job, key, value)
     db.commit()
@@ -64,9 +64,9 @@ def update_jobposting(job_id: int, data: JobPostingBase, db: Session = Depends(g
 
 @router.delete("/{job_id}")
 def delete_jobposting(job_id: int, db: Session = Depends(get_db)):
-    job = db.query(JobPosting).filter(JobPosting.job_id == job_id).first()
+    job = db.query(JobRole).filter(JobRole.job_id == job_id).first()
     if not job:
-        raise HTTPException(status_code=404, detail="JobPosting not found")
+        raise HTTPException(status_code=404, detail="Job not found")
     db.delete(job)
     db.commit()
-    return {"message": "JobPosting deleted successfully"}
+    return {"message": "Job deleted successfully"}

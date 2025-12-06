@@ -1,0 +1,82 @@
+#!/usr/bin/env python
+"""
+Small script to test the runtime models from the command line.
+
+It:
+  1. Builds a real SBERT (all-MiniLM-L6-v2) 384-dim embedding from sample text
+  2. Runs lr_coarse, lr_clusters, and siamese on it
+  3. Prints the results
+
+You can later reuse `build_features_from_text` inside your API/backend.
+"""
+
+import warnings
+
+from sklearn.exceptions import InconsistentVersionWarning
+
+# Hide the sklearn version mismatch warnings
+warnings.filterwarnings("ignore", category=InconsistentVersionWarning)
+
+from sentence_transformers import SentenceTransformer
+
+from model_runtime import (
+    run_inference,
+    EXPECTED_FEATURES,
+)
+
+
+# Load SBERT once (same as training: all-MiniLM-L6-v2)
+_sbert = SentenceTransformer("all-MiniLM-L6-v2")
+
+
+def build_features_from_text(text: str) -> list[float]:
+    """
+    Build a 384-dimensional SBERT embedding from raw text.
+
+    Uses the same model as in training:
+        SentenceTransformer("all-MiniLM-L6-v2")
+    """
+    emb = _sbert.encode([text], convert_to_tensor=False)[0]
+    emb_list = emb.tolist()
+
+    if len(emb_list) != EXPECTED_FEATURES:
+        raise ValueError(
+            f"SBERT embedding length {len(emb_list)} != EXPECTED_FEATURES {EXPECTED_FEATURES}"
+        )
+
+    return emb_list
+
+
+def main():
+    sample_text = "Sample curriculum text about Python, SQL, and data structures."
+
+    print("Building features from text...")
+    features = build_features_from_text(sample_text)
+    print(f"Feature vector length: {len(features)}")
+
+    print("\n=== Running lr_coarse ===")
+    try:
+        result_coarse = run_inference("lr_coarse", features=features)
+        print(result_coarse)
+    except Exception as e:
+        print("Error in lr_coarse:", e)
+
+    print("\n=== Running lr_clusters ===")
+    try:
+        result_clusters = run_inference("lr_clusters", features=features)
+        print(result_clusters)
+    except Exception as e:
+        print("Error in lr_clusters:", e)
+
+    print("\n=== Running siamese ===")
+    try:
+        result_siamese = run_inference("siamese", features=features)
+        print("Siamese embedding length:", len(result_siamese.get("embedding", [])))
+        # If you want to see the raw vector:
+        # print(result_siamese)
+    except Exception as e:
+        print("Error in siamese:", e)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,11 @@
+fastapi
+sqlalchemy
+pydantic
+uvicorn
+mysql-connector-python
+python-dotenv
+scikit-learn
+torch
+joblib
+numpy
+typing_extensions

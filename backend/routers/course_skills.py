@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from models import CourseSkill, Course, Skill
+from app.database import SessionLocal
+from app.models import CourseSkill, Curriculum, Skill
 from pydantic import BaseModel
 from typing import List
 
@@ -28,14 +28,14 @@ class CourseSkillUpdate(BaseModel):
 
 class CourseSkillOut(CourseSkillBase):
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # ------------------ ROUTES ------------------
 
 @router.post("/", response_model=CourseSkillOut)
 def create_course_skill(data: CourseSkillCreate, db: Session = Depends(get_db)):
     # checks if course_id exists in courses
-    course = db.query(Course).filter(Course.course_id == data.course_id).first()
+    course = db.query(Curriculum).filter(Curriculum.curriculum_id == data.course_id).first()
     if not course:
         raise HTTPException(status_code=404, detail="Course not found")
 
