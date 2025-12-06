@@ -1,5 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { FileText, ChevronDown, BarChart3, CheckCircle, AlertCircle, BookOpen, Target, Award } from 'lucide-react';
+import { 
+    FileText, 
+    ChevronDown, 
+    BarChart3, 
+    CheckCircle, 
+    AlertCircle, 
+    BookOpen, 
+    Target, 
+    Award, 
+    Layers,
+    PieChart as IconPieChart 
+} from 'lucide-react';
+import { 
+    PieChart, 
+    Pie, 
+    Cell, 
+    BarChart, 
+    Bar, 
+    XAxis, 
+    YAxis, 
+    CartesianGrid, 
+    Tooltip, 
+    Legend, 
+    ResponsiveContainer 
+} from 'recharts';
 
 export default function CurriculumGapAnalyzer() {
 
@@ -22,7 +46,6 @@ export default function CurriculumGapAnalyzer() {
             try {
                 setOptionsError('');
                 setOptionsLoading(true);
-                // Prefer curated options from backend; fallback to raw lists
                 const optionsRes = await fetch(`${API_BASE}/api/options`);
                 const optionsCt = optionsRes.headers.get('content-type') || '';
                 let mappedCurr = [];
@@ -64,12 +87,8 @@ export default function CurriculumGapAnalyzer() {
 
                 setPrograms(mappedCurr);
                 setCareers(mappedJobs);
-                if (mappedCurr.length > 0) {
-                    setSelectedProgram(mappedCurr[0]);
-                }
-                if (mappedJobs.length > 0) {
-                    setSelectedCareer(mappedJobs[0]);
-                }
+                if (mappedCurr.length > 0) setSelectedProgram(mappedCurr[0]);
+                if (mappedJobs.length > 0) setSelectedCareer(mappedJobs[0]);
             } catch (err) {
                 setOptionsError(err.message);
             } finally {
@@ -93,12 +112,9 @@ export default function CurriculumGapAnalyzer() {
                 })
             });
             const ct = response.headers.get('content-type') || '';
-            if (!response.ok) {
-                throw new Error(`Failed to fetch analysis (${response.status})`);
-            }
-            if (!ct.includes('application/json')) {
-                throw new Error('Unexpected response (not JSON)');
-            }
+            if (!response.ok) throw new Error(`Failed to fetch analysis (${response.status})`);
+            if (!ct.includes('application/json')) throw new Error('Unexpected response (not JSON)');
+            
             const data = await response.json();
             setResults(data);
             setShowResults(true);
@@ -109,17 +125,28 @@ export default function CurriculumGapAnalyzer() {
         }
     };
 
+    // Prepare Data for Recharts
+    const pieData = results ? [
+        { name: 'Matched Skills', value: results.matchingSkills, color: '#10b981' }, // Emerald-500
+        { name: 'Missing Gaps', value: results.missingSkills, color: '#ef4444' }     // Red-500
+    ] : [];
+
+    const barData = results ? [
+        {
+            name: 'Skill Analysis',
+            Matches: results.matchingSkills,
+            Gaps: results.missingSkills,
+            Total: results.matchingSkills + results.missingSkills
+        }
+    ] : [];
+
     return (
-        <div className="min-h-screen bg-gray-50 font-sans">
+        <div className="min-h-screen bg-gray-50 font-sans text-gray-900">
             {/* Header */}
             <header className="bg-white border-b border-gray-200 px-6 py-4 sticky top-0 z-50">
                 <div className="max-w-6xl mx-auto flex items-center gap-2">
                     <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-sm">
-                        <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                            <path d="M2 17l10 5 10-5" />
-                            <path d="M2 12l10 5 10-5" />
-                        </svg>
+                        <Layers className="w-5 h-5 text-white" />
                     </div>
                     <h1 className="text-xl font-bold text-gray-900 tracking-tight">Curriculum Gap Analyzer</h1>
                 </div>
@@ -130,10 +157,7 @@ export default function CurriculumGapAnalyzer() {
                 {/* AI Badge */}
                 <div className="flex justify-center mb-6">
                     <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 border border-indigo-100 rounded-full shadow-sm">
-                        <svg className="w-4 h-4 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <circle cx="12" cy="12" r="10" />
-                            <path d="M12 6v6l4 2" />
-                        </svg>
+                        <Award className="w-4 h-4 text-indigo-600" />
                         <span className="text-sm font-medium text-indigo-700">AI-powered insights for universities</span>
                     </div>
                 </div>
@@ -251,88 +275,133 @@ export default function CurriculumGapAnalyzer() {
                 {/* Results Section */}
                 {optionsError && <div className="text-red-500 mb-4">{optionsError}</div>}
                 {error && <div className="text-red-500 mb-4">{error}</div>}
+                
                 {showResults && results && (
-                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-h-[70vh] overflow-y-auto pr-2">
-                        <div className="flex items-center gap-2 mb-6">
-                            <div className="h-8 w-1 bg-indigo-600 rounded-full"></div>
-                            <h3 className="text-2xl font-bold text-gray-900">Analysis Results</h3>
-                        </div>
-
-                        {/* High Level Metrics - UPDATED GRID FOR 5 ITEMS */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-6">
-                            {/* Metric 1: Coverage (Low value - The Gap) */}
-                            <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-                                <div className="flex items-center gap-2 mb-1">
-                                    <Target className="w-4 h-4 text-orange-500" />
-                                    <p className="text-sm text-gray-500 font-medium">Job Coverage</p>
+                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-h-[70vh] overflow-y-auto pr-2 pb-10">
+                        
+                        {/* 1. Summary Metrics Cards */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                            {/* Total Skills */}
+                            <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex flex-col justify-center">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <Target className="w-4 h-4 text-gray-500" />
+                                    <p className="text-sm text-gray-500 font-medium">Total Required Skills</p>
                                 </div>
-                                <p className="text-3xl font-bold text-indigo-600">{results.coverage}</p>
-                                <p className="text-xs text-gray-400 mt-1">Matched / Required</p>
+                                <p className="text-3xl font-bold text-gray-900">{results.matchingSkills + results.missingSkills}</p>
                             </div>
 
-                            {/* Metric 2: Relevance (High value - The Quality) - NEW */}
-                            <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm border-l-4 border-l-emerald-500">
-                                <div className="flex items-center gap-2 mb-1">
-                                    <Award className="w-4 h-4 text-emerald-500" />
-                                    <p className="text-sm text-gray-500 font-medium">Relevance</p>
+                            {/* Matches */}
+                            <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm border-l-4 border-l-emerald-500 flex flex-col justify-center">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <CheckCircle className="w-4 h-4 text-emerald-500" />
+                                    <p className="text-sm text-gray-500 font-medium">Matches Found</p>
                                 </div>
-                                <p className="text-3xl font-bold text-emerald-600">{results.relevance || 'N/A'}</p>
-                                <p className="text-xs text-gray-400 mt-1">Useful Course Content</p>
-                            </div>
-
-                            {/* Metric 3: Alignment */}
-                            <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-                                <p className="text-sm text-gray-500 font-medium mb-1">Skill Alignment</p>
-                                <p className="text-3xl font-bold text-indigo-600">{results.alignment}</p>
-                                <p className="text-xs text-gray-400 mt-1">Semantic similarity</p>
-                            </div>
-
-                            {/* Metric 4: Matches */}
-                            <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-                                <p className="text-sm text-gray-500 font-medium mb-1">Matching Skills</p>
                                 <p className="text-3xl font-bold text-emerald-600">{results.matchingSkills}</p>
                             </div>
 
-                            {/* Metric 5: Gaps */}
-                            <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm">
-                                <p className="text-sm text-gray-500 font-medium mb-1">Missing Skills</p>
+                            {/* Gaps */}
+                            <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm border-l-4 border-l-red-500 flex flex-col justify-center">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <AlertCircle className="w-4 h-4 text-red-500" />
+                                    <p className="text-sm text-gray-500 font-medium">Critical Gaps</p>
+                                </div>
                                 <p className="text-3xl font-bold text-red-500">{results.missingSkills}</p>
+                            </div>
+
+                            {/* Job Coverage (Replaces Relevance) */}
+                            <div className="bg-white p-5 rounded-xl border border-gray-200 shadow-sm border-l-4 border-l-indigo-600 flex flex-col justify-center">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <IconPieChart className="w-4 h-4 text-indigo-600" />
+                                    <p className="text-sm text-gray-500 font-medium">Job Coverage</p>
+                                </div>
+                                <p className="text-3xl font-bold text-indigo-600">{results.coverage}</p>
                             </div>
                         </div>
 
-                        {/* Detailed Comparison Table */}
+                        {/* 2. Visualizations Section (Charts) */}
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                            
+                            {/* Chart A: Coverage Distribution */}
+                            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                                <h4 className="text-lg font-semibold text-gray-900 mb-4">Coverage Distribution</h4>
+                                <div className="h-64 w-full">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <PieChart>
+                                            <Pie
+                                                data={pieData}
+                                                cx="50%"
+                                                cy="50%"
+                                                innerRadius={60}
+                                                outerRadius={80}
+                                                paddingAngle={5}
+                                                dataKey="value"
+                                            >
+                                                {pieData.map((entry, index) => (
+                                                    <Cell key={`cell-${index}`} fill={entry.color} />
+                                                ))}
+                                            </Pie>
+                                            <Tooltip 
+                                                formatter={(value) => [value, 'Skills']}
+                                                contentStyle={{ backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                                            />
+                                            <Legend verticalAlign="bottom" height={36} iconType="circle" />
+                                        </PieChart>
+                                    </ResponsiveContainer>
+                                </div>
+                            </div>
+
+                            {/* Chart B: Gap Analysis Bars */}
+                            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                                <h4 className="text-lg font-semibold text-gray-900 mb-4">Gap Analysis Overview</h4>
+                                <div className="h-64 w-full">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <BarChart data={barData} layout="horizontal" barSize={40}>
+                                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
+                                            <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#6b7280'}} />
+                                            <YAxis axisLine={false} tickLine={false} tick={{fill: '#6b7280'}} />
+                                            <Tooltip 
+                                                cursor={{fill: '#f3f4f6'}}
+                                                contentStyle={{ backgroundColor: '#fff', borderRadius: '8px', border: '1px solid #e5e7eb', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                                            />
+                                            <Legend iconType="circle" />
+                                            <Bar dataKey="Matches" fill="#10b981" radius={[4, 4, 0, 0]} />
+                                            <Bar dataKey="Gaps" fill="#ef4444" radius={[4, 4, 0, 0]} />
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* 3. Detailed Comparison Lists */}
                         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                             <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
-                                <h4 className="font-semibold text-gray-900">Skill Gap Analysis</h4>
+                                <h4 className="font-semibold text-gray-900">Skill Details</h4>
                             </div>
                             <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-gray-200">
-                                {/* Covered Skills */}
+                                {/* Exact Matches */}
                                 <div className="p-6">
                                     <div className="flex items-center gap-2 mb-4">
                                         <CheckCircle className="w-5 h-5 text-emerald-500" />
-                                        <h5 className="font-semibold text-gray-900">Top Skills Covered</h5>
+                                        <h5 className="font-semibold text-gray-900">Matched Skills (Covered)</h5>
                                     </div>
                                     <div className="flex flex-wrap gap-2">
-                                        {results.covered && results.covered.length > 0 ? (
-                                            results.covered.map((skill, index) => (
+                                        {results.exact && results.exact.length > 0 ? (
+                                            results.exact.map((skill, index) => (
                                                 <span key={index} className="px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-sm font-medium">
                                                     {skill}
                                                 </span>
                                             ))
                                         ) : (
-                                            <span className="text-gray-400">No covered skills found.</span>
+                                            <span className="text-gray-400 text-sm italic">No exact matches.</span>
                                         )}
                                     </div>
-                                    <p className="mt-4 text-sm text-gray-500">
-                                        These skills are present in your curriculum and highly relevant to the target career.
-                                    </p>
                                 </div>
 
                                 {/* Missing Skills */}
                                 <div className="p-6 bg-red-50/10">
                                     <div className="flex items-center gap-2 mb-4">
                                         <AlertCircle className="w-5 h-5 text-red-500" />
-                                        <h5 className="font-semibold text-gray-900">Critical Skill Gaps</h5>
+                                        <h5 className="font-semibold text-gray-900">Missing Skills (Gaps)</h5>
                                     </div>
                                     <div className="flex flex-wrap gap-2">
                                         {results.gaps && results.gaps.length > 0 ? (
@@ -342,12 +411,9 @@ export default function CurriculumGapAnalyzer() {
                                                 </span>
                                             ))
                                         ) : (
-                                            <span className="text-gray-400">No missing skills found.</span>
+                                            <span className="text-gray-400 text-sm italic">No missing skills found.</span>
                                         )}
                                     </div>
-                                    <p className="mt-4 text-sm text-gray-500">
-                                        These are high-demand skills found in job postings that are currently missing from the curriculum.
-                                    </p>
                                 </div>
                             </div>
                         </div>

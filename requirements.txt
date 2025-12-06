@@ -1,3 +1,4 @@
+# Python dependencies for the backend application
 fastapi
 sqlalchemy
 pydantic
@@ -9,3 +10,7 @@ torch
 joblib
 numpy
 typing_extensions
+
+# JavaScript dependencies for frontend visualization
+npm
+recharts

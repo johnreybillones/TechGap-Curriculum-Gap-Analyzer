@@ -78,6 +78,14 @@ class AnalysisRequest(BaseModel):
 # -----------------------
 # CORE LOGIC (DB Only)
 # -----------------------
+# ... existing imports ...
+
+# Find the function _calculate_gap_analysis and replace it with this:
+
+# ... (Imports remain the same)
+
+# ... (Keep existing setup code until _calculate_gap_analysis)
+
 def _calculate_gap_analysis(curriculum_id: int, job_id: int, db: Session):
     # 1. Fetch Entities
     curriculum = db.query(Curriculum).filter(Curriculum.curriculum_id == curriculum_id).first()
@@ -95,8 +103,7 @@ def _calculate_gap_analysis(curriculum_id: int, job_id: int, db: Session):
 
     matches = []
     gaps = []
-    similarity_sum = 0.0
-
+    
     # 3. Query SkillMatchDetail (Single Source of Truth)
     db_details = db.query(SkillMatchDetail, Skill.skill_name)\
         .join(Skill, SkillMatchDetail.skill_id == Skill.skill_id)\
@@ -108,13 +115,11 @@ def _calculate_gap_analysis(curriculum_id: int, job_id: int, db: Session):
     # 4. Process Results
     if db_details:
         for row, skill_name in db_details:
-            score = float(row.similarity_score) if row.similarity_score else 0.0
-            
-            # Categorize based on 'status' enum
-            if row.status in ['match', 'partial']:
+            # STRICT LOGIC: If it's not a match, it's a gap.
+            # We ignore 'partial' status as requested.
+            if row.status == 'match':
                 matches.append(skill_name)
-                similarity_sum += score
-            elif row.status == 'gap':
+            else:
                 gaps.append(skill_name)
 
     # 5. Calculate Metrics
@@ -123,9 +128,10 @@ def _calculate_gap_analysis(curriculum_id: int, job_id: int, db: Session):
     
     match_count = len(matches)
     gap_count = len(gaps)
+    
     total_job_needs = match_count + gap_count
     
-    # Fallback for division by zero if curriculum is empty
+    # Fallback for division by zero
     if total_curriculum_skills == 0:
         total_curriculum_skills = match_count if match_count > 0 else 1
 
@@ -133,15 +139,18 @@ def _calculate_gap_analysis(curriculum_id: int, job_id: int, db: Session):
     relevance = (match_count / total_curriculum_skills) if total_curriculum_skills > 0 else 0.0
     if relevance > 1.0: relevance = 1.0
     
-    alignment = (similarity_sum / match_count) if match_count > 0 else 0.0
-
     return {
         "coverage": f"{coverage * 100:.1f}%",
         "relevance": f"{relevance * 100:.1f}%",
-        "alignment": f"{alignment * 100:.1f}%",
+        "coverage_score": coverage * 100,   # Raw number for frontend charts
+        "relevance_score": relevance * 100, # Raw number for frontend charts
+        
+        # Breakdown counts
         "matchingSkills": match_count,
         "missingSkills": gap_count,
-        "covered": matches,
+        
+        # Detailed Lists
+        "exact": matches,
         "gaps": gaps
     }
 
