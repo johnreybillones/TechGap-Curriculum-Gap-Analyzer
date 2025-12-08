@@ -359,10 +359,19 @@ export default function CurriculumGapAnalyzer() {
                                 </div>
                             ) : recommendation ? (
                                 <div className="prose prose-indigo max-w-none text-slate-700 bg-white/60 p-4 rounded-xl border border-indigo-50/50 backdrop-blur-sm">
-                                    {/* Using whitespace-pre-wrap to respect newlines from Gemini */}
-                                    <div className="whitespace-pre-wrap font-medium leading-relaxed">
+                                    <ReactMarkdown
+                                        components={{
+                                            ul: ({ node, ...props }) => <ul className="list-disc pl-5 space-y-2" {...props} />,
+                                            ol: ({ node, ...props }) => <ol className="list-decimal pl-5 space-y-2" {...props} />,
+                                            li: ({ node, ...props }) => <li className="text-slate-700" {...props} />,
+                                            p: ({ node, ...props }) => <p className="text-slate-700 leading-relaxed" {...props} />,
+                                            h2: ({ node, ...props }) => <h2 className="text-xl font-bold text-indigo-900 mt-4" {...props} />,
+                                            h3: ({ node, ...props }) => <h3 className="text-lg font-semibold text-indigo-900 mt-3" {...props} />,
+                                            strong: ({ node, ...props }) => <strong className="text-indigo-900" {...props} />,
+                                        }}
+                                    >
                                         {recommendation}
-                                    </div>
+                                    </ReactMarkdown>
                                 </div>
                             ) : (
                                 <p className="text-slate-500 italic">Analysis complete. Waiting for AI insights...</p>

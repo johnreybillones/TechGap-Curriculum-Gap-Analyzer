@@ -1,5 +1,6 @@
 import os
 import google.generativeai as genai
+from dotenv import load_dotenv
 
 from datetime import date
 from typing import List, Optional
@@ -11,6 +12,10 @@ from sqlalchemy import func, distinct
 from sqlalchemy.orm import Session
 
 from app.database import SessionLocal
+
+# Load .env from app directory
+dotenv_path = os.path.join(os.path.dirname(__file__), '..', 'app', '.env')
+load_dotenv(dotenv_path)
 from app.models import (
     Curriculum,
     GapReport,
@@ -344,7 +349,8 @@ def generate_recommendation(request: RecommendationRequest):
         
         # Prefer the modern SDK, fall back to legacy generate_text if GenerativeModel is unavailable
         if hasattr(genai, "GenerativeModel"):
-            model = genai.GenerativeModel(model = genai.GenerativeModel('models/gemini-1.5-flash'))
+            # Use gemini-2.0-flash-lite (separate quota pool, faster for simple tasks)
+            model = genai.GenerativeModel('gemini-2.5-flash-lite')
             response = model.generate_content(prompt)
             text = getattr(response, "text", None) or str(response)
         else:
