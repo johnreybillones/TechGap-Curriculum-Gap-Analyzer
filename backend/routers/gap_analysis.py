@@ -1,15 +1,21 @@
+import os
+import google.generativeai as genai
+from dotenv import load_dotenv
+
 from datetime import date
 from typing import List, Optional
 import re
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
-import csv
-from pathlib import Path
-from sqlalchemy import func
+from sqlalchemy import func, distinct
 from sqlalchemy.orm import Session
 
 from app.database import SessionLocal
+
+# Load .env from app directory
+dotenv_path = os.path.join(os.path.dirname(__file__), '..', 'app', '.env')
+load_dotenv(dotenv_path)
 from app.models import (
     Curriculum,
     GapReport,
@@ -23,62 +29,28 @@ from app.models import (
 
 router = APIRouter(tags=["Gap Analysis"])
 
-SKILL_CSV_PATH = (
-    Path(__file__).resolve().parent.parent
-    / "csvs"
-    / "generated csv from model and ung model file"
-    / "skill_match_detail.csv"
-)
-
-# In-memory caches to avoid re-reading large CSVs on every request
-_CSV_ROWS = None
-_CSV_BY_TRACK = None
+# In-memory caches
 _OPTIONS_CACHE = None
-_GAP_CSV_CACHE = None
+
+# --- CONFIGURATION: JOBS TO HIDE ---
+BLACKLIST_JOBS = {
+    "statistics",
+    "business analyst",
+    "data quality manager",
+    "data warehousing",
+    "technical operations"
+}
 
 # -----------------------
 # Helpers
 # -----------------------
-def load_skill_csv():
-    """Load skill_match_detail.csv once and index by lowercased track."""
-    global _CSV_ROWS, _CSV_BY_TRACK
-    if _CSV_ROWS is not None and _CSV_BY_TRACK is not None:
-        return
-    _CSV_ROWS = []
-    _CSV_BY_TRACK = {}
-    if not SKILL_CSV_PATH.exists():
-        return
-    with SKILL_CSV_PATH.open(newline="", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            _CSV_ROWS.append(row)
-            track = row.get("curriculum_track", "")
-            key = track.lower()
-            _CSV_BY_TRACK.setdefault(key, []).append(row)
-
-
-def load_gap_csv():
-    """Load gap_report.csv once."""
-    global _GAP_CSV_CACHE
-    if _GAP_CSV_CACHE is not None:
-        return
-    gap_path = (
-        Path(__file__).resolve().parent.parent
-        / "csvs"
-        / "generated csv from model and ung model file"
-        / "gap_report.csv"
-    )
-    _GAP_CSV_CACHE = []
-    if not gap_path.exists():
-        return
-    with gap_path.open(newline="", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        _GAP_CSV_CACHE.extend(list(reader))
-
-
 def invalidate_options_cache():
     global _OPTIONS_CACHE
     _OPTIONS_CACHE = None
+
+def normalize_string(text: str) -> str:
+    if not text: return ""
+    return re.sub(r'[^a-z0-9]', '', text.lower())
 
 # -----------------------
 # Dependencies & Schemas
@@ -110,222 +82,184 @@ class AnalysisRequest(BaseModel):
 
 
 # -----------------------
-# Analysis Endpoint
+# CORE LOGIC (DB Only)
+# -----------------------
+
+def _calculate_gap_analysis(curriculum_id: int, job_id: int, db: Session):
+    # 1. Fetch Entities
+    curriculum = db.query(Curriculum).filter(Curriculum.curriculum_id == curriculum_id).first()
+    if not curriculum:
+        raise HTTPException(status_code=404, detail=f"Curriculum {curriculum_id} not found")
+
+    job = db.query(JobRole).filter(JobRole.job_id == job_id).first()
+    if not job:
+        raise HTTPException(status_code=404, detail=f"Job role {job_id} not found")
+
+    # 2. Metrics Denominator: Total Skills in Curriculum
+    total_curriculum_skills = db.query(func.count(CourseSkill.skill_id))\
+        .filter(CourseSkill.curriculum_id == curriculum_id)\
+        .scalar() or 0
+
+    matches = []
+    gaps = []
+    
+    # 3. Query SkillMatchDetail (Single Source of Truth)
+    db_details = db.query(SkillMatchDetail, Skill.skill_name)\
+        .join(Skill, SkillMatchDetail.skill_id == Skill.skill_id)\
+        .filter(
+            SkillMatchDetail.curriculum_id == curriculum_id,
+            SkillMatchDetail.job_id == job_id
+        ).all()
+
+    # 4. Process Results
+    if db_details:
+        for row, skill_name in db_details:
+            if row.status == 'match':
+                matches.append(skill_name)
+            else:
+                gaps.append(skill_name)
+
+    # 5. Calculate Metrics
+    matches = sorted(list(set(matches)))
+    gaps = sorted(list(set(gaps)))
+    
+    match_count = len(matches)
+    gap_count = len(gaps)
+    
+    total_job_needs = match_count + gap_count
+    
+    # Avoid division by zero
+    if total_curriculum_skills == 0:
+        total_curriculum_skills = match_count if match_count > 0 else 1
+
+    # Logic for Curriculum Relevance (Option B):
+    # Relevance = (Skills Matched / Total Curriculum Skills)
+    # Irrelevant = (Total Curriculum Skills - Skills Matched)
+    irrelevant_count = max(0, total_curriculum_skills - match_count)
+
+    coverage = (match_count / total_job_needs) if total_job_needs > 0 else 0.0
+    relevance = (match_count / total_curriculum_skills) if total_curriculum_skills > 0 else 0.0
+    if relevance > 1.0: relevance = 1.0
+    
+    return {
+        "coverage": f"{coverage * 100:.1f}%",
+        "relevance": f"{relevance * 100:.1f}%",
+        "coverage_score": round(coverage * 100, 1),
+        "relevance_score": round(relevance * 100, 1),
+        
+        # Counts
+        "matchingSkills": match_count,
+        "missingSkills": gap_count,
+        "totalCurriculumSkills": total_curriculum_skills,
+        "irrelevantSkills": irrelevant_count,
+        
+        # Detailed Lists
+        "exact": matches,
+        "gaps": gaps
+    }
+
+
+# -----------------------
+# Analysis Endpoints
 # -----------------------
 @router.post("/api/analyze")
 def analyze(request: AnalysisRequest, db: Session = Depends(get_db)):
-    """
-    Analyzes the gap between a Curriculum and a specific Job Role.
+    return _calculate_gap_analysis(request.curriculum_id, request.job_id, db)
+
+
+# -----------------------
+# Filtered Options Endpoint
+# -----------------------
+@router.get("/api/options")
+def get_options(db: Session = Depends(get_db)):
+    global _OPTIONS_CACHE
+    if _OPTIONS_CACHE is not None:
+        return _OPTIONS_CACHE
+
+    valid_curriculum_ids = db.query(SkillMatchDetail.curriculum_id).distinct().all()
+    valid_job_ids = db.query(SkillMatchDetail.job_id).distinct().all()
     
-    LOGIC VERIFICATION:
-    1. Matching Skills:
-       - Source: Union of DB (SkillMatchDetail) and CSV.
-       - Filter: Strictly filtered by the specific job_id / job_title.
-       - Result: Only skills found in BOTH the Curriculum and THIS Job.
-       
-    2. Missing Skills:
-       - Source: Union of DB (GapReport), Gap CSV, AND Skill Match CSV (status=gap).
-       - Filter: Intersected with 'Target Job Skills' (DB + CSV).
-       - Result: Only skills found in THIS Job but MISSING from Curriculum.
-       
-    3. Metrics:
-       - Coverage: Matches / (Matches + Relevant Gaps) -> Specific to Job.
-       - Relevance: Matches / Total Curriculum -> Specific to Course Efficiency.
-    """
-    # 1. Fetch Entities
-    curriculum = db.query(Curriculum).filter(Curriculum.curriculum_id == request.curriculum_id).first()
-    if not curriculum:
-        raise HTTPException(status_code=404, detail="Curriculum not found")
+    c_ids = [row[0] for row in valid_curriculum_ids]
+    j_ids = [row[0] for row in valid_job_ids]
 
-    job = db.query(JobRole).filter(JobRole.job_id == request.job_id).first()
-    if not job:
-        raise HTTPException(status_code=404, detail="Job role not found")
+    curricula = db.query(Curriculum).filter(Curriculum.curriculum_id.in_(c_ids)).all()
+    jobs = db.query(JobRole).filter(JobRole.job_id.in_(j_ids)).all()
 
-    # Helper for normalization
-    def normalize_skill(name):
-        if not name: return ""
-        return re.sub(r'[^a-z0-9]', '', name.lower())
-
-    # ---------------------------------------------------------
-    # PRE-CALCULATION: Identify relevant CSV rows for this Job/Track
-    # ---------------------------------------------------------
-    load_skill_csv()
-    csv_job_rows = []
+    curriculum_options = []
+    seen_c = set()
+    for c in curricula:
+        label = c.track or c.course_title or ""
+        norm = normalize_string(label)
+        if norm and norm not in seen_c:
+            curriculum_options.append({"id": c.curriculum_id, "label": label})
+            seen_c.add(norm)
     
-    if _CSV_BY_TRACK:
-        track_label = (curriculum.track or curriculum.course_title or "").lower()
-        job_label = (job.query or job.title or "").lower()
+    job_options = []
+    seen_j = set()
+    for j in jobs:
+        label = j.query or j.title or ""
+        if label.lower().strip() in BLACKLIST_JOBS:
+            continue
+        norm = normalize_string(label)
+        if norm and norm not in seen_j:
+            job_options.append({"id": j.job_id, "label": label})
+            seen_j.add(norm)
+
+    _OPTIONS_CACHE = {"curricula": curriculum_options, "jobs": job_options}
+    return _OPTIONS_CACHE
+
+# ... (Keep the Debug and CRUD endpoints below this line exactly as they were in your file)
+
+
+# -----------------------
+# Debug Endpoint
+# -----------------------
+@router.get("/api/debug/full_matrix")
+def debug_full_matrix(db: Session = Depends(get_db)):
+    print("\n" + "="*80)
+    print(f"{'FULL MATRIX GAP ANALYSIS (Strict DB)':^80}")
+    print("="*80 + "\n")
+    
+    active_c_ids = [r[0] for r in db.query(distinct(SkillMatchDetail.curriculum_id)).all()]
+    active_j_ids = [r[0] for r in db.query(distinct(SkillMatchDetail.job_id)).all()]
+
+    curricula = db.query(Curriculum).filter(Curriculum.curriculum_id.in_(active_c_ids)).all()
+    jobs = db.query(JobRole).filter(JobRole.job_id.in_(active_j_ids)).all()
+    
+    # Filter uniques for debug loop too
+    unique_curricula = []
+    seen = set()
+    for c in curricula:
+        key = normalize_string(c.track or c.course_title)
+        if key not in seen:
+            unique_curricula.append(c)
+            seen.add(key)
+
+    header = f"{'Job Title':<30} | {'Cov':<6} | {'Rel':<6} | {'Mat':<3} | {'Gap':<3}"
+    
+    for i, c in enumerate(unique_curricula):
+        if i >= 4: break 
         
-        # Look in the specific track
-        for row in _CSV_BY_TRACK.get(track_label, []):
-            jt = row.get("job_title", "").lower()
-            # Fuzzy match: e.g. "Data Scientist" in "Senior Data Scientist"
-            if job_label and (job_label in jt or jt in job_label):
-                csv_job_rows.append(row)
+        c_name = c.track or c.course_title or f"Curriculum {c.curriculum_id}"
+        print(f"--- {c_name} ---")
+        print(header)
+        print("-" * 80)
+        
+        for j in jobs:
+            # Skip blacklisted jobs in debug too (optional, keeps log clean)
+            if (j.query or j.title or "").lower().strip() in BLACKLIST_JOBS:
+                continue
 
-    # ---------------------------------------------------------
-    # STEP 2: Get Target Job Skills (The "Requirement List" for THIS Job)
-    # ---------------------------------------------------------
-    
-    # Priority A: From Database
-    job_skill_rows = (
-        db.query(Skill.skill_name)
-        .join(JobSkill, Skill.skill_id == JobSkill.skill_id)
-        .filter(JobSkill.job_id == request.job_id)
-        .all()
-    )
-    target_job_skills_norm = {normalize_skill(r.skill_name) for r in job_skill_rows}
+            j_name = j.query or j.title or f"Job {j.job_id}"
+            try:
+                res = _calculate_gap_analysis(c.curriculum_id, j.job_id, db)
+                print(f"{j_name:<30} | {res['coverage']:<6} | {res['relevance']:<6} | {res['matchingSkills']:<3} | {res['missingSkills']:<3}")
+            except Exception as e:
+                # pass silently
+                pass
+        print("\n")
 
-    # Priority B: Augment from CSV (ALWAYS run this to enrich sparse DB data)
-    # This reads ALL skills listed for this job in the CSV (matches, gaps, etc.)
-    # because if it's in the CSV, the job implies it requires it.
-    for row in csv_job_rows:
-        s_name = row.get("skill_name", "").strip()
-        if s_name:
-            target_job_skills_norm.add(normalize_skill(s_name))
-
-    # 3. Get Curriculum Skills (DB Inventory)
-    curriculum_skill_rows = (
-        db.query(Skill.skill_name)
-        .join(CourseSkill, Skill.skill_id == CourseSkill.skill_id)
-        .filter(CourseSkill.curriculum_id == request.curriculum_id)
-        .all()
-    )
-    curriculum_skills_count = len(curriculum_skill_rows)
-
-    # =========================================================
-    # PART A: MATCHING SKILLS (Merge DB + CSV)
-    # =========================================================
-    covered_names = set()
-    covered_names_norm = set() 
-    similarity_scores = []
-    
-    # 1. From DB
-    details = (
-        db.query(SkillMatchDetail)
-        .filter(
-            SkillMatchDetail.curriculum_id == request.curriculum_id,
-            SkillMatchDetail.job_id == request.job_id,
-        )
-        .all()
-    )
-    if details:
-        for d in details:
-            if d.status in ("match", "partial"):
-                s = db.query(Skill).get(d.skill_id)
-                if s:
-                    s_name = s.skill_name
-                    covered_names.add(s_name)
-                    covered_names_norm.add(normalize_skill(s_name))
-                    similarity_scores.append(d.similarity_score)
-
-    # 2. From CSV (Using pre-filtered rows)
-    for row in csv_job_rows:
-        if row.get("status", "").lower() in ("match", "partial"):
-            s_name = row.get("skill_name", "").strip()
-            if s_name and normalize_skill(s_name) not in covered_names_norm:
-                covered_names.add(s_name)
-                covered_names_norm.add(normalize_skill(s_name))
-                try:
-                    similarity_scores.append(float(row.get("similarity_score", 0)))
-                except Exception:
-                    pass
-
-    # =========================================================
-    # PART B: POTENTIAL GAPS (Merge DB + Gap CSV + Match CSV)
-    # =========================================================
-    raw_gap_pool = set() # Stores actual names
-    raw_gap_pool_norm = {} # Maps normalized -> original name
-
-    # 1. From DB (GapReport)
-    gap_reports = db.query(GapReport).filter(GapReport.curriculum_id == request.curriculum_id).all()
-    for gr in gap_reports:
-        if gr.recommendation:
-            match = re.search(r":\s*(.*?)$", gr.recommendation)
-            if match:
-                s_name = match.group(1).strip()
-                raw_gap_pool.add(s_name)
-                raw_gap_pool_norm[normalize_skill(s_name)] = s_name
-
-    # 2. From GapReport CSV
-    load_gap_csv()
-    if _GAP_CSV_CACHE:
-        track_label = (curriculum.track or curriculum.course_title or "").lower()
-        for row in _GAP_CSV_CACHE:
-            if row.get("curriculum_track", "").lower() == track_label:
-                rec = row.get("recommendation", "")
-                match = re.search(r":\s*(.*?)$", rec)
-                if match:
-                    s_name = match.group(1).strip()
-                    if normalize_skill(s_name) not in raw_gap_pool_norm:
-                        raw_gap_pool.add(s_name)
-                        raw_gap_pool_norm[normalize_skill(s_name)] = s_name
-
-    # 3. From Skill Match CSV (Explicit Gaps)
-    # If the CSV explicitly says "gap", we add it to the pool.
-    for row in csv_job_rows:
-        if row.get("status", "").lower() == "gap":
-            s_name = row.get("skill_name", "").strip()
-            if s_name and normalize_skill(s_name) not in raw_gap_pool_norm:
-                raw_gap_pool.add(s_name)
-                raw_gap_pool_norm[normalize_skill(s_name)] = s_name
-
-    # =========================================================
-    # PART C: STRICT JOB-SPECIFIC FILTERING
-    # =========================================================
-    
-    # We strictly intersect the "Raw Gaps" (from Curriculum analysis) 
-    # with "Target Job Skills" (from Job Requirements).
-    # This guarantees we ONLY show gaps relevant to THIS job.
-    
-    final_gaps = set()
-    
-    if target_job_skills_norm:
-        for gap_norm, gap_original in raw_gap_pool_norm.items():
-            if gap_norm in target_job_skills_norm:
-                final_gaps.add(gap_original)
-    
-    # Sanity check: Remove anything we already matched
-    # (Matches take precedence over Gaps)
-    final_gaps_cleaned = set()
-    for gap in final_gaps:
-        if normalize_skill(gap) not in covered_names_norm:
-            final_gaps_cleaned.add(gap)
-
-    matching_skills_count = len(covered_names)
-    missing_skills_count = len(final_gaps_cleaned)
-    
-    # Denominators
-    total_market_skills = matching_skills_count + missing_skills_count
-    
-    # If curriculum count is 0 (import error) but matches exist, infer curriculum size
-    if curriculum_skills_count == 0 and matching_skills_count > 0:
-        curriculum_skills_count = matching_skills_count
-
-    # METRIC 1: Coverage (Matches / Job Requirements)
-    coverage_ratio = (
-        matching_skills_count / total_market_skills if total_market_skills > 0 else 0.0
-    )
-
-    # METRIC 2: Relevance (Matches / Curriculum Inventory)
-    relevance_ratio = (
-        matching_skills_count / curriculum_skills_count if curriculum_skills_count > 0 else 0.0
-    )
-    if relevance_ratio > 1.0: relevance_ratio = 1.0
-
-    avg_similarity = (
-        sum(similarity_scores) / len(similarity_scores) if similarity_scores else 0.0
-    )
-
-    return {
-        "coverage": f"{coverage_ratio * 100:.1f}%",
-        "relevance": f"{relevance_ratio * 100:.1f}%",
-        "alignment": f"{avg_similarity * 100:.1f}%",
-        "matchingSkills": matching_skills_count,
-        "missingSkills": missing_skills_count,
-        "covered": sorted(list(covered_names)),
-        "gaps": sorted(list(final_gaps_cleaned)),
-    }
+    return []
 
 
 # -----------------------
@@ -333,13 +267,6 @@ def analyze(request: AnalysisRequest, db: Session = Depends(get_db)):
 # -----------------------
 @router.post("/gapanalysis", response_model=GapAnalysisOut)
 def create_report(data: GapAnalysisCreate, db: Session = Depends(get_db)):
-    course = db.query(Curriculum).filter(Curriculum.curriculum_id == data.course_id).first()
-    if not course:
-        raise HTTPException(status_code=404, detail="Course not found")
-    skill = db.query(Skill).filter(Skill.skill_id == data.missing_skill_id).first()
-    if not skill:
-        raise HTTPException(status_code=404, detail="Skill not found")
-
     new_report = GapReport(**data.dict())
     db.add(new_report)
     db.commit()
@@ -353,81 +280,93 @@ def get_reports(db: Session = Depends(get_db)):
 @router.get("/gapanalysis/{report_id}", response_model=GapAnalysisOut)
 def get_report(report_id: int, db: Session = Depends(get_db)):
     report = db.query(GapReport).filter(GapReport.report_id == report_id).first()
-    if not report:
-        raise HTTPException(status_code=404, detail="GapAnalysis not found")
+    if not report: raise HTTPException(status_code=404, detail="Not found")
     return report
 
 @router.put("/gapanalysis/{report_id}", response_model=GapAnalysisOut)
 def update_report(report_id: int, data: GapAnalysisBase, db: Session = Depends(get_db)):
     report = db.query(GapReport).filter(GapReport.report_id == report_id).first()
-    if not report:
-        raise HTTPException(status_code=404, detail="GapAnalysis not found")
-    for key, value in data.dict().items():
-        setattr(report, key, value)
+    if not report: raise HTTPException(status_code=404, detail="Not found")
+    for key, value in data.dict().items(): setattr(report, key, value)
     db.commit()
-    db.refresh(report)
     return report
 
 @router.delete("/gapanalysis/{report_id}")
 def delete_report(report_id: int, db: Session = Depends(get_db)):
     report = db.query(GapReport).filter(GapReport.report_id == report_id).first()
-    if not report:
-        raise HTTPException(status_code=404, detail="GapAnalysis not found")
+    if not report: raise HTTPException(status_code=404, detail="Not found")
     db.delete(report)
     db.commit()
-    return {"message": "GapAnalysis report deleted successfully"}
+    return {"message": "Deleted"}
 
-@router.get("/api/options")
-def get_options(db: Session = Depends(get_db)):
-    global _OPTIONS_CACHE
-    if _OPTIONS_CACHE is not None:
-        return _OPTIONS_CACHE
+# Initialize Gemini (Make sure you set GOOGLE_API_KEY in your environment variables)
+# If testing locally, you can temporarily hardcode it, but env var is safer.
+if os.getenv("GOOGLE_API_KEY"):
+    genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
-    curr_counts = (
-        db.query(SkillMatchDetail.curriculum_id.label("cid"), func.count().label("cnt"))
-        .group_by(SkillMatchDetail.curriculum_id)
-        .all()
-    )
-    job_counts = (
-        db.query(SkillMatchDetail.job_id.label("jid"), func.count().label("cnt"))
-        .group_by(SkillMatchDetail.job_id)
-        .all()
-    )
+class RecommendationRequest(BaseModel):
+    job_title: str
+    curriculum_title: str
+    missing_skills: List[str]
+    coverage_score: float
 
-    def build_curr_options(ids_with_counts):
-        opts = {}
-        for cid, cnt in ids_with_counts:
-            row = db.query(Curriculum).filter(Curriculum.curriculum_id == cid).first()
-            if not row:
-                continue
-            label = row.track or row.course_title or f"Curriculum {cid}"
-            if label not in opts or cnt > opts[label]["count"]:
-                opts[label] = {"id": cid, "label": label, "count": cnt}
-        return list(opts.values())
+@router.post("/api/recommend")
+def generate_recommendation(request: RecommendationRequest):
+    # Check if API key is present
+    if not os.getenv("GOOGLE_API_KEY"):
+        return {"recommendation": "⚠️ API Key missing. Please set GOOGLE_API_KEY in your backend environment."}
 
-    def build_job_options(ids_with_counts):
-        opts = {}
-        for jid, cnt in ids_with_counts:
-            row = db.query(JobRole).filter(JobRole.job_id == jid).first()
-            if not row:
-                continue
-            label = row.query or row.title or f"Job {jid}"
-            if label not in opts or cnt > opts[label]["count"]:
-                opts[label] = {"id": jid, "label": label, "count": cnt}
-        return list(opts.values())
+    try:
+        # Limit skills to avoid token overflow
+        skills_list = ", ".join(request.missing_skills[:20])
+        
+        # --- UPDATED PROMPT TO FOLLOW SCOPE & DELIMITATIONS ---
+        prompt = f"""
+        Act as a Senior Curriculum Developer for the College of Information and Computer Studies (CICS).
+        
+        CONTEXT:
+        We are analyzing the alignment between the official CICS syllabi (academic reference) and industry-required skills (public job datasets) for the role of "{request.job_title}".
+        
+        DATA:
+        - Curriculum: "{request.curriculum_title}"
+        - Current Match Score: {request.coverage_score}%
+        - Critical MISSING Skills: {skills_list}
 
-    curriculum_options = build_curr_options(curr_counts)
-    job_options = build_job_options(job_counts)
+        TASK:
+        Provide a strategic summary and 3 actionable recommendations to update the OFFICIAL SYLLABUS.
 
-    if not curriculum_options:
-        curriculum_options = [
-            {"id": c.curriculum_id, "label": c.track or c.course_title}
-            for c in db.query(Curriculum).all()
-        ]
-    if not job_options:
-        job_options = [
-            {"id": j.job_id, "label": j.query or j.title} for j in db.query(JobRole).all()
-        ]
+        CONSTRAINTS (STRICTLY FOLLOW):
+        1. Focus ONLY on modifying the core subjects/syllabi (e.g., adding new topics, updating lab exercises, modernizing tools).
+        2. Do NOT suggest internships, seminars, OJT, or informal learning (these are outside the scope of this study).
+        3. Do NOT suggest General Education changes.
+        4. Keep recommendations technical and specific to the computing field.
 
-    _OPTIONS_CACHE = {"curricula": curriculum_options, "jobs": job_options}
-    return _OPTIONS_CACHE
+        FORMAT:
+        - Executive Summary (2-3 sentences)
+        - 3 Bulleted Recommendations (Bold the key action)
+        """
+        # -------------------------------------------------------
+        
+        # Prefer the modern SDK, fall back to legacy generate_text if GenerativeModel is unavailable
+        if hasattr(genai, "GenerativeModel"):
+            # Use gemini-2.0-flash-lite (separate quota pool, faster for simple tasks)
+            model = genai.GenerativeModel('gemini-2.5-flash-lite')
+            response = model.generate_content(prompt)
+            text = getattr(response, "text", None) or str(response)
+        else:
+            # Legacy client in version 0.1.0rc1 (does not have GenerativeModel)
+            response = genai.generate_text(
+                model="models/text-bison-001",
+                prompt=prompt
+            )
+            text = getattr(response, "result", None)
+            if not text and isinstance(response, dict):
+                text = response.get("generated_text") or response.get("result")
+            if not text:
+                text = str(response)
+
+        return {"recommendation": text}
+        
+    except Exception as e:
+        print(f"Gemini API Error: {e}")
+        return {"recommendation": "Unable to generate AI recommendations at this time. Please try again later."}
