@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import ReactMarkdown from 'react-markdown'; // Optional: If you want to render bolding/lists nicely
+import ReactMarkdown from 'react-markdown'; 
 import { 
     ChevronDown, 
     BarChart3, 
@@ -7,9 +7,8 @@ import {
     AlertCircle, 
     BookOpen, 
     Target, 
-    Layers,
-    Sparkles, // <--- New Icon
-    Loader2   // <--- Loading Icon
+    Sparkles, 
+    Loader2
 } from 'lucide-react';
 import { 
     PieChart, 
@@ -21,8 +20,15 @@ import {
     YAxis, 
     CartesianGrid, 
     Legend, 
-    ResponsiveContainer 
+    ResponsiveContainer,
+    Tooltip 
 } from 'recharts';
+import logoPng from './assets/logo.png';
+
+// --- TECHGAP LOGO ---
+const TechGapLogo = ({ className = "w-8 h-8" }) => (
+    <img src={logoPng} alt="TechGap Logo" className={`${className} object-contain`} />
+);
 
 // Custom Smooth Scroll Helper
 const smoothScroll = (target, duration) => {
@@ -55,10 +61,14 @@ export default function CurriculumGapAnalyzer() {
     const [results, setResults] = useState(null);
     const [loading, setLoading] = useState(false);
     
-    // --- New AI Recommendation State ---
+    // --- AI Recommendation State ---
     const [recommendation, setRecommendation] = useState('');
     const [recLoading, setRecLoading] = useState(false);
-    // -----------------------------------
+    const [isAiOpen, setIsAiOpen] = useState(true); 
+
+    // --- Skill List Truncation State ---
+    const [showAllGaps, setShowAllGaps] = useState(false);
+    const [showAllMatches, setShowAllMatches] = useState(false);
 
     const [error, setError] = useState('');
     const [programs, setPrograms] = useState([]);
@@ -72,7 +82,6 @@ export default function CurriculumGapAnalyzer() {
 
     const summaryRef = useRef(null);
 
-    // ... (Keep existing useEffect for loadOptions) ...
     useEffect(() => {
         const loadOptions = async () => {
             try {
@@ -105,13 +114,15 @@ export default function CurriculumGapAnalyzer() {
 
     const handleAnalyze = async () => {
         setLoading(true);
-        setRecLoading(true); // Start AI loading
-        setRecommendation(''); // Reset previous AI result
+        setRecLoading(true);
+        setRecommendation('');
         setError('');
         setShowResults(false);
+        setIsAiOpen(true); 
+        setShowAllGaps(false); 
+        setShowAllMatches(false);
         
         try {
-            // 1. Run Main Analysis
             const response = await fetch(`${API_BASE}/api/analyze`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -127,14 +138,12 @@ export default function CurriculumGapAnalyzer() {
             setResults(data);
             setShowResults(true);
 
-            // Scroll to results
             setTimeout(() => {
                 smoothScroll(summaryRef.current, 2000);
             }, 100);
 
-            setLoading(false); // Stop main loading
+            setLoading(false);
 
-            // 2. Run AI Recommendation (Chained request)
             const aiResponse = await fetch(`${API_BASE}/api/recommend`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -161,71 +170,102 @@ export default function CurriculumGapAnalyzer() {
         }
     };
 
-    // --- CHART DATA ---
     const pieData = results ? [
-        { name: 'Relevant Skills', value: results.matchingSkills, color: '#10b981' }, 
-        { name: 'Other Topics', value: results.irrelevantSkills || 0, color: '#E5E7EB' } 
+        { name: 'Relevant', value: results.matchingSkills, color: 'url(#colorRelevant)' }, 
+        { name: 'Others', value: results.irrelevantSkills || 0, color: 'url(#colorOthers)' } 
     ] : [];
 
     const barData = results ? [
         {
-            name: 'Skill Analysis',
+            name: 'Skills',
             Matches: results.matchingSkills,
             Gaps: results.missingSkills,
             Total: results.matchingSkills + results.missingSkills
         }
     ] : [];
 
+    const getVisibleSkills = (skills, showAll) => {
+        if (!skills) return [];
+        if (showAll) return skills;
+        return skills.slice(0, 15); 
+    };
+
+    // Custom Tooltip for Charts
+    const CustomTooltip = ({ active, payload, label }) => {
+        if (active && payload && payload.length) {
+            return (
+                <div className="bg-white/95 backdrop-blur-md p-3 border border-indigo-100 rounded-xl shadow-xl text-xs z-50">
+                    <p className="font-bold text-indigo-900 mb-1">{label || payload[0].name}</p>
+                    {payload.map((entry, index) => (
+                        <p key={index} style={{ color: entry.color }} className="font-medium flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }}></span>
+                            {entry.name}: {entry.value}
+                        </p>
+                    ))}
+                </div>
+            );
+        }
+        return null;
+    };
+
     return (
-        <div className="min-h-screen bg-gray-50 font-sans text-gray-900">
+        // BACKGROUND FIX: Stronger Gradient + Grid Pattern
+        <div className="min-h-screen font-sans text-gray-900 relative selection:bg-indigo-100">
+             {/* Fixed Background Layer */}
+             <div className="fixed inset-0 -z-10 h-full w-full bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] [background-size:24px_24px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_70%,transparent_100%)]"></div>
+             <div className="fixed inset-0 -z-20 h-full w-full bg-slate-50 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-100/50 via-slate-50 to-slate-50"></div>
+
             {/* Header */}
-            <header className="bg-white border-b border-gray-200 px-6 py-4 sticky top-0 z-50">
+            <header className="bg-white/70 backdrop-blur-xl border-b border-indigo-50 px-4 md:px-6 py-3 sticky top-0 z-40 shadow-sm transition-all duration-300">
                 <div className="max-w-6xl mx-auto flex items-center gap-2">
-                    <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center shadow-sm">
-                        <Layers className="w-5 h-5 text-white" />
+                    <div className="w-8 h-8 flex items-center justify-center transform hover:scale-105 transition-transform duration-300">
+                        <TechGapLogo className="w-8 h-8 drop-shadow-md" />
                     </div>
-                    <h1 className="text-xl font-bold text-gray-900 tracking-tight">TechGap</h1>
+                    <h1 className="text-lg md:text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-700 to-indigo-500 tracking-tight">TechGap</h1>
                 </div>
             </header>
 
             {/* Main Content */}
-            <main className="max-w-6xl mx-auto px-6 py-12">
+            <main className="max-w-6xl mx-auto px-3 md:px-6 py-6 md:py-8 relative z-0">
                 
                 {/* Title Section */}
-                <div className="text-center mb-12 mt-4">
-                    <h2 className="text-4xl md:text-5xl font-extrabold text-indigo-900 mb-4 tracking-tight">
+                <div className="text-center mb-8 md:mb-12 mt-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                    <h2 className="text-4xl md:text-6xl font-extrabold text-indigo-950 mb-4 tracking-tight drop-shadow-sm">
                         Curriculum Gap Analyzer
                     </h2>
-                    <p className="text-gray-600 text-lg mb-2 max-w-2xl mx-auto">
+                    <p className="text-slate-600 text-sm md:text-lg mb-2 max-w-2xl mx-auto px-4 leading-relaxed font-medium">
                         Identify critical skill gaps by comparing your course content against real-time industry job market standards.
                     </p>
                 </div>
 
                 {/* Control Panel */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 md:p-8 mb-12 transition-all hover:shadow-md">
+                {/* DROPDOWN FIX: Added z-30 to this container to keep it above results */}
+                <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-lg shadow-indigo-100/50 border border-white p-4 md:p-8 mb-8 transition-all duration-300 hover:shadow-xl hover:shadow-indigo-200/40 relative z-30">
                     <div className="flex flex-col md:flex-row items-end gap-4">
                         {/* Program Dropdown */}
-                        <div className="w-full md:flex-1 relative">
-                            <label className="block text-sm font-semibold text-gray-500 uppercase mb-2">Select Curriculum</label>
+                        <div className="w-full md:flex-1 relative group">
+                            <label className="block text-xs md:text-sm font-bold text-slate-500 uppercase mb-2 group-hover:text-indigo-600 transition-colors ml-1">Select Curriculum</label>
                             <button
                                 onClick={() => {
                                     if (optionsLoading) return;
                                     setIsProgramOpen(!isProgramOpen);
                                     setIsCareerOpen(false);
                                 }}
-                                className="w-full flex items-center justify-between px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg hover:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-left disabled:opacity-60"
+                                className="w-full flex items-center justify-between px-4 py-4 bg-slate-50/80 border border-slate-200 rounded-xl hover:border-indigo-500 hover:bg-white focus:outline-none focus:ring-4 focus:ring-indigo-100 transition-all text-left disabled:opacity-60 shadow-sm group-hover:shadow-md cursor-pointer"
                                 disabled={optionsLoading || programs.length === 0}
                             >
                                 <div className="flex items-center gap-3 overflow-hidden">
                                     <BookOpen className="w-5 h-5 text-indigo-500 flex-shrink-0" />
-                                    <span className="text-slate-700 font-medium truncate">
+                                    <span className="text-slate-700 font-bold truncate text-sm md:text-base">
                                         {selectedProgram ? selectedProgram.label : optionsLoading ? 'Loading...' : 'No curriculum found'}
                                     </span>
                                 </div>
-                                <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${isProgramOpen ? 'rotate-180' : ''}`} />
+                                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${isProgramOpen ? 'rotate-180 text-indigo-500' : ''}`} />
                             </button>
-                            {isProgramOpen && (
-                                <div className="absolute z-10 w-full mt-2 bg-white border border-gray-200 rounded-lg shadow-xl py-1 max-h-60 overflow-auto">
+                            
+                            {/* DROPDOWN FIX: Added z-50 to the absolute menu */}
+                            <div className={`absolute z-50 w-full mt-2 bg-white border border-slate-100 rounded-xl shadow-2xl overflow-hidden transition-all duration-200 origin-top ${isProgramOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'}`}>
+                                <div className="max-h-64 overflow-auto py-1 scrollbar-thin scrollbar-thumb-indigo-100 scrollbar-track-transparent">
                                     {programs.map((program) => (
                                         <button
                                             key={program.id}
@@ -234,40 +274,42 @@ export default function CurriculumGapAnalyzer() {
                                                 setIsProgramOpen(false);
                                                 setShowResults(false);
                                             }}
-                                            className="w-full text-left px-4 py-3 hover:bg-indigo-50 transition-colors flex items-center gap-2"
+                                            className="w-full text-left px-4 py-3 hover:bg-indigo-50 transition-colors flex items-center gap-3 border-b border-slate-50 last:border-0"
                                         >
-                                            <span className={`block truncate ${selectedProgram?.id === program.id ? 'text-indigo-600 font-medium' : 'text-gray-700'}`}>
+                                            <span className={`block truncate text-sm ${selectedProgram?.id === program.id ? 'text-indigo-600 font-bold' : 'text-slate-600'}`}>
                                                 {program.label}
                                             </span>
                                             {selectedProgram?.id === program.id && <CheckCircle className="w-4 h-4 text-indigo-600 ml-auto" />}
                                         </button>
                                     ))}
                                 </div>
-                            )}
+                            </div>
                         </div>
 
                         {/* Career Dropdown */}
-                        <div className="w-full md:flex-1 relative">
-                            <label className="block text-sm font-semibold text-gray-500 uppercase mb-2">Target Career Path</label>
+                        <div className="w-full md:flex-1 relative group">
+                            <label className="block text-xs md:text-sm font-bold text-slate-500 uppercase mb-2 group-hover:text-indigo-600 transition-colors ml-1">Target Career Path</label>
                             <button
                                 onClick={() => {
                                     if (optionsLoading) return;
                                     setIsCareerOpen(!isCareerOpen);
                                     setIsProgramOpen(false);
                                 }}
-                                className="w-full flex items-center justify-between px-4 py-3 bg-slate-50 border border-slate-200 rounded-lg hover:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-left disabled:opacity-60"
+                                className="w-full flex items-center justify-between px-4 py-4 bg-slate-50/80 border border-slate-200 rounded-xl hover:border-indigo-500 hover:bg-white focus:outline-none focus:ring-4 focus:ring-indigo-100 transition-all text-left disabled:opacity-60 shadow-sm group-hover:shadow-md cursor-pointer"
                                 disabled={optionsLoading || careers.length === 0}
                             >
                                 <div className="flex items-center gap-3 overflow-hidden">
                                     <BarChart3 className="w-5 h-5 text-indigo-500 flex-shrink-0" />
-                                    <span className="text-slate-700 font-medium truncate">
+                                    <span className="text-slate-700 font-bold truncate text-sm md:text-base">
                                         {selectedCareer ? selectedCareer.label : optionsLoading ? 'Loading...' : 'No job roles found'}
                                     </span>
                                 </div>
-                                <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${isCareerOpen ? 'rotate-180' : ''}`} />
+                                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform duration-300 ${isCareerOpen ? 'rotate-180 text-indigo-500' : ''}`} />
                             </button>
-                            {isCareerOpen && (
-                                <div className="absolute z-10 w-full mt-2 bg-white border border-gray-200 rounded-lg shadow-xl py-1 max-h-80 overflow-y-auto">
+                            
+                            {/* DROPDOWN FIX: Added z-50 */}
+                            <div className={`absolute z-50 w-full mt-2 bg-white border border-slate-100 rounded-xl shadow-2xl overflow-hidden transition-all duration-200 origin-top ${isCareerOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 -translate-y-2 pointer-events-none'}`}>
+                                <div className="max-h-64 overflow-y-auto py-1 scrollbar-thin scrollbar-thumb-indigo-100 scrollbar-track-transparent">
                                     {careers.map((career) => (
                                         <button
                                             key={career.id}
@@ -276,228 +318,314 @@ export default function CurriculumGapAnalyzer() {
                                                 setIsCareerOpen(false);
                                                 setShowResults(false);
                                             }}
-                                            className="w-full text-left px-4 py-3 hover:bg-indigo-50 transition-colors flex items-center gap-2"
+                                            className="w-full text-left px-4 py-3 hover:bg-indigo-50 transition-colors flex items-center gap-3 border-b border-slate-50 last:border-0"
                                         >
-                                            <span className={`block truncate ${selectedCareer?.id === career.id ? 'text-indigo-600 font-medium' : 'text-gray-700'}`}>
+                                            <span className={`block truncate text-sm ${selectedCareer?.id === career.id ? 'text-indigo-600 font-bold' : 'text-slate-600'}`}>
                                                 {career.label}
                                             </span>
                                             {selectedCareer?.id === career.id && <CheckCircle className="w-4 h-4 text-indigo-600 ml-auto" />}
                                         </button>
                                     ))}
                                 </div>
-                            )}
+                            </div>
                         </div>
 
                         {/* Analyze Button */}
                         <div className="w-full md:w-auto">
                             <button 
                                 onClick={handleAnalyze}
-                                className="w-full md:w-auto px-8 py-3 bg-indigo-600 text-white rounded-lg font-bold shadow-lg hover:bg-indigo-700 hover:shadow-indigo-500/30 transform active:scale-95 transition-all flex items-center justify-center h-[48px]"
+                                className="w-full md:w-auto px-8 py-4 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white rounded-xl font-bold shadow-lg shadow-indigo-600/20 hover:from-indigo-700 hover:to-indigo-800 hover:scale-[1.02] hover:shadow-indigo-600/40 active:scale-95 transition-all duration-200 flex items-center justify-center h-[54px] text-sm md:text-base cursor-pointer"
                                 disabled={loading || !selectedProgram || !selectedCareer}
                             >
-                                {loading ? 'Analyzing...' : 'Run Analysis'}
+                                {loading ? (
+                                    <>
+                                        <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                                        Analyzing...
+                                    </>
+                                ) : 'Run Analysis'}
                             </button>
                         </div>
                     </div>
                 </div>
 
-                {/* Scroll Anchor */}
                 <div ref={summaryRef}></div>
 
                 {/* Results Section */}
-                {optionsError && <div className="text-red-500 mb-4 bg-red-50 p-4 rounded-lg border border-red-200">{optionsError}</div>}
-                {error && <div className="text-red-500 mb-4 bg-red-50 p-4 rounded-lg border border-red-200">{error}</div>}
-                
-                {showResults && results && (
-                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 pb-10">
-                        
-                        {/* 1. Summary Metrics Cards */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                            <StatCard 
-                                label="Total Required Skills" 
-                                value={results.matchingSkills + results.missingSkills} 
-                                icon={<Target className="w-5 h-5 text-slate-600" />}
-                            />
-                            <StatCard 
-                                label="Matches Found" 
-                                value={results.matchingSkills} 
-                                color="text-emerald-600"
-                                icon={<CheckCircle className="w-5 h-5 text-emerald-600" />}
-                            />
-                            <StatCard 
-                                label="Critical Gaps" 
-                                value={results.missingSkills} 
-                                color="text-red-500"
-                                icon={<AlertCircle className="w-5 h-5 text-red-500" />}
-                            />
-                            <StatCard 
-                                label="Job Coverage" 
-                                value={results.coverage} 
-                                subtext="of job requirements met"
-                                color="text-indigo-600"
-                                icon={<BarChart3 className="w-5 h-5 text-indigo-600" />}
-                            />
-                        </div>
-
-                         {/* --- NEW: AI Recommendation Section --- */}
-                         <div className="bg-gradient-to-r from-indigo-50 to-white p-6 rounded-2xl shadow-sm border border-indigo-100 mb-8 relative overflow-hidden">
-                            <div className="absolute top-0 right-0 p-4 opacity-10">
-                                <Sparkles className="w-24 h-24 text-indigo-600" />
-                            </div>
+                {/* Added relative z-10 to ensure it sits below the dropdown */}
+                <div className="relative z-10">
+                    {optionsError && <div className="text-red-500 mb-4 bg-red-50 p-4 rounded-xl border border-red-200 animate-in fade-in">{optionsError}</div>}
+                    {error && <div className="text-red-500 mb-4 bg-red-50 p-4 rounded-xl border border-red-200 animate-in fade-in">{error}</div>}
+                    
+                    {showResults && results && (
+                        <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 pb-10">
                             
-                            <div className="flex items-center gap-3 mb-4 relative z-10">
-                                <div className="p-2 bg-indigo-600 rounded-lg shadow-md">
-                                    <Sparkles className="w-5 h-5 text-white" />
-                                </div>
-                                <h3 className="text-xl font-bold text-indigo-900">AI Strategic Recommendations</h3>
+                            {/* 1. METRICS GRID */}
+                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
+                                <StatCard 
+                                    label="Total Required" 
+                                    value={results.matchingSkills + results.missingSkills} 
+                                    icon={<Target className="w-4 h-4 text-indigo-900/80" />}
+                                />
+                                <StatCard 
+                                    label="Matches Found" 
+                                    value={results.matchingSkills} 
+                                    color="text-emerald-600"
+                                    icon={<CheckCircle className="w-4 h-4 text-emerald-600" />}
+                                />
+                                <StatCard 
+                                    label="Critical Gaps" 
+                                    value={results.missingSkills} 
+                                    color="text-red-500"
+                                    icon={<AlertCircle className="w-4 h-4 text-red-500" />}
+                                />
+                                <StatCard 
+                                    label="Job Coverage" 
+                                    value={results.coverage} 
+                                    subtext="of job skills met"
+                                    color="text-indigo-600"
+                                    icon={<BarChart3 className="w-4 h-4 text-indigo-600" />}
+                                />
                             </div>
 
-                            {recLoading ? (
-                                <div className="flex items-center gap-3 text-indigo-600 py-4 animate-pulse">
-                                    <Loader2 className="w-5 h-5 animate-spin" />
-                                    <span className="font-medium">Gemini is analyzing the curriculum gaps...</span>
+                            {/* AI Section */}
+                            <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-sm border border-indigo-50 mb-6 md:mb-8 relative overflow-hidden transition-all duration-300 hover:shadow-md hover:border-indigo-200 group">
+                                <div 
+                                    className="flex items-center justify-between p-4 md:p-6 cursor-pointer select-none hover:bg-indigo-50/30 transition-colors duration-300"
+                                    onClick={() => setIsAiOpen(!isAiOpen)}
+                                >
+                                    <div className="flex items-center gap-3 relative z-10">
+                                        <div className="p-2 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg shadow-lg shadow-indigo-500/20 group-hover:scale-110 transition-transform duration-300">
+                                            <Sparkles className="w-4 h-4 text-white" />
+                                        </div>
+                                        <h3 className="text-sm md:text-xl font-bold text-indigo-900">AI Recommendations</h3>
+                                    </div>
+                                    <div className={`text-indigo-400 transition-transform duration-300 ${isAiOpen ? 'rotate-180' : ''}`}>
+                                        <ChevronDown className="w-5 h-5"/>
+                                    </div>
                                 </div>
-                            ) : recommendation ? (
-                                <div className="prose prose-indigo max-w-none text-slate-700 bg-white/60 p-4 rounded-xl border border-indigo-50/50 backdrop-blur-sm">
-                                    <ReactMarkdown
-                                        components={{
-                                            ul: ({ node, ...props }) => <ul className="list-disc pl-5 space-y-2" {...props} />,
-                                            ol: ({ node, ...props }) => <ol className="list-decimal pl-5 space-y-2" {...props} />,
-                                            li: ({ node, ...props }) => <li className="text-slate-700" {...props} />,
-                                            p: ({ node, ...props }) => <p className="text-slate-700 leading-relaxed" {...props} />,
-                                            h2: ({ node, ...props }) => <h2 className="text-xl font-bold text-indigo-900 mt-4" {...props} />,
-                                            h3: ({ node, ...props }) => <h3 className="text-lg font-semibold text-indigo-900 mt-3" {...props} />,
-                                            strong: ({ node, ...props }) => <strong className="text-indigo-900" {...props} />,
-                                        }}
-                                    >
-                                        {recommendation}
-                                    </ReactMarkdown>
-                                </div>
-                            ) : (
-                                <p className="text-slate-500 italic">Analysis complete. Waiting for AI insights...</p>
-                            )}
-                        </div>
-                        {/* -------------------------------------- */}
-
-                        {/* 2. Visualizations Section (Charts) */}
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                            
-                            {/* Chart A: Curriculum Relevance */}
-                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
-                                <h4 className="text-lg font-bold text-slate-800 mb-4">Curriculum Relevance</h4>
-                                <div className="h-64 w-full relative">
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <PieChart>
-                                            <Pie
-                                                data={pieData}
-                                                cx="50%"
-                                                cy="50%"
-                                                innerRadius="60%"
-                                                outerRadius="80%"
-                                                paddingAngle={5}
-                                                dataKey="value"
-                                                stroke="none"
-                                            >
-                                                {pieData.map((entry, index) => (
-                                                    <Cell key={`cell-${index}`} fill={entry.color} />
-                                                ))}
-                                            </Pie>
-                                            <Legend verticalAlign="bottom" height={36} iconType="circle" />
-                                        </PieChart>
-                                    </ResponsiveContainer>
-                                    
-                                    {/* Center Text Overlay */}
-                                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                        <div className="text-center pb-8"> 
-                                            <p className="text-3xl font-bold text-slate-800">{results.relevance}</p>
-                                            <p className="text-xs text-slate-400">Relevant</p>
+                                
+                                <div className={`grid transition-all duration-300 ease-in-out ${isAiOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                                    <div className="overflow-hidden">
+                                        <div className="px-4 pb-4 md:px-6 md:pb-6">
+                                            {recLoading ? (
+                                                <div className="flex items-center gap-3 text-indigo-600 py-6 animate-pulse bg-indigo-50/50 rounded-xl p-4">
+                                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                                    <span className="text-sm font-medium">Analyzing curriculum gaps...</span>
+                                                </div>
+                                            ) : recommendation ? (
+                                                <div className="prose prose-sm md:prose-base prose-indigo max-w-none text-slate-700 bg-indigo-50/30 p-5 rounded-xl border border-indigo-50 shadow-inner">
+                                                    <ReactMarkdown components={{
+                                                            ul: ({ node, ...props }) => <ul className="list-disc pl-5 space-y-2" {...props} />,
+                                                            ol: ({ node, ...props }) => <ol className="list-decimal pl-5 space-y-2" {...props} />,
+                                                            li: ({ node, ...props }) => <li className="text-slate-700" {...props} />,
+                                                            p: ({ node, ...props }) => <p className="text-slate-700 leading-relaxed" {...props} />,
+                                                            h2: ({ node, ...props }) => <h2 className="text-xl font-bold text-indigo-900 mt-4" {...props} />,
+                                                            h3: ({ node, ...props }) => <h3 className="text-lg font-semibold text-indigo-900 mt-3" {...props} />,
+                                                            strong: ({ node, ...props }) => <strong className="text-indigo-900 font-bold" {...props} />,
+                                                    }}>
+                                                        {recommendation}
+                                                    </ReactMarkdown>
+                                                </div>
+                                            ) : (
+                                                <p className="text-indigo-900/60 text-sm italic p-4">Waiting for AI insights...</p>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Chart B: Gap Analysis Bars */}
-                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
-                                <h4 className="text-lg font-bold text-slate-800 mb-4">Gap Analysis Overview</h4>
-                                <div className="h-64 w-full">
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <BarChart data={barData} layout="horizontal" barSize={40}>
-                                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                                            <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#94a3b8'}} />
-                                            <YAxis axisLine={false} tickLine={false} tick={{fill: '#94a3b8'}} />
-                                            <Legend iconType="circle" />
-                                            <Bar dataKey="Matches" name="Matches" fill="#10b981" radius={[4, 4, 0, 0]} />
-                                            <Bar dataKey="Gaps" name="Missing Gaps" fill="#ef4444" radius={[4, 4, 0, 0]} />
-                                        </BarChart>
-                                    </ResponsiveContainer>
+                            {/* 2. CHARTS SECTION (ENHANCED) */}
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
+                                
+                                {/* Chart A: Pie Chart */}
+                                <div className="bg-white/80 backdrop-blur-md p-4 md:p-6 rounded-2xl shadow-sm border border-white/50 hover:shadow-xl hover:scale-[1.01] transition-all duration-300">
+                                    <h4 className="text-indigo-900 text-xs md:text-sm font-bold uppercase tracking-wider mb-6 text-center md:text-left">
+                                        Curriculum Relevance
+                                    </h4>
+                                    <div className="h-64 w-full relative">
+                                        {/* Center Text - Rendered first so it sits behind the chart/tooltip */}
+                                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none mb-4">
+                                            <div className="text-center"> 
+                                                <p className="text-3xl md:text-4xl font-extrabold text-indigo-900 drop-shadow-sm">{results.relevance}</p>
+                                                <p className="text-xs text-indigo-900/70 font-medium mt-1">Relevant</p>
+                                            </div>
+                                        </div>
+
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <PieChart>
+                                                <defs>
+                                                    <linearGradient id="colorRelevant" x1="0" y1="0" x2="0" y2="1">
+                                                        <stop offset="5%" stopColor="#10b981" stopOpacity={0.9}/>
+                                                        <stop offset="95%" stopColor="#059669" stopOpacity={1}/>
+                                                    </linearGradient>
+                                                    <linearGradient id="colorOthers" x1="0" y1="0" x2="0" y2="1">
+                                                        <stop offset="5%" stopColor="#94a3b8" stopOpacity={0.5}/>
+                                                        <stop offset="95%" stopColor="#64748b" stopOpacity={0.8}/>
+                                                    </linearGradient>
+                                                    <filter id="shadow" height="130%">
+                                                        <feDropShadow dx="0" dy="3" stdDeviation="3" floodColor="#000" floodOpacity="0.1"/>
+                                                    </filter>
+                                                </defs>
+                                                <Pie
+                                                    data={pieData}
+                                                    cx="50%"
+                                                    cy="50%"
+                                                    innerRadius="65%" 
+                                                    outerRadius="85%"
+                                                    paddingAngle={4}
+                                                    dataKey="value"
+                                                    stroke="none"
+                                                    cornerRadius={6} 
+                                                >
+                                                    {pieData.map((entry, index) => (
+                                                        <Cell key={`cell-${index}`} fill={entry.color} filter="url(#shadow)" />
+                                                    ))}
+                                                </Pie>
+                                                <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ fontSize: '12px', fontWeight: 500 }} />
+                                                {/* TOOLTIP FIX: Added allowEscapeViewBox */}
+                                                <Tooltip content={<CustomTooltip />} allowEscapeViewBox={{ x: true, y: true }} />
+                                            </PieChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                </div>
+
+                                {/* Chart B: Bar Chart */}
+                                <div className="bg-white/80 backdrop-blur-md p-4 md:p-6 rounded-2xl shadow-sm border border-white/50 hover:shadow-xl hover:scale-[1.01] transition-all duration-300">
+                                    <h4 className="text-indigo-900 text-xs md:text-sm font-bold uppercase tracking-wider mb-6 text-center md:text-left">
+                                        Gap Analysis Overview
+                                    </h4>
+                                    <div className="h-64 w-full">
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <BarChart data={barData} layout="horizontal" barSize={45}>
+                                                <defs>
+                                                    <linearGradient id="barMatch" x1="0" y1="0" x2="0" y2="1">
+                                                        <stop offset="0%" stopColor="#10b981"/>
+                                                        <stop offset="100%" stopColor="#047857"/>
+                                                    </linearGradient>
+                                                    <linearGradient id="barGap" x1="0" y1="0" x2="0" y2="1">
+                                                        <stop offset="0%" stopColor="#ef4444"/>
+                                                        <stop offset="100%" stopColor="#b91c1c"/>
+                                                    </linearGradient>
+                                                </defs>
+                                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                                                <XAxis 
+                                                    dataKey="name" 
+                                                    axisLine={false} 
+                                                    tickLine={false} 
+                                                    hide={true} 
+                                                />
+                                                <YAxis 
+                                                    axisLine={false} 
+                                                    tickLine={false} 
+                                                    tick={{fill: '#312e81', fontSize: 10, fontWeight: 600}} 
+                                                />
+                                                <Legend iconType="circle" wrapperStyle={{ paddingTop: '10px', fontSize: '12px', fontWeight: 500 }}/>
+                                                {/* TOOLTIP FIX: Added allowEscapeViewBox */}
+                                                <Tooltip cursor={{fill: 'rgba(255,255,255,0.4)'}} content={<CustomTooltip />} allowEscapeViewBox={{ x: true, y: true }} />
+                                                
+                                                <Bar dataKey="Matches" name="Matches" fill="url(#barMatch)" radius={[6, 6, 6, 6]} filter="url(#shadow)" />
+                                                <Bar dataKey="Gaps" name="Missing Gaps" fill="url(#barGap)" radius={[6, 6, 6, 6]} filter="url(#shadow)" />
+                                            </BarChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 3. Skill Lists */}
+                            <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-sm border border-white/50 overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                                <div className="bg-slate-50/50 px-4 py-3 md:px-6 md:py-4 border-b border-slate-100">
+                                    <h4 className="font-bold text-sm md:text-base text-indigo-900">Skill Details</h4>
+                                </div>
+                                <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+                                    {/* Matched */}
+                                    <div className="p-4 md:p-6">
+                                        <div className="flex items-center gap-2 mb-4">
+                                            <CheckCircle className="w-4 h-4 text-emerald-500" />
+                                            <h5 className="font-bold text-sm md:text-lg text-indigo-900">Matched Skills</h5>
+                                            <span className="ml-auto text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-full border border-emerald-100">
+                                                {results.exact?.length || 0}
+                                            </span>
+                                        </div>
+                                        <div className="flex flex-wrap gap-2">
+                                            {results.exact && results.exact.length > 0 ? (
+                                                <>
+                                                    {getVisibleSkills(results.exact, showAllMatches).map((skill, index) => (
+                                                        <span key={index} className="px-3 py-1 bg-white border border-emerald-100 text-emerald-700 rounded-full text-xs md:text-base font-medium hover:scale-105 transition-transform cursor-default shadow-sm hover:shadow-md hover:border-emerald-200">
+                                                            {skill}
+                                                        </span>
+                                                    ))}
+                                                    {results.exact.length > 15 && (
+                                                        <button onClick={() => setShowAllMatches(!showAllMatches)} className="px-3 py-1 bg-slate-50 text-indigo-900/70 border border-slate-200 rounded-full text-xs md:text-base font-medium hover:text-emerald-600 hover:border-emerald-300 transition-colors">
+                                                            {showAllMatches ? "Less" : `+${results.exact.length - 15}`}
+                                                        </button>
+                                                    )}
+                                                </>
+                                            ) : <span className="text-indigo-900/60 text-xs italic">None</span>}
+                                        </div>
+                                    </div>
+
+                                    {/* Gaps */}
+                                    <div className="p-4 md:p-6 bg-red-50/5">
+                                        <div className="flex items-center gap-2 mb-4">
+                                            <AlertCircle className="w-4 h-4 text-red-500" />
+                                            <h5 className="font-bold text-sm md:text-lg text-indigo-900">Missing Skills</h5>
+                                            <span className="ml-auto text-xs font-bold text-red-700 bg-red-50 px-2 py-1 rounded-full border border-red-100">
+                                                {results.gaps?.length || 0}
+                                            </span>
+                                        </div>
+                                        <div className="flex flex-wrap gap-2">
+                                            {results.gaps && results.gaps.length > 0 ? (
+                                                <>
+                                                    {getVisibleSkills(results.gaps, showAllGaps).map((skill, index) => (
+                                                        <span key={index} className="px-3 py-1 bg-white border border-red-100 text-red-700 rounded-full text-xs md:text-base font-medium hover:scale-105 transition-transform cursor-default shadow-sm hover:shadow-md hover:border-red-200">
+                                                            {skill}
+                                                        </span>
+                                                    ))}
+                                                    {results.gaps.length > 15 && (
+                                                        <button onClick={() => setShowAllGaps(!showAllGaps)} className="px-3 py-1 bg-slate-50 text-indigo-900/70 border border-slate-200 rounded-full text-xs md:text-base font-medium hover:text-red-600 hover:border-red-300 transition-colors">
+                                                            {showAllGaps ? "Less" : `+${results.gaps.length - 15}`}
+                                                        </button>
+                                                    )}
+                                                </>
+                                            ) : <span className="text-indigo-900/60 text-xs italic">None</span>}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
-                        {/* 3. Detailed Comparison Lists */}
-                        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md transition-shadow duration-300">
-                            <div className="bg-slate-50/50 px-6 py-4 border-b border-slate-100">
-                                <h4 className="font-bold text-slate-800">Skill Details</h4>
-                            </div>
-                            <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-100">
-                                {/* Exact Matches */}
-                                <div className="p-6">
-                                    <div className="flex items-center gap-2 mb-4">
-                                        <CheckCircle className="w-5 h-5 text-emerald-500" />
-                                        <h5 className="font-semibold text-slate-700">Matched Skills (Covered)</h5>
-                                    </div>
-                                    <div className="flex flex-wrap gap-2">
-                                        {results.exact && results.exact.length > 0 ? (
-                                            results.exact.map((skill, index) => (
-                                                <span key={index} className="px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-sm font-medium">
-                                                    {skill}
-                                                </span>
-                                            ))
-                                        ) : (
-                                            <span className="text-slate-400 text-sm italic">No exact matches.</span>
-                                        )}
-                                    </div>
-                                </div>
-
-                                {/* Missing Skills */}
-                                <div className="p-6 bg-red-50/5">
-                                    <div className="flex items-center gap-2 mb-4">
-                                        <AlertCircle className="w-5 h-5 text-red-500" />
-                                        <h5 className="font-semibold text-slate-700">Missing Skills (Gaps)</h5>
-                                    </div>
-                                    <div className="flex flex-wrap gap-2">
-                                        {results.gaps && results.gaps.length > 0 ? (
-                                            results.gaps.map((skill, index) => (
-                                                <span key={index} className="px-3 py-1 bg-red-50 text-red-700 border border-red-200 rounded-full text-sm font-medium">
-                                                    {skill}
-                                                </span>
-                                            ))
-                                        ) : (
-                                            <span className="text-slate-400 text-sm italic">No missing skills found.</span>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </main>
+
+            {/* Footer */}
+            <footer className="py-4 text-center text-slate-400 text-xs md:text-sm relative z-10">
+                <p>&copy; {new Date().getFullYear()} Evalrey. All rights reserved.</p>
+            </footer>
         </div>
     );
 }
 
-// Reusable Card Component with Hover Effects
-const StatCard = ({ label, value, color = "text-slate-800", subtext, icon }) => (
-  <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-default">
-    <div className="flex items-center justify-between mb-4">
-      <div className={`p-2 rounded-lg bg-slate-50 ${color.replace('text-', 'bg-').replace('600', '100').replace('500', '100')}`}>
-        {icon}
-      </div>
+// METRIC CARD COMPONENT
+const StatCard = ({ label, value, color = "text-indigo-900", subtext, icon }) => (
+  <div className="bg-white/80 backdrop-blur-md p-3 md:p-5 rounded-2xl shadow-sm border border-white/60 flex flex-col justify-between h-full transition-all duration-300 hover:shadow-lg hover:scale-[1.02] hover:border-indigo-100 group">
+    {/* Header */}
+    <div className="flex items-center gap-2 mb-2">
+        <div className={`p-1.5 md:p-2 rounded-lg bg-slate-50 transition-colors group-hover:bg-indigo-50 ${color.replace('text-', 'bg-').replace('600', '100').replace('500', '100').replace('900', '100')}`}>
+            {icon}
+        </div>
+        <h4 className="text-indigo-900/70 text-[10px] md:text-xs font-bold uppercase tracking-wider truncate leading-tight group-hover:text-indigo-900 transition-colors">
+            {label}
+        </h4>
     </div>
-    <h4 className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">{label}</h4>
-    <div className={`text-3xl font-extrabold ${color}`}>
-      {value}
+    
+    {/* Body */}
+    <div className="mt-auto">
+        <div className={`text-2xl md:text-3xl font-extrabold ${color} leading-none tracking-tight drop-shadow-sm`}>
+            {value}
+        </div>
+        <p className={`text-[9px] md:text-xs mt-1 truncate ${subtext ? 'text-indigo-900/70' : 'text-transparent select-none'}`}>
+            {subtext || "spacer"}
+        </p>
     </div>
-    {subtext && <p className="text-xs text-slate-400 mt-2">{subtext}</p>}
   </div>
 );

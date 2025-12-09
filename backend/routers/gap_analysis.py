@@ -36,8 +36,8 @@ _OPTIONS_CACHE = None
 BLACKLIST_JOBS = {
     "statistics",
     "business analyst",
-    "data quality manager",
     "data warehousing",
+    "technology integration",
     "technical operations"
 }
 
@@ -316,57 +316,77 @@ def generate_recommendation(request: RecommendationRequest):
     if not os.getenv("GOOGLE_API_KEY"):
         return {"recommendation": "⚠️ API Key missing. Please set GOOGLE_API_KEY in your backend environment."}
 
-    try:
-        # Limit skills to avoid token overflow
-        skills_list = ", ".join(request.missing_skills[:20])
-        
-        # --- UPDATED PROMPT TO FOLLOW SCOPE & DELIMITATIONS ---
-        prompt = f"""
-        Act as a Senior Curriculum Developer for the College of Information and Computer Studies (CICS).
-        
-        CONTEXT:
-        We are analyzing the alignment between the official CICS syllabi (academic reference) and industry-required skills (public job datasets) for the role of "{request.job_title}".
-        
-        DATA:
-        - Curriculum: "{request.curriculum_title}"
-        - Current Match Score: {request.coverage_score}%
-        - Critical MISSING Skills: {skills_list}
+    # Limit skills to avoid token overflow
+    skills_list = ", ".join(request.missing_skills[:15])
+    
+    # --- CONCISE PROMPT FOR STUDENTS & PROFESSORS ---
+    prompt = f"""
+    You are a curriculum advisor for CICS analyzing gap between "{request.curriculum_title}" and "{request.job_title}" roles.
 
-        TASK:
-        Provide a strategic summary and 3 actionable recommendations to update the OFFICIAL SYLLABUS.
+    Match Score: {request.coverage_score}%
+    Top Missing Skills: {skills_list}
 
-        CONSTRAINTS (STRICTLY FOLLOW):
-        1. Focus ONLY on modifying the core subjects/syllabi (e.g., adding new topics, updating lab exercises, modernizing tools).
-        2. Do NOT suggest internships, seminars, OJT, or informal learning (these are outside the scope of this study).
-        3. Do NOT suggest General Education changes.
-        4. Keep recommendations technical and specific to the computing field.
+    Provide a scan-friendly response with this EXACT structure:
 
-        FORMAT:
-        - Executive Summary (2-3 sentences)
-        - 3 Bulleted Recommendations (Bold the key action)
-        """
-        # -------------------------------------------------------
-        
-        # Prefer the modern SDK, fall back to legacy generate_text if GenerativeModel is unavailable
-        if hasattr(genai, "GenerativeModel"):
-            # Use gemini-2.0-flash-lite (separate quota pool, faster for simple tasks)
-            model = genai.GenerativeModel('gemini-2.5-flash-lite')
-            response = model.generate_content(prompt)
-            text = getattr(response, "text", None) or str(response)
-        else:
-            # Legacy client in version 0.1.0rc1 (does not have GenerativeModel)
-            response = genai.generate_text(
-                model="models/text-bison-001",
-                prompt=prompt
-            )
-            text = getattr(response, "result", None)
-            if not text and isinstance(response, dict):
-                text = response.get("generated_text") or response.get("result")
-            if not text:
-                text = str(response)
+    **Gap Summary:**
+    (3-4 sentences) - Analyze the alignment issue:
+    - What categories of skills are missing? (e.g., cloud platforms, statistical methods, tools)
+    - Why does this gap matter for graduates entering this role?
+    - What's the strategic impact on curriculum competitiveness?
+    
+    **Top 3 Actions:**
+    List ONLY 3 specific syllabus updates:
+    - Start each with a verb (Add, Integrate, Update, Include)
+    - Keep each to 1 line
+    - Focus on course content/labs only (NO internships, seminars, or general education)
+    - Be specific to technical topics
 
-        return {"recommendation": text}
-        
-    except Exception as e:
-        print(f"Gemini API Error: {e}")
-        return {"recommendation": "Unable to generate AI recommendations at this time. Please try again later."}
+    Use bullet points. Bold key terms only. Do NOT add a title or heading before "Gap Summary".
+    """
+    # -------------------------------------------------------
+    
+    # Recommended models by Gemini (in priority order)
+    FALLBACK_MODELS = [
+        'gemini-2.5-flash-lite',  # Fastest, separate quota pool
+        'gemini-2.5-flash',       # Balanced performance
+        'gemini-2.5-pro',         # Most capable
+    ]
+    
+    # Try each model in sequence until one succeeds
+    last_error = None
+    for model_name in FALLBACK_MODELS:
+        try:
+            if hasattr(genai, "GenerativeModel"):
+                model = genai.GenerativeModel(model_name)
+                response = model.generate_content(prompt)
+                text = getattr(response, "text", None) or str(response)
+                return {"recommendation": text}
+            else:
+                # Legacy fallback (for older SDK versions)
+                response = genai.generate_text(
+                    model="models/text-bison-001",
+                    prompt=prompt
+                )
+                text = getattr(response, "result", None)
+                if not text and isinstance(response, dict):
+                    text = response.get("generated_text") or response.get("result")
+                if not text:
+                    text = str(response)
+                return {"recommendation": text}
+                
+        except Exception as e:
+            error_msg = str(e).lower()
+            last_error = e
+            
+            # If it's a quota/rate limit error, try next model
+            if any(keyword in error_msg for keyword in ['quota', 'limit', 'rate', 'resource_exhausted']):
+                print(f"⚠️ {model_name} quota exceeded, trying next model...")
+                continue
+            else:
+                # If it's a different error, fail immediately
+                print(f"❌ Gemini API Error ({model_name}): {e}")
+                break
+    
+    # All models failed
+    print(f"❌ All models failed. Last error: {last_error}")
+    return {"recommendation": "Unable to generate AI recommendations at this time. Please try again later."}
