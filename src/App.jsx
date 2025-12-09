@@ -226,7 +226,7 @@ export default function CurriculumGapAnalyzer() {
             </header>
 
             {/* Main Content */}
-            <main className="max-w-6xl mx-auto px-3 md:px-6 py-6 md:py-8 relative z-0">
+            <main className="max-w-6xl mx-auto px-3 md:px-6 py-6 md:py-8 relative z-10">
                 
                 {/* Title Section */}
                 <div className="text-center mb-8 md:mb-12 mt-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -598,7 +598,7 @@ export default function CurriculumGapAnalyzer() {
             </main>
 
             {/* Footer */}
-            <footer className="py-4 text-center text-slate-400 text-xs md:text-sm relative z-10">
+            <footer className="py-4 text-center text-slate-400 text-xs md:text-sm relative z-0">
                 <p>&copy; {new Date().getFullYear()} Evalrey. All rights reserved.</p>
             </footer>
         </div>
