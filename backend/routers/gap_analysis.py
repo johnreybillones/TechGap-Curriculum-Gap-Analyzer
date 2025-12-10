@@ -30,6 +30,7 @@ router = APIRouter(tags=["Gap Analysis"])
 
 # In-memory caches
 _OPTIONS_CACHE = None
+_RECOMMENDATION_CACHE = {}  # Cache AI recommendations to reduce API calls
 
 # --- CONFIGURATION: JOBS TO HIDE ---
 BLACKLIST_JOBS = {
@@ -362,6 +363,12 @@ def generate_recommendation(request: RecommendationRequest):
     # Lazy import to avoid slowing down startup
     import google.generativeai as genai
     
+    # Check cache first (reduces API calls significantly)
+    cache_key = f"{request.curriculum_title}_{request.job_title}_{request.coverage_score}_{request.relevance_score}"
+    if cache_key in _RECOMMENDATION_CACHE:
+        print(f"✓ Returning cached recommendation for {request.curriculum_title} vs {request.job_title}")
+        return {"recommendation": _RECOMMENDATION_CACHE[cache_key]}
+    
     # Check if API key is present
     if not os.getenv("GOOGLE_API_KEY"):
         return {"recommendation": "⚠️ API Key missing. Please set GOOGLE_API_KEY in your backend environment."}
@@ -442,6 +449,8 @@ def generate_recommendation(request: RecommendationRequest):
                         pass
                 
                 if text:
+                    # Cache the successful response
+                    _RECOMMENDATION_CACHE[cache_key] = text
                     return {"recommendation": text}
                 else:
                     print(f"⚠️ {model_name} returned empty response, trying next model...")
@@ -482,4 +491,43 @@ def generate_recommendation(request: RecommendationRequest):
     
     # All models failed
     print(f"❌ All {len(FALLBACK_MODELS)} models failed. Last error: {last_error}")
+    
+    # Try Groq as final fallback (if GROQ_API_KEY is set)
+    groq_key = os.getenv("GROQ_API_KEY")
+    if groq_key:
+        try:
+            print("⚠️ Trying Groq API as final fallback...")
+            import requests
+            
+            response = requests.post(
+                "https://api.groq.com/openai/v1/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {groq_key}",
+                    "Content-Type": "application/json"
+                },
+                json={
+                    "model": "llama-3.3-70b-versatile",  # Fast, free tier available
+                    "messages": [{"role": "user", "content": prompt}],
+                    "temperature": 0.7,
+                    "max_tokens": 500
+                },
+                timeout=10
+            )
+            
+            if response.ok:
+                text = response.json()["choices"][0]["message"]["content"]
+                _RECOMMENDATION_CACHE[cache_key] = text
+                print("✓ Groq API succeeded!")
+                return {"recommendation": text}
+        except Exception as groq_error:
+            print(f"❌ Groq API also failed: {groq_error}")
+    
     return {"recommendation": "Unable to generate AI recommendations at this time. All models are currently unavailable. Please try again later."}
+
+# Clear cache endpoint (useful for testing or when cache gets stale)
+@router.post("/api/recommend/clear-cache")
+def clear_recommendation_cache():
+    global _RECOMMENDATION_CACHE
+    cache_size = len(_RECOMMENDATION_CACHE)
+    _RECOMMENDATION_CACHE = {}
+    return {"message": f"Cleared {cache_size} cached recommendations"}
