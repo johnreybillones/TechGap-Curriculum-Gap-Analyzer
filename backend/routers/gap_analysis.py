@@ -397,11 +397,16 @@ def generate_recommendation(request: RecommendationRequest):
     """
     # -------------------------------------------------------
     
-    # Recommended models by Gemini (in priority order)
+    # Recommended models by Gemini (in priority order with additional fallbacks)
     FALLBACK_MODELS = [
-        'gemini-2.5-flash-lite',  # Fastest, separate quota pool
-        'gemini-2.5-flash',       # Balanced performance
-        'gemini-2.5-pro',         # Most capable
+        'gemini-2.5-flash-lite',         # Fastest, separate quota pool
+        'gemini-2.5-flash',              # Balanced performance
+        'gemini-2.5-pro',                # Most capable
+        'gemini-2.0-flash-lite',         # Older lite version
+        'gemini-2.0-flash',              # Older flash version
+        'gemini-flash-lite-latest',      # Latest lite alias
+        'gemini-flash-latest',           # Latest flash alias
+        'gemini-pro-latest',             # Latest pro alias
     ]
     
     # Try each model in sequence until one succeeds
