@@ -14,7 +14,7 @@ const SkillDetails = ({
     missingSkillsRef
 }) => {
     return (
-        <div className="bg-white/80 dark:bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-sm border border-white/50 dark:border-slate-700/50 overflow-hidden hover:shadow-lg transition-shadow duration-300">
+        <div className="bg-white/80 dark:bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-sm border border-white/50 dark:border-slate-700/50 hover:shadow-lg transition-shadow duration-300">
             <div className="bg-slate-50/50 dark:bg-slate-900/30 px-4 py-3 md:px-6 md:py-4 border-b border-slate-100 dark:border-slate-700/50">
                 <h4 className="font-bold text-sm md:text-base text-slate-600 dark:text-slate-300">Skill Details</h4>
             </div>

@@ -48,7 +48,7 @@ const SkillList = ({
             {skills && skills.length > 15 && (
                 <button 
                     onClick={onToggle} 
-                    className={`mt-3 px-3 py-1 bg-slate-50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600/50 rounded-full text-xs md:text-base font-medium transition-all duration-300 cursor-pointer hover:scale-105 hover:shadow-md hover:bg-white dark:hover:bg-slate-600/50 ${buttonHoverClass}`}
+                    className={`mt-3 px-3 py-1.5 bg-slate-50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600/50 rounded-full text-sm md:text-base font-medium transition-all duration-300 cursor-pointer hover:scale-105 hover:shadow-md hover:bg-white dark:hover:bg-slate-600/50 ${buttonHoverClass}`}
                 >
                     {showAll ? "Show Less" : `Show ${skills.length - 15} More`}
                 </button>
