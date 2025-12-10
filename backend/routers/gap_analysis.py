@@ -176,14 +176,18 @@ def get_options(db: Session = Depends(get_db)):
     if _OPTIONS_CACHE is not None:
         return _OPTIONS_CACHE
 
-    valid_curriculum_ids = db.query(SkillMatchDetail.curriculum_id).distinct().all()
-    valid_job_ids = db.query(SkillMatchDetail.job_id).distinct().all()
+    # OPTIMIZED: Use JOIN instead of IN queries to reduce round trips
+    # Single query to get all valid curricula with their skill match data
+    curricula = db.query(Curriculum)\
+        .join(SkillMatchDetail, Curriculum.curriculum_id == SkillMatchDetail.curriculum_id)\
+        .distinct()\
+        .all()
     
-    c_ids = [row[0] for row in valid_curriculum_ids]
-    j_ids = [row[0] for row in valid_job_ids]
-
-    curricula = db.query(Curriculum).filter(Curriculum.curriculum_id.in_(c_ids)).all()
-    jobs = db.query(JobRole).filter(JobRole.job_id.in_(j_ids)).all()
+    # Single query to get all valid jobs with their skill match data
+    jobs = db.query(JobRole)\
+        .join(SkillMatchDetail, JobRole.job_id == SkillMatchDetail.job_id)\
+        .distinct()\
+        .all()
 
     curriculum_options = []
     seen_c = set()

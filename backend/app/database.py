@@ -25,13 +25,17 @@ except (ValueError, TypeError):
 if not all([DB_HOST, DB_USER, DB_PASS, DB_NAME]):
     print(f"WARNING: Missing database configuration. Using placeholder values.")
 
-# --- THE FIX: Add SSL arguments for TiDB ---
+# --- THE FIX: Add SSL arguments for TiDB + Enable Connection Pooling ---
 DATABASE_URL = f"mysql+mysqlconnector://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 engine = create_engine(
     DATABASE_URL, 
     echo=False,
-    poolclass=NullPool,
+    # PERFORMANCE FIX: Replace NullPool with QueuePool for connection reuse
+    pool_size=10,           # Keep 10 persistent connections
+    max_overflow=20,        # Allow 20 additional connections when needed
+    pool_pre_ping=True,     # Verify connections before using (prevents stale connections)
+    pool_recycle=3600,      # Recycle connections every hour
     connect_args={
         "ssl_ca": certifi.where(),  # <--- Critical for TiDB
         "ssl_disabled": False

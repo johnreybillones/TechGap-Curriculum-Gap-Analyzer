@@ -47,10 +47,20 @@ def root():
 
 @app.on_event("startup")
 def preload_caches():
-    # Warm caches for faster first requests
+    """Warm caches on startup for faster first requests"""
     try:
-        gap_analysis.load_skill_csv()
-        gap_analysis.load_gap_csv()
-        gap_analysis.invalidate_options_cache()
-    except Exception:
+        # Warm up the options cache immediately on startup
+        from app.database import SessionLocal
+        db = SessionLocal()
+        try:
+            # Pre-load options into cache
+            from routers.gap_analysis import get_options
+            get_options(db)
+            print("✅ Options cache warmed successfully")
+        except Exception as e:
+            print(f"⚠️ Failed to warm options cache: {e}")
+        finally:
+            db.close()
+    except Exception as e:
+        print(f"⚠️ Startup cache warming failed: {e}")
         pass
