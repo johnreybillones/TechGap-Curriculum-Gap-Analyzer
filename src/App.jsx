@@ -173,7 +173,8 @@ export default function CurriculumGapAnalyzer() {
                     job_title: selectedCareer?.label,
                     curriculum_title: selectedProgram?.label,
                     missing_skills: data.gaps,
-                    coverage_score: data.coverage_score
+                    coverage_score: data.coverage_score,
+                    relevance_score: data.relevance_score
                 })
             });
 

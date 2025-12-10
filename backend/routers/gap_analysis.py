@@ -355,6 +355,7 @@ class RecommendationRequest(BaseModel):
     curriculum_title: str
     missing_skills: List[str]
     coverage_score: float
+    relevance_score: float
 
 @router.post("/api/recommend")
 def generate_recommendation(request: RecommendationRequest):
@@ -375,16 +376,17 @@ def generate_recommendation(request: RecommendationRequest):
     prompt = f"""
     You are a curriculum advisor for CICS analyzing gap between "{request.curriculum_title}" and "{request.job_title}" roles.
 
-    Match Score: {request.coverage_score}%
+    Job Coverage Score: {request.coverage_score}%
+    Curriculum Relevance Score: {request.relevance_score}%
     Top Missing Skills: {skills_list}
 
     Provide a scan-friendly response with this EXACT structure:
 
     **Gap Summary:**
-    (3-4 sentences) - Analyze the alignment issue:
+    (3-4 sentences) - Analyze the alignment based on the results:
+    - Explain what the {request.coverage_score}% job coverage means (how much of the job requirements the curriculum covers)
+    - Explain what the {request.relevance_score}% curriculum relevance means (what portion of curriculum skills are actually needed for this job role)
     - What categories of skills are missing? (e.g., cloud platforms, statistical methods, tools)
-    - Why does this gap matter for graduates entering this role?
-    - What's the strategic impact on curriculum competitiveness?
     
     **Top 3 Actions:**
     List ONLY 3 specific syllabus updates:
@@ -416,8 +418,35 @@ def generate_recommendation(request: RecommendationRequest):
             if hasattr(genai, "GenerativeModel"):
                 model = genai.GenerativeModel(model_name)
                 response = model.generate_content(prompt)
-                text = getattr(response, "text", None) or str(response)
-                return {"recommendation": text}
+                
+                # Check if response was blocked by safety filters
+                if hasattr(response, 'prompt_feedback') and response.prompt_feedback:
+                    if hasattr(response.prompt_feedback, 'block_reason'):
+                        print(f"⚠️ {model_name} blocked content (safety filters), trying next model...")
+                        continue
+                
+                # Try to extract text from response
+                text = None
+                if hasattr(response, 'text'):
+                    try:
+                        text = response.text
+                    except:
+                        # Sometimes .text property throws an error if response is blocked
+                        pass
+                
+                if not text and hasattr(response, 'candidates') and response.candidates:
+                    # Try to get text from first candidate
+                    try:
+                        text = response.candidates[0].content.parts[0].text
+                    except:
+                        pass
+                
+                if text:
+                    return {"recommendation": text}
+                else:
+                    print(f"⚠️ {model_name} returned empty response, trying next model...")
+                    continue
+                    
             else:
                 # Legacy fallback (for older SDK versions)
                 response = genai.generate_text(
@@ -435,15 +464,22 @@ def generate_recommendation(request: RecommendationRequest):
             error_msg = str(e).lower()
             last_error = e
             
-            # If it's a quota/rate limit error, try next model
-            if any(keyword in error_msg for keyword in ['quota', 'limit', 'rate', 'resource_exhausted']):
-                print(f"⚠️ {model_name} quota exceeded, trying next model...")
+            # Check for various types of recoverable errors - try next model
+            recoverable_errors = [
+                'quota', 'limit', 'rate', 'resource_exhausted',
+                'blocked', 'safety', 'filter', 'recitation',
+                'timeout', 'deadline', 'unavailable', '503', '429',
+                'overloaded', 'capacity'
+            ]
+            
+            if any(keyword in error_msg for keyword in recoverable_errors):
+                print(f"⚠️ {model_name} error (recoverable): {str(e)[:100]}... Trying next model...")
                 continue
             else:
-                # If it's a different error, fail immediately
-                print(f"❌ Gemini API Error ({model_name}): {e}")
-                break
+                # For truly unrecoverable errors (auth, invalid request), try next anyway
+                print(f"⚠️ {model_name} error: {str(e)[:100]}... Trying next model...")
+                continue
     
     # All models failed
-    print(f"❌ All models failed. Last error: {last_error}")
-    return {"recommendation": "Unable to generate AI recommendations at this time. Please try again later."}
+    print(f"❌ All {len(FALLBACK_MODELS)} models failed. Last error: {last_error}")
+    return {"recommendation": "Unable to generate AI recommendations at this time. All models are currently unavailable. Please try again later."}
