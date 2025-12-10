@@ -93,9 +93,10 @@ export const useAnalysis = () => {
             setResults(data);
             setShowResults(true);
 
+            // Wait longer for charts to fully render
             setTimeout(() => {
-                smoothScroll(summaryRef.current, 2000);
-            }, 100);
+                smoothScroll(summaryRef.current, 1800);
+            }, 800);
 
             setLoading(false);
 
