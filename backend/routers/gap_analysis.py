@@ -1,5 +1,4 @@
 import os
-import google.generativeai as genai
 from dotenv import load_dotenv
 
 from datetime import date
@@ -176,41 +175,89 @@ def get_options(db: Session = Depends(get_db)):
     if _OPTIONS_CACHE is not None:
         return _OPTIONS_CACHE
 
-    # OPTIMIZED: Use JOIN instead of IN queries to reduce round trips
-    # Single query to get all valid curricula with their skill match data
-    curricula = db.query(Curriculum)\
-        .join(SkillMatchDetail, Curriculum.curriculum_id == SkillMatchDetail.curriculum_id)\
-        .distinct()\
-        .all()
-    
-    # Single query to get all valid jobs with their skill match data
-    jobs = db.query(JobRole)\
-        .join(SkillMatchDetail, JobRole.job_id == SkillMatchDetail.job_id)\
-        .distinct()\
-        .all()
+    # SUPER OPTIMIZED: Use pre-computed summary table (avoids 6M+ row scans)
+    try:
+        from sqlalchemy import text
+        
+        # Try to use summary table first (much faster)
+        curricula_query = text("""
+            SELECT entity_id as id, label 
+            FROM options_summary 
+            WHERE entity_type = 'curriculum'
+            ORDER BY entity_id
+        """)
+        jobs_query = text("""
+            SELECT entity_id as id, label 
+            FROM options_summary 
+            WHERE entity_type = 'job'
+            ORDER BY entity_id
+        """)
+        
+        curricula_rows = db.execute(curricula_query).fetchall()
+        jobs_rows = db.execute(jobs_query).fetchall()
+        
+        # Deduplicate and filter
+        curriculum_options = []
+        seen_c = set()
+        for row in curricula_rows:
+            label = row.label or ""
+            norm = normalize_string(label)
+            if norm and norm not in seen_c:
+                curriculum_options.append({"id": row.id, "label": label})
+                seen_c.add(norm)
+        
+        job_options = []
+        seen_j = set()
+        for row in jobs_rows:
+            label = row.label or ""
+            if label.lower().strip() in BLACKLIST_JOBS:
+                continue
+            norm = normalize_string(label)
+            if norm and norm not in seen_j:
+                job_options.append({"id": row.id, "label": label})
+                seen_j.add(norm)
+        
+        _OPTIONS_CACHE = {"curricula": curriculum_options, "jobs": job_options}
+        return _OPTIONS_CACHE
+        
+    except Exception as e:
+        # Fallback to JOIN query if summary table doesn't exist
+        print(f"⚠️ Summary table not found, using slow fallback: {e}")
+        
+        curricula = db.query(Curriculum)\
+            .join(SkillMatchDetail, Curriculum.curriculum_id == SkillMatchDetail.curriculum_id)\
+            .distinct()\
+            .order_by(Curriculum.curriculum_id)\
+            .all()
+        
+        jobs = db.query(JobRole)\
+            .join(SkillMatchDetail, JobRole.job_id == SkillMatchDetail.job_id)\
+            .distinct()\
+            .order_by(JobRole.job_id)\
+            .all()
 
-    curriculum_options = []
-    seen_c = set()
-    for c in curricula:
-        label = c.track or c.course_title or ""
-        norm = normalize_string(label)
-        if norm and norm not in seen_c:
-            curriculum_options.append({"id": c.curriculum_id, "label": label})
-            seen_c.add(norm)
-    
-    job_options = []
-    seen_j = set()
-    for j in jobs:
-        label = j.query or j.title or ""
-        if label.lower().strip() in BLACKLIST_JOBS:
-            continue
-        norm = normalize_string(label)
-        if norm and norm not in seen_j:
-            job_options.append({"id": j.job_id, "label": label})
-            seen_j.add(norm)
+        curriculum_options = []
+        seen_c = set()
+        for c in curricula:
+            label = c.track or c.course_title or ""
+            norm = normalize_string(label)
+            if norm and norm not in seen_c:
+                curriculum_options.append({"id": c.curriculum_id, "label": label})
+                seen_c.add(norm)
+        
+        job_options = []
+        seen_j = set()
+        for j in jobs:
+            label = j.query or j.title or ""
+            if label.lower().strip() in BLACKLIST_JOBS:
+                continue
+            norm = normalize_string(label)
+            if norm and norm not in seen_j:
+                job_options.append({"id": j.job_id, "label": label})
+                seen_j.add(norm)
 
-    _OPTIONS_CACHE = {"curricula": curriculum_options, "jobs": job_options}
-    return _OPTIONS_CACHE
+        _OPTIONS_CACHE = {"curricula": curriculum_options, "jobs": job_options}
+        return _OPTIONS_CACHE
 
 # ... (Keep the Debug and CRUD endpoints below this line exactly as they were in your file)
 
@@ -303,11 +350,6 @@ def delete_report(report_id: int, db: Session = Depends(get_db)):
     db.commit()
     return {"message": "Deleted"}
 
-# Initialize Gemini (Make sure you set GOOGLE_API_KEY in your environment variables)
-# If testing locally, you can temporarily hardcode it, but env var is safer.
-if os.getenv("GOOGLE_API_KEY"):
-    genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-
 class RecommendationRequest(BaseModel):
     job_title: str
     curriculum_title: str
@@ -316,9 +358,15 @@ class RecommendationRequest(BaseModel):
 
 @router.post("/api/recommend")
 def generate_recommendation(request: RecommendationRequest):
+    # Lazy import to avoid slowing down startup
+    import google.generativeai as genai
+    
     # Check if API key is present
     if not os.getenv("GOOGLE_API_KEY"):
         return {"recommendation": "⚠️ API Key missing. Please set GOOGLE_API_KEY in your backend environment."}
+    
+    # Configure Gemini on first use (lazy initialization)
+    genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
     # Limit skills to avoid token overflow
     skills_list = ", ".join(request.missing_skills[:15])

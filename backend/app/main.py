@@ -48,19 +48,32 @@ def root():
 @app.on_event("startup")
 def preload_caches():
     """Warm caches on startup for faster first requests"""
+    print("🚀 Starting TechGap API...")
+    
+    # Optional: Warm cache in background (don't block startup)
     try:
-        # Warm up the options cache immediately on startup
-        from app.database import SessionLocal
-        db = SessionLocal()
-        try:
-            # Pre-load options into cache
-            from routers.gap_analysis import get_options
-            get_options(db)
-            print("✅ Options cache warmed successfully")
-        except Exception as e:
-            print(f"⚠️ Failed to warm options cache: {e}")
-        finally:
-            db.close()
+        from threading import Thread
+        
+        def warm_cache_background():
+            try:
+                from app.database import SessionLocal
+                from routers.gap_analysis import get_options
+                
+                db = SessionLocal()
+                try:
+                    result = get_options(db)
+                    print(f"✅ Cache warmed: {len(result.get('curricula', []))} curricula, {len(result.get('jobs', []))} jobs")
+                except Exception as e:
+                    print(f"⚠️ Cache warming failed (non-critical): {e}")
+                finally:
+                    db.close()
+            except Exception:
+                pass  # Silently fail, cache will warm on first request
+        
+        # Start background thread - don't wait for it
+        Thread(target=warm_cache_background, daemon=True).start()
+        print("🔄 Cache warming started in background...")
+        
     except Exception as e:
-        print(f"⚠️ Startup cache warming failed: {e}")
-        pass
+        print(f"⚠️ Could not start background cache warming: {e}")
+        print("💡 Cache will warm on first request instead")
