@@ -452,7 +452,7 @@ export default function CurriculumGapAnalyzer() {
                                         </div>
 
                                         <ResponsiveContainer width="100%" height="100%" className="outline-none">
-                                            <PieChart>
+                                            <PieChart className="outline-none focus:outline-none">
                                                 <defs>
                                                     <linearGradient id="colorRelevant" x1="0" y1="0" x2="0" y2="1">
                                                         <stop offset="5%" stopColor="#10b981" stopOpacity={0.9}/>
@@ -496,7 +496,7 @@ export default function CurriculumGapAnalyzer() {
                                     </h4>
                                     <div className="h-64 w-full">
                                         <ResponsiveContainer width="100%" height="100%" className="outline-none">
-                                            <BarChart data={barData} layout="horizontal" barSize={45}>
+                                            <BarChart data={barData} layout="horizontal" barSize={45} className="outline-none focus:outline-none">
                                                 <defs>
                                                     <linearGradient id="barMatch" x1="0" y1="0" x2="0" y2="1">
                                                         <stop offset="0%" stopColor="#10b981"/>

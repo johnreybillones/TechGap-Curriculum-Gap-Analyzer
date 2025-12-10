@@ -1,1 +1,16 @@
 @import "tailwindcss";
+
+/* Global override for Recharts focus outline */
+.recharts-wrapper,
+.recharts-surface,
+.recharts-responsive-container,
+.recharts-sector,
+.recharts-layer {
+  outline: none !important;
+}
+
+.recharts-wrapper:focus,
+.recharts-wrapper *:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
