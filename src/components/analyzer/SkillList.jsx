@@ -2,6 +2,7 @@
  * SkillList Component
  * Displays a list of skills with expand/collapse functionality
  */
+import { useState, useEffect, useRef } from 'react';
 import { CheckCircle, AlertCircle } from 'lucide-react';
 import SkillBadge from './SkillBadge';
 
@@ -13,6 +14,25 @@ const SkillList = ({
     onToggle,
     sectionRef
 }) => {
+    const contentRef = useRef(null);
+    const [hasOverflow, setHasOverflow] = useState(false);
+
+    useEffect(() => {
+        const checkOverflow = () => {
+            if (contentRef.current) {
+                const isContentOverflowing = contentRef.current.scrollHeight > 200;
+                setHasOverflow(isContentOverflowing);
+            }
+        };
+
+        // Check after a brief delay to ensure content is rendered
+        const timer = setTimeout(checkOverflow, 100);
+        window.addEventListener('resize', checkOverflow);
+        return () => {
+            clearTimeout(timer);
+            window.removeEventListener('resize', checkOverflow);
+        };
+    }, [skills]);
     const isMatched = variant === 'matched';
     const containerClass = isMatched ? '' : 'bg-rose-50/20 dark:bg-rose-900/5';
     const Icon = isMatched ? CheckCircle : AlertCircle;
@@ -34,8 +54,12 @@ const SkillList = ({
                 </span>
             </div>
             <div 
-                className="flex flex-wrap gap-2 overflow-hidden transition-all duration-500 ease-in-out" 
-                style={{ maxHeight: showAll ? '1000px' : '120px' }}
+                ref={contentRef}
+                className="flex flex-wrap gap-2 transition-all duration-500 ease-in-out" 
+                style={{ 
+                    maxHeight: showAll ? '2000px' : '200px',
+                    overflow: 'hidden'
+                }}
             >
                 {skills && skills.length > 0 ? (
                     skills.map((skill, index) => (
@@ -45,12 +69,12 @@ const SkillList = ({
                     <span className="text-slate-400 dark:text-slate-500 text-xs italic">None</span>
                 )}
             </div>
-            {skills && skills.length > 15 && (
+            {hasOverflow && (
                 <button 
                     onClick={onToggle} 
-                    className={`mt-3 px-3 py-1.5 bg-slate-50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600/50 rounded-full text-sm md:text-base font-medium transition-all duration-300 cursor-pointer hover:scale-105 hover:shadow-md hover:bg-white dark:hover:bg-slate-600/50 ${buttonHoverClass}`}
+                    className={`mt-4 px-3 py-1.5 bg-slate-50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600/50 rounded-full text-sm md:text-base font-medium transition-all duration-300 cursor-pointer hover:scale-105 hover:shadow-md hover:bg-white dark:hover:bg-slate-600/50 ${buttonHoverClass}`}
                 >
-                    {showAll ? "Show Less" : `Show ${skills.length - 15} More`}
+                    {showAll ? "Show Less" : "Show More"}
                 </button>
             )}
         </div>
