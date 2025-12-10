@@ -451,7 +451,7 @@ export default function CurriculumGapAnalyzer() {
                                             </div>
                                         </div>
 
-                                        <ResponsiveContainer width="100%" height="100%">
+                                        <ResponsiveContainer width="100%" height="100%" className="outline-none">
                                             <PieChart>
                                                 <defs>
                                                     <linearGradient id="colorRelevant" x1="0" y1="0" x2="0" y2="1">
@@ -482,8 +482,8 @@ export default function CurriculumGapAnalyzer() {
                                                     ))}
                                                 </Pie>
                                                 <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ fontSize: '12px', fontWeight: 500 }} />
-                                                {/* TOOLTIP FIX: Added allowEscapeViewBox */}
-                                                <Tooltip content={<CustomTooltip />} allowEscapeViewBox={{ x: true, y: true }} />
+                                                {/* TOOLTIP FIX: Added allowEscapeViewBox and outline-none */}
+                                                <Tooltip content={<CustomTooltip />} allowEscapeViewBox={{ x: true, y: true }} wrapperStyle={{ outline: 'none' }} />
                                             </PieChart>
                                         </ResponsiveContainer>
                                     </div>
@@ -495,7 +495,7 @@ export default function CurriculumGapAnalyzer() {
                                         Gap Analysis Overview
                                     </h4>
                                     <div className="h-64 w-full">
-                                        <ResponsiveContainer width="100%" height="100%">
+                                        <ResponsiveContainer width="100%" height="100%" className="outline-none">
                                             <BarChart data={barData} layout="horizontal" barSize={45}>
                                                 <defs>
                                                     <linearGradient id="barMatch" x1="0" y1="0" x2="0" y2="1">
@@ -520,8 +520,8 @@ export default function CurriculumGapAnalyzer() {
                                                     tick={{fill: '#312e81', fontSize: 10, fontWeight: 600}} 
                                                 />
                                                 <Legend iconType="circle" wrapperStyle={{ paddingTop: '10px', fontSize: '12px', fontWeight: 500 }}/>
-                                                {/* TOOLTIP FIX: Added allowEscapeViewBox */}
-                                                <Tooltip cursor={{fill: 'rgba(255,255,255,0.4)'}} content={<CustomTooltip />} allowEscapeViewBox={{ x: true, y: true }} />
+                                                {/* TOOLTIP FIX: Added allowEscapeViewBox and outline-none */}
+                                                <Tooltip cursor={{fill: 'rgba(255,255,255,0.4)'}} content={<CustomTooltip />} allowEscapeViewBox={{ x: true, y: true }} wrapperStyle={{ outline: 'none' }} />
                                                 
                                                 <Bar dataKey="Matches" name="Matches" fill="url(#barMatch)" radius={[6, 6, 6, 6]} filter="url(#shadow)" />
                                                 <Bar dataKey="Gaps" name="Missing Gaps" fill="url(#barGap)" radius={[6, 6, 6, 6]} filter="url(#shadow)" />
