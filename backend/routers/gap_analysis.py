@@ -387,116 +387,40 @@ def generate_recommendation(request: RecommendationRequest):
     Curriculum Relevance Score: {request.relevance_score}%
     Top Missing Skills: {skills_list}
 
-    Provide a scan-friendly response with this EXACT structure:
+    Provide a response in this EXACT format:
 
-    **Gap Summary:**
-    (3-4 sentences) - Analyze the alignment based on the results:
-    - Explain what the {request.coverage_score}% job coverage means (how much of the job requirements the curriculum covers)
-    - Explain what the {request.relevance_score}% curriculum relevance means (what portion of curriculum skills are actually needed for this job role)
-    - What categories of skills are missing? (e.g., cloud platforms, statistical methods, tools)
-    
-    **Top 3 Actions:**
-    List ONLY 3 specific syllabus updates:
-    - Start each with a verb (Add, Integrate, Update, Include)
-    - Keep each to 1 line
-    - Focus on course content/labs only (NO internships, seminars, or general education)
-    - Be specific to technical topics
+**Job Coverage Analysis ({request.coverage_score}%):**
+[Write paragraph here - 3-4 sentences explaining: what this score means, which technical categories are covered vs missing, and root cause. Use transition words. Bold only the 2-3 most critical missing skills or gaps.]
 
-    Use bullet points. Bold key terms only. Do NOT add a title or heading before "Gap Summary".
+**Curriculum Relevance Analysis ({request.relevance_score}%):**
+[Write paragraph here - 3-4 sentences explaining: what this score reveals, which topics are relevant vs less applicable, and why. Use transition words. Bold only the 2-3 most important technical areas needing updates.]
+
+**Top 3 Actions:**
+- **[Action Verb]** [specific, actionable technical recommendation]
+- **[Action Verb]** [specific, actionable technical recommendation]  
+- **[Action Verb]** [specific, actionable technical recommendation]
+
+CRITICAL FORMATTING:
+- Use exactly **two asterisks** before and after bold text
+- In paragraphs: Bold only 2-3 most critical technical terms per section
+- In actions: Bold only the action verb at the start of each bullet
+- Do NOT add blank lines anywhere
     """
     # -------------------------------------------------------
     
-    # Recommended models by Gemini (in priority order with additional fallbacks)
-    FALLBACK_MODELS = [
-        'gemini-2.5-flash-lite',         # Fastest, separate quota pool
-        'gemini-2.5-flash',              # Balanced performance
-        'gemini-2.5-pro',                # Most capable
-        'gemini-2.0-flash-lite',         # Older lite version
-        'gemini-2.0-flash',              # Older flash version
-        'gemini-flash-lite-latest',      # Latest lite alias
-        'gemini-flash-latest',           # Latest flash alias
-        'gemini-pro-latest',             # Latest pro alias
-    ]
-    
-    # Try each model in sequence until one succeeds
     last_error = None
-    for model_name in FALLBACK_MODELS:
-        try:
-            if hasattr(genai, "GenerativeModel"):
-                model = genai.GenerativeModel(model_name)
-                response = model.generate_content(prompt)
-                
-                # Check if response was blocked by safety filters
-                if hasattr(response, 'prompt_feedback') and response.prompt_feedback:
-                    if hasattr(response.prompt_feedback, 'block_reason'):
-                        print(f"⚠️ {model_name} blocked content (safety filters), trying next model...")
-                        continue
-                
-                # Try to extract text from response
-                text = None
-                if hasattr(response, 'text'):
-                    try:
-                        text = response.text
-                    except:
-                        # Sometimes .text property throws an error if response is blocked
-                        pass
-                
-                if not text and hasattr(response, 'candidates') and response.candidates:
-                    # Try to get text from first candidate
-                    try:
-                        text = response.candidates[0].content.parts[0].text
-                    except:
-                        pass
-                
-                if text:
-                    # Cache the successful response
-                    _RECOMMENDATION_CACHE[cache_key] = text
-                    return {"recommendation": text}
-                else:
-                    print(f"⚠️ {model_name} returned empty response, trying next model...")
-                    continue
-                    
-            else:
-                # Legacy fallback (for older SDK versions)
-                response = genai.generate_text(
-                    model="models/text-bison-001",
-                    prompt=prompt
-                )
-                text = getattr(response, "result", None)
-                if not text and isinstance(response, dict):
-                    text = response.get("generated_text") or response.get("result")
-                if not text:
-                    text = str(response)
-                return {"recommendation": text}
-                
-        except Exception as e:
-            error_msg = str(e).lower()
-            last_error = e
-            
-            # Check for various types of recoverable errors - try next model
-            recoverable_errors = [
-                'quota', 'limit', 'rate', 'resource_exhausted',
-                'blocked', 'safety', 'filter', 'recitation',
-                'timeout', 'deadline', 'unavailable', '503', '429',
-                'overloaded', 'capacity'
-            ]
-            
-            if any(keyword in error_msg for keyword in recoverable_errors):
-                print(f"⚠️ {model_name} error (recoverable): {str(e)[:100]}... Trying next model...")
-                continue
-            else:
-                # For truly unrecoverable errors (auth, invalid request), try next anyway
-                print(f"⚠️ {model_name} error: {str(e)[:100]}... Trying next model...")
-                continue
     
-    # All models failed
-    print(f"❌ All {len(FALLBACK_MODELS)} models failed. Last error: {last_error}")
+    # STRATEGY: Groq first (fastest), then Gemini as backup
     
-    # Try Groq as final fallback (if GROQ_API_KEY is set)
+    # ═══════════════════════════════════════════════════════════════
+    # TIER 1: GROQ API (Primary - Fast & Reliable)
+    # ═══════════════════════════════════════════════════════════════
+    
+    # 1. Groq (Llama 3.3 70B - Very fast, 30 req/min = 43,200/day, truly free)
     groq_key = os.getenv("GROQ_API_KEY")
     if groq_key:
         try:
-            print("⚠️ Trying Groq API as final fallback...")
+            print("🚀 Trying Groq API (Llama 3.3 70B - fastest inference)...")
             import requests
             
             response = requests.post(
@@ -506,10 +430,10 @@ def generate_recommendation(request: RecommendationRequest):
                     "Content-Type": "application/json"
                 },
                 json={
-                    "model": "llama-3.3-70b-versatile",  # Fast, free tier available
+                    "model": "llama-3.3-70b-versatile",
                     "messages": [{"role": "user", "content": prompt}],
                     "temperature": 0.7,
-                    "max_tokens": 500
+                    "max_tokens": 600
                 },
                 timeout=10
             )
@@ -517,11 +441,79 @@ def generate_recommendation(request: RecommendationRequest):
             if response.ok:
                 text = response.json()["choices"][0]["message"]["content"]
                 _RECOMMENDATION_CACHE[cache_key] = text
-                print("✓ Groq API succeeded!")
+                print("✅ Groq API succeeded!")
                 return {"recommendation": text}
-        except Exception as groq_error:
-            print(f"❌ Groq API also failed: {groq_error}")
+        except Exception as e:
+            last_error = e
+            print(f"⚠️ Groq API failed: {str(e)[:100]}...")
     
+    # ═══════════════════════════════════════════════════════════════
+    # TIER 2: GEMINI (Backup - has quota limits but good quality)
+    # ═══════════════════════════════════════════════════════════════
+    
+    if os.getenv("GOOGLE_API_KEY"):
+        import google.generativeai as genai
+        genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+        
+        GEMINI_MODELS = [
+            'gemini-2.5-flash-lite',         # Fastest, separate quota pool
+            'gemini-2.5-flash',              # Balanced performance
+            'gemini-2.5-pro',                # Most capable
+            'gemini-2.0-flash-lite',         # Older lite version
+            'gemini-2.0-flash',              # Older flash version
+            'gemini-flash-lite-latest',      # Latest lite alias
+            'gemini-flash-latest',           # Latest flash alias
+            'gemini-pro-latest',             # Latest pro alias
+        ]
+        
+        for model_name in GEMINI_MODELS:
+            try:
+                if hasattr(genai, "GenerativeModel"):
+                    model = genai.GenerativeModel(model_name)
+                    response = model.generate_content(prompt)
+                    
+                    # Check if response was blocked by safety filters
+                    if hasattr(response, 'prompt_feedback') and response.prompt_feedback:
+                        if hasattr(response.prompt_feedback, 'block_reason'):
+                            print(f"⚠️ {model_name} blocked content (safety filters), trying next model...")
+                            continue
+                    
+                    # Try to extract text from response
+                    text = None
+                    if hasattr(response, 'text'):
+                        try:
+                            text = response.text
+                        except:
+                            pass
+                    
+                    if not text and hasattr(response, 'candidates') and response.candidates:
+                        try:
+                            text = response.candidates[0].content.parts[0].text
+                        except:
+                            pass
+                    
+                    if text:
+                        _RECOMMENDATION_CACHE[cache_key] = text
+                        print(f"✅ {model_name} succeeded!")
+                        return {"recommendation": text}
+                    else:
+                        print(f"⚠️ {model_name} returned empty response, trying next model...")
+                        continue
+                        
+            except Exception as e:
+                error_msg = str(e).lower()
+                last_error = e
+                
+                # Check for quota/rate limit errors
+                if any(keyword in error_msg for keyword in ['quota', 'limit', 'rate', 'resource_exhausted', '429']):
+                    print(f"⚠️ {model_name} quota exceeded, trying next model...")
+                    continue
+                else:
+                    print(f"⚠️ {model_name} error: {str(e)[:100]}... Trying next model...")
+                    continue
+    
+    # All APIs failed
+    print(f"❌ All 10 models failed. Last error: {last_error}")
     return {"recommendation": "Unable to generate AI recommendations at this time. All models are currently unavailable. Please try again later."}
 
 # Clear cache endpoint (useful for testing or when cache gets stale)

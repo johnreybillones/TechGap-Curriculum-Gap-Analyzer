@@ -92,6 +92,49 @@ export default function CurriculumGapAnalyzer() {
     });
 
     const summaryRef = useRef(null);
+    const matchedSkillsRef = useRef(null);
+    const missingSkillsRef = useRef(null);
+
+    // Handle smooth scroll when expanding skills
+    const handleToggleMatches = () => {
+        if (!showAllMatches && matchedSkillsRef.current) {
+            const rect = matchedSkillsRef.current.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const targetPosition = rect.top + scrollTop;
+            
+            setShowAllMatches(true);
+            
+            // After expansion, adjust scroll to keep button in view
+            setTimeout(() => {
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }, 50);
+        } else {
+            setShowAllMatches(false);
+        }
+    };
+
+    const handleToggleGaps = () => {
+        if (!showAllGaps && missingSkillsRef.current) {
+            const rect = missingSkillsRef.current.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const targetPosition = rect.top + scrollTop;
+            
+            setShowAllGaps(true);
+            
+            // After expansion, adjust scroll to keep button in view
+            setTimeout(() => {
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }, 50);
+        } else {
+            setShowAllGaps(false);
+        }
+    };
 
     // --- Dark Mode Effect ---
     useEffect(() => {
@@ -217,13 +260,15 @@ export default function CurriculumGapAnalyzer() {
         if (active && payload && payload.length) {
             return (
                 <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm p-3 border border-indigo-50 dark:border-slate-700 rounded-xl shadow-xl shadow-indigo-100/20 dark:shadow-none outline-none">
-                    <p className="font-bold text-indigo-900 dark:text-indigo-100 text-sm mb-2">{label}</p>
-                    {payload.map((entry, index) => (
-                        <p key={index} style={{ color: entry.color }} className="font-medium flex items-center gap-2 text-xs md:text-sm">
-                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }}></span>
-                            {entry.name}: {entry.value}
-                        </p>
-                    ))}
+                    <p className="font-bold text-indigo-900 dark:text-indigo-100 text-sm mb-2 text-left">{label}</p>
+                    <div className="flex flex-col items-start gap-1">
+                        {payload.map((entry, index) => (
+                            <p key={index} style={{ color: entry.color }} className="font-medium flex items-center gap-2 text-xs md:text-sm whitespace-nowrap">
+                                <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: entry.color }}></span>
+                                {entry.name}: {entry.value}
+                            </p>
+                        ))}
+                    </div>
                 </div>
             );
         }
@@ -248,7 +293,7 @@ export default function CurriculumGapAnalyzer() {
                     {/* Dark Mode Toggle Slider */}
                     <button 
                         onClick={() => setDarkMode(!darkMode)}
-                        className={`ml-auto relative w-16 h-8 rounded-full transition-colors duration-500 focus:outline-none shadow-inner border border-slate-200 dark:border-slate-700 cursor-pointer z-50 ${darkMode ? 'bg-slate-800' : 'bg-indigo-50'}`}
+                        className={`ml-auto relative w-16 h-8 rounded-full transition-all duration-500 focus:outline-none shadow-inner border border-slate-200 dark:border-slate-700 cursor-pointer z-50 hover:scale-110 hover:shadow-lg ${darkMode ? 'bg-slate-800 hover:bg-slate-700' : 'bg-indigo-50 hover:bg-indigo-100'}`}
                         aria-label="Toggle Dark Mode"
                     >
                         <div className={`absolute top-1 left-1 w-6 h-6 rounded-full shadow-md transform transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] flex items-center justify-center border ${darkMode ? 'translate-x-8 bg-slate-900 border-slate-700' : 'translate-x-0 bg-white border-white'}`}>
@@ -288,7 +333,7 @@ export default function CurriculumGapAnalyzer() {
                                     setIsProgramOpen(!isProgramOpen);
                                     setIsCareerOpen(false);
                                 }}
-                                className="w-full flex items-center justify-between px-4 py-4 bg-slate-50/80 dark:bg-slate-900/30 border border-slate-200 dark:border-slate-700/50 rounded-xl hover:border-indigo-500 dark:hover:border-indigo-500/50 hover:bg-white dark:hover:bg-slate-800/50 focus:outline-none focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-900/20 transition-all text-left disabled:opacity-60 shadow-sm group-hover:shadow-md cursor-pointer"
+                                className="w-full flex items-center justify-between px-4 py-4 bg-slate-50/80 dark:bg-slate-900/30 border border-slate-200 dark:border-slate-700/50 rounded-xl hover:border-indigo-500 dark:hover:border-indigo-500/50 hover:bg-white dark:hover:bg-slate-800/50 focus:outline-none focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-900/20 transition-all text-left disabled:opacity-60 shadow-sm hover:shadow-lg hover:scale-[1.01] hover:shadow-indigo-200/30 dark:hover:shadow-indigo-900/20 cursor-pointer"
                                 disabled={optionsLoading || programs.length === 0}
                             >
                                 <div className="flex items-center gap-3 overflow-hidden">
@@ -332,7 +377,7 @@ export default function CurriculumGapAnalyzer() {
                                     setIsCareerOpen(!isCareerOpen);
                                     setIsProgramOpen(false);
                                 }}
-                                className="w-full flex items-center justify-between px-4 py-4 bg-slate-50/80 dark:bg-slate-900/30 border border-slate-200 dark:border-slate-700/50 rounded-xl hover:border-indigo-500 dark:hover:border-indigo-500/50 hover:bg-white dark:hover:bg-slate-800/50 focus:outline-none focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-900/20 transition-all text-left disabled:opacity-60 shadow-sm group-hover:shadow-md cursor-pointer"
+                                className="w-full flex items-center justify-between px-4 py-4 bg-slate-50/80 dark:bg-slate-900/30 border border-slate-200 dark:border-slate-700/50 rounded-xl hover:border-indigo-500 dark:hover:border-indigo-500/50 hover:bg-white dark:hover:bg-slate-800/50 focus:outline-none focus:ring-4 focus:ring-indigo-100 dark:focus:ring-indigo-900/20 transition-all text-left disabled:opacity-60 shadow-sm group-hover:shadow-lg group-hover:scale-[1.01] hover:shadow-indigo-200/30 dark:hover:shadow-indigo-900/20 cursor-pointer"
                                 disabled={optionsLoading || careers.length === 0}
                             >
                                 <div className="flex items-center gap-3 overflow-hidden">
@@ -422,53 +467,6 @@ export default function CurriculumGapAnalyzer() {
                                     color="text-indigo-500 dark:text-indigo-400"
                                     icon={<BarChart3 className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />}
                                 />
-                            </div>
-
-                            {/* AI Section */}
-                            <div className="bg-white/80 dark:bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-sm border border-indigo-50 dark:border-slate-700/50 mb-6 md:mb-8 relative overflow-hidden transition-all duration-300 hover:shadow-md hover:border-indigo-200 dark:hover:border-indigo-900/50 group">
-                                <div 
-                                    className="flex items-center justify-between p-4 md:p-6 cursor-pointer select-none hover:bg-indigo-50/30 dark:hover:bg-indigo-900/10 transition-colors duration-300"
-                                    onClick={() => setIsAiOpen(!isAiOpen)}
-                                >
-                                    <div className="flex items-center gap-3 relative z-10">
-                                        <div className="p-2 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg shadow-lg shadow-indigo-500/20 group-hover:scale-110 transition-transform duration-300">
-                                            <Sparkles className="w-4 h-4 text-white" />
-                                        </div>
-                                        <h3 className="text-sm md:text-xl font-bold text-indigo-900 dark:text-slate-200">AI Recommendations</h3>
-                                    </div>
-                                    <div className={`text-indigo-400 transition-transform duration-300 ${isAiOpen ? 'rotate-180' : ''}`}>
-                                        <ChevronDown className="w-5 h-5"/>
-                                    </div>
-                                </div>
-                                
-                                <div className={`grid transition-all duration-300 ease-in-out ${isAiOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
-                                    <div className="overflow-hidden">
-                                        <div className="px-4 pb-4 md:px-6 md:pb-6">
-                                            {recLoading ? (
-                                                <div className="flex items-center gap-3 text-indigo-600 dark:text-indigo-400 py-6 animate-pulse bg-indigo-50/50 dark:bg-indigo-900/10 rounded-xl p-4">
-                                                    <Loader2 className="w-5 h-5 animate-spin" />
-                                                    <span className="text-sm font-medium">Analyzing curriculum gaps...</span>
-                                                </div>
-                                            ) : recommendation ? (
-                                                <div className="prose prose-sm md:prose-base prose-indigo max-w-none text-slate-700 dark:text-slate-300 bg-indigo-50/30 dark:bg-indigo-900/10 p-5 rounded-xl border border-indigo-50 dark:border-slate-700/50 shadow-inner dark:shadow-none">
-                                                    <ReactMarkdown components={{
-                                                            ul: ({ node, ...props }) => <ul className="list-disc pl-5 space-y-2" {...props} />,
-                                                            ol: ({ node, ...props }) => <ol className="list-decimal pl-5 space-y-2" {...props} />,
-                                                            li: ({ node, ...props }) => <li className="text-slate-700 dark:text-slate-300" {...props} />,
-                                                            p: ({ node, ...props }) => <p className="text-slate-700 dark:text-slate-300 leading-relaxed" {...props} />,
-                                                            h2: ({ node, ...props }) => <h2 className="text-xl font-bold text-indigo-900 dark:text-indigo-200 mt-4" {...props} />,
-                                                            h3: ({ node, ...props }) => <h3 className="text-lg font-semibold text-indigo-900 dark:text-indigo-200 mt-3" {...props} />,
-                                                            strong: ({ node, ...props }) => <strong className="text-indigo-900 dark:text-indigo-200 font-bold" {...props} />,
-                                                    }}>
-                                                        {recommendation}
-                                                    </ReactMarkdown>
-                                                </div>
-                                            ) : (
-                                                <p className="text-indigo-900/60 dark:text-indigo-200/60 text-sm italic p-4">Waiting for AI insights...</p>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
 
                             {/* 2. CHARTS SECTION (ENHANCED) */}
@@ -568,64 +566,114 @@ export default function CurriculumGapAnalyzer() {
                                 </div>
                             </div>
 
+                            {/* AI Recommendations Section */}
+                            <div className="bg-white/80 dark:bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-sm border border-indigo-50 dark:border-slate-700/50 mb-6 md:mb-8 relative overflow-hidden transition-all duration-300 hover:shadow-md hover:border-indigo-200 dark:hover:border-indigo-900/50 group">
+                                <div 
+                                    className="flex items-center justify-between p-4 md:p-6 cursor-pointer select-none hover:bg-indigo-50/30 dark:hover:bg-indigo-900/10 transition-colors duration-300"
+                                    onClick={() => setIsAiOpen(!isAiOpen)}
+                                >
+                                    <div className="flex items-center gap-3 relative z-10">
+                                        <div className="p-2 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg shadow-lg shadow-indigo-500/20 group-hover:scale-110 transition-transform duration-300">
+                                            <Sparkles className="w-4 h-4 text-white" />
+                                        </div>
+                                        <h3 className="text-sm md:text-xl font-bold text-indigo-900 dark:text-slate-200">AI Recommendations</h3>
+                                    </div>
+                                    <div className={`text-indigo-400 transition-transform duration-300 ${isAiOpen ? 'rotate-180' : ''}`}>
+                                        <ChevronDown className="w-5 h-5"/>
+                                    </div>
+                                </div>
+                                
+                                <div className={`grid transition-all duration-300 ease-in-out ${isAiOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                                    <div className="overflow-hidden">
+                                        <div className="px-4 pb-4 md:px-6 md:pb-6">
+                                            {recLoading ? (
+                                                <div className="flex items-center gap-3 text-indigo-600 dark:text-indigo-400 py-6 animate-pulse bg-indigo-50/50 dark:bg-indigo-900/10 rounded-xl p-4">
+                                                    <Loader2 className="w-5 h-5 animate-spin" />
+                                                    <span className="text-sm font-medium">Analyzing curriculum gaps...</span>
+                                                </div>
+                                            ) : recommendation ? (
+                                                <div className="prose prose-sm md:prose-base prose-indigo max-w-none text-slate-700 dark:text-slate-300 bg-indigo-50/30 dark:bg-indigo-900/10 p-5 rounded-xl border border-indigo-50 dark:border-slate-700/50 shadow-inner dark:shadow-none">
+                                                    <ReactMarkdown components={{
+                                                            ul: ({ node, ...props }) => <ul className="list-disc pl-5 space-y-2 mt-3" {...props} />,
+                                                            ol: ({ node, ...props }) => <ol className="list-decimal pl-5 space-y-2 mt-3" {...props} />,
+                                                            li: ({ node, ...props }) => <li className="text-slate-700 dark:text-slate-300" {...props} />,
+                                                            p: ({ node, ...props }) => <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-4" {...props} />,
+                                                            h1: ({ node, ...props }) => <h1 className="text-lg md:text-xl font-bold text-indigo-800 dark:text-indigo-200 mb-2 mt-5" {...props} />,
+                                                            h2: ({ node, ...props }) => <h2 className="text-base md:text-lg font-bold text-indigo-900 dark:text-indigo-200 mb-2 mt-5" {...props} />,
+                                                            h3: ({ node, ...props }) => <h3 className="text-base font-semibold text-indigo-900 dark:text-indigo-200 mb-2 mt-4" {...props} />,
+                                                            strong: ({ node, ...props }) => <strong className="text-indigo-900 dark:text-indigo-300 font-bold" {...props} />,
+                                                    }}>
+                                                        {recommendation}
+                                                    </ReactMarkdown>
+                                                </div>
+                                            ) : (
+                                                <p className="text-indigo-900/60 dark:text-indigo-200/60 text-sm italic p-4">Waiting for AI insights...</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             {/* 3. Skill Lists */}
                             <div className="bg-white/80 dark:bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-sm border border-white/50 dark:border-slate-700/50 overflow-hidden hover:shadow-lg transition-shadow duration-300">
                                 <div className="bg-slate-50/50 dark:bg-slate-900/30 px-4 py-3 md:px-6 md:py-4 border-b border-slate-100 dark:border-slate-700/50">
-                                    <h4 className="font-bold text-sm md:text-base text-indigo-900 dark:text-slate-200">Skill Details</h4>
+                                    <h4 className="font-bold text-sm md:text-base text-slate-600 dark:text-slate-300">Skill Details</h4>
                                 </div>
                                 <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-100 dark:divide-slate-700/50">
                                     {/* Matched */}
-                                    <div className="p-4 md:p-6">
+                                    <div className="p-4 md:p-6" ref={matchedSkillsRef}>
                                         <div className="flex items-center gap-2 mb-4">
-                                            <CheckCircle className="w-4 h-4 text-emerald-500/90" />
-                                            <h5 className="font-bold text-sm md:text-lg text-slate-700 dark:text-slate-200">Matched Skills</h5>
-                                            <span className="ml-auto text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-1 rounded-full border border-emerald-100 dark:border-emerald-900/50">
+                                            <CheckCircle className="w-4 h-4 text-emerald-400/70" />
+                                            <h5 className="font-semibold text-sm md:text-lg text-slate-600 dark:text-slate-300">Matched Skills</h5>
+                                            <span className="ml-auto text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-900/20 px-2 py-1 rounded-full border border-emerald-100/50 dark:border-emerald-900/30">
                                                 {results.exact?.length || 0}
                                             </span>
                                         </div>
-                                        <div className="flex flex-wrap gap-2">
+                                        <div className="flex flex-wrap gap-2 overflow-hidden transition-all duration-500 ease-in-out" style={{ maxHeight: showAllMatches ? '1000px' : '120px' }}>
                                             {results.exact && results.exact.length > 0 ? (
-                                                <>
-                                                    {getVisibleSkills(results.exact, showAllMatches).map((skill, index) => (
-                                                        <span key={index} className="px-3 py-1 bg-white dark:bg-slate-800/50 border border-emerald-100 dark:border-emerald-900/50 text-emerald-700/90 dark:text-emerald-300/90 rounded-full text-xs md:text-base font-medium hover:scale-105 transition-transform cursor-default shadow-sm hover:shadow-md hover:border-emerald-200 dark:hover:border-emerald-700">
-                                                            {skill}
-                                                        </span>
-                                                    ))}
-                                                    {results.exact.length > 15 && (
-                                                        <button onClick={() => setShowAllMatches(!showAllMatches)} className="px-3 py-1 bg-slate-50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600/50 rounded-full text-xs md:text-base font-medium hover:text-emerald-600 hover:border-emerald-300 dark:hover:border-emerald-600 transition-colors">
-                                                            {showAllMatches ? "Less" : `+${results.exact.length - 15}`}
-                                                        </button>
-                                                    )}
-                                                </>
+                                                results.exact.map((skill, index) => (
+                                                    <span 
+                                                        key={index} 
+                                                        className="px-3 py-1 bg-white dark:bg-slate-800/50 border border-emerald-100/70 dark:border-emerald-900/30 text-emerald-600/80 dark:text-emerald-400/80 rounded-full text-xs md:text-base font-medium hover:scale-105 transition-transform cursor-default shadow-sm hover:shadow-md hover:border-emerald-200/80 dark:hover:border-emerald-700/50"
+                                                    >
+                                                        {skill}
+                                                    </span>
+                                                ))
                                             ) : <span className="text-slate-400 dark:text-slate-500 text-xs italic">None</span>}
                                         </div>
+                                        {results.exact && results.exact.length > 15 && (
+                                            <button onClick={handleToggleMatches} className="mt-3 px-3 py-1 bg-slate-50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600/50 rounded-full text-xs md:text-base font-medium hover:text-emerald-600 hover:border-emerald-300 dark:hover:border-emerald-600 transition-all duration-300 cursor-pointer hover:scale-105 hover:shadow-md hover:bg-white dark:hover:bg-slate-600/50">
+                                                {showAllMatches ? "Show Less" : `Show ${results.exact.length - 15} More`}
+                                            </button>
+                                        )}
                                     </div>
 
                                     {/* Gaps */}
-                                    <div className="p-4 md:p-6 bg-rose-50/30 dark:bg-rose-900/10">
+                                    <div className="p-4 md:p-6 bg-rose-50/20 dark:bg-rose-900/5" ref={missingSkillsRef}>
                                         <div className="flex items-center gap-2 mb-4">
-                                            <AlertCircle className="w-4 h-4 text-rose-500" />
-                                            <h5 className="font-bold text-sm md:text-lg text-slate-700 dark:text-slate-200">Missing Skills</h5>
-                                            <span className="ml-auto text-xs font-bold text-rose-700 dark:text-rose-300 bg-rose-50 dark:bg-rose-900/30 px-2 py-1 rounded-full border border-rose-100 dark:border-rose-900/50">
+                                            <AlertCircle className="w-4 h-4 text-rose-400/70" />
+                                            <h5 className="font-semibold text-sm md:text-lg text-slate-600 dark:text-slate-300">Missing Skills</h5>
+                                            <span className="ml-auto text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-50/50 dark:bg-rose-900/20 px-2 py-1 rounded-full border border-rose-100/50 dark:border-rose-900/30">
                                                 {results.gaps?.length || 0}
                                             </span>
                                         </div>
-                                        <div className="flex flex-wrap gap-2">
+                                        <div className="flex flex-wrap gap-2 overflow-hidden transition-all duration-500 ease-in-out" style={{ maxHeight: showAllGaps ? '1000px' : '120px' }}>
                                             {results.gaps && results.gaps.length > 0 ? (
-                                                <>
-                                                    {getVisibleSkills(results.gaps, showAllGaps).map((skill, index) => (
-                                                        <span key={index} className="px-3 py-1 bg-white dark:bg-slate-800/50 border border-rose-100 dark:border-rose-900/50 text-rose-700 dark:text-rose-300 rounded-full text-xs md:text-base font-medium hover:scale-105 transition-transform cursor-default shadow-sm hover:shadow-md hover:border-rose-200 dark:hover:border-rose-700">
-                                                            {skill}
-                                                        </span>
-                                                    ))}
-                                                    {results.gaps.length > 15 && (
-                                                        <button onClick={() => setShowAllGaps(!showAllGaps)} className="px-3 py-1 bg-slate-50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600/50 rounded-full text-xs md:text-base font-medium hover:text-rose-600 hover:border-rose-300 dark:hover:border-rose-600 transition-colors">
-                                                            {showAllGaps ? "Less" : `+${results.gaps.length - 15}`}
-                                                        </button>
-                                                    )}
-                                                </>
+                                                results.gaps.map((skill, index) => (
+                                                    <span 
+                                                        key={index} 
+                                                        className="px-3 py-1 bg-white dark:bg-slate-800/50 border border-rose-100/70 dark:border-rose-900/30 text-rose-600/80 dark:text-rose-400/80 rounded-full text-xs md:text-base font-medium hover:scale-105 transition-transform cursor-default shadow-sm hover:shadow-md hover:border-rose-200/80 dark:hover:border-rose-700/50"
+                                                    >
+                                                        {skill}
+                                                    </span>
+                                                ))
                                             ) : <span className="text-slate-400 dark:text-slate-500 text-xs italic">None</span>}
                                         </div>
+                                        {results.gaps && results.gaps.length > 15 && (
+                                            <button onClick={handleToggleGaps} className="mt-3 px-3 py-1 bg-slate-50 dark:bg-slate-700/50 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600/50 rounded-full text-xs md:text-base font-medium hover:text-rose-600 hover:border-rose-300 dark:hover:border-rose-600 transition-all duration-300 cursor-pointer hover:scale-105 hover:shadow-md hover:bg-white dark:hover:bg-slate-600/50">
+                                                {showAllGaps ? "Show Less" : `Show ${results.gaps.length - 15} More`}
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -644,7 +692,7 @@ export default function CurriculumGapAnalyzer() {
 
 // METRIC CARD COMPONENT
 const StatCard = ({ label, value, color = "text-slate-700 dark:text-slate-200", subtext, icon }) => (
-  <div className="bg-white/80 dark:bg-slate-800/50 backdrop-blur-md p-3 md:p-5 rounded-2xl shadow-sm border border-white/60 dark:border-slate-700/50 flex flex-col justify-between h-full transition-all duration-300 hover:shadow-lg hover:scale-[1.02] hover:border-indigo-100 dark:hover:border-indigo-900/50 group">
+  <div className="bg-white/80 dark:bg-slate-800/50 backdrop-blur-md p-3 md:p-5 rounded-2xl shadow-sm border border-white/60 dark:border-slate-700/50 flex flex-col justify-between h-full transition-all duration-500 hover:shadow-xl hover:-translate-y-1 hover:border-indigo-200/60 dark:hover:border-indigo-800/40 hover:shadow-indigo-100/30 dark:hover:shadow-indigo-900/20 group">
     {/* Header */}
     <div className="flex items-center gap-2 mb-2">
         <div className="p-1.5 md:p-2 rounded-lg bg-slate-50 dark:bg-slate-900/50 transition-colors group-hover:bg-indigo-50 dark:group-hover:bg-indigo-900/20">
