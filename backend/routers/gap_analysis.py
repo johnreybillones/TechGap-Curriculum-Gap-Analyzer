@@ -38,7 +38,12 @@ BLACKLIST_JOBS = {
     "business analyst",
     "data warehousing",
     "technology integration",
-    "technical operations"
+    "technical operations",
+    "data architect",
+    "machine learning",
+    "deep learning",
+    "business intelligence analyst",
+    "data quality manager"
 }
 
 # -----------------------
