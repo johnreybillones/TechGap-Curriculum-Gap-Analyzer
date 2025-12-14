@@ -63,6 +63,7 @@ def preload_caches():
                 try:
                     result = get_options(db)
                     print(f"✅ Cache warmed: {len(result.get('curricula', []))} curricula, {len(result.get('jobs', []))} jobs")
+                    print()
                 except Exception as e:
                     print(f"⚠️ Cache warming failed (non-critical): {e}")
                 finally:

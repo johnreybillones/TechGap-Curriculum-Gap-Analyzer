@@ -30,6 +30,7 @@ router = APIRouter(tags=["Gap Analysis"])
 
 # In-memory caches
 _OPTIONS_CACHE = None
+_RECOMMENDATION_CACHE = {}  # Cache AI recommendations to reduce API calls
 
 # --- CONFIGURATION: JOBS TO HIDE ---
 BLACKLIST_JOBS = {
@@ -290,34 +291,34 @@ def debug_full_matrix(db: Session = Depends(get_db)):
         if key not in seen:
             unique_curricula.append(c)
             seen.add(key)
-    
-    # Filter unique jobs
-    unique_jobs = []
-    seen_jobs = set()
-    for j in jobs:
-        label = (j.query or j.title or "").lower().strip()
-        if label in BLACKLIST_JOBS:
-            continue
-        key = normalize_string(label)
-        if key not in seen_jobs:
-            unique_jobs.append(j)
-            seen_jobs.add(key)
 
-    print(f"Processing {len(unique_curricula)} unique curricula vs {len(unique_jobs)} unique jobs\n")
+    header = f"{'Job Title':<30} | {'Cov':<6} | {'Rel':<6} | {'Mat':<3} | {'Gap':<3}"
     
     for i, c in enumerate(unique_curricula):
-        c_name = c.track or c.course_title or f"Curriculum {c.curriculum_id}"
-        print(f"--- [{i+1}/{len(unique_curricula)}] ID: {c.curriculum_id} | {c_name} ---")
-        print(f"{'Job Title':<30} | {'Job Coverage':<12} | {'Curriculum Relevance':<20} | {'Matches':<7} | {'Gaps':<4}")
-        print("-" * 95)
+        if i >= 4: break 
         
-        for j in unique_jobs:
+        c_name = c.track or c.course_title or f"Curriculum {c.curriculum_id}"
+        total_width = 85
+        title_with_spaces = f" {c_name} "
+        padding = total_width - len(title_with_spaces)
+        left_dashes = padding // 2
+        right_dashes = padding - left_dashes
+        print(f"{'-' * left_dashes}{title_with_spaces}{'-' * right_dashes}")
+        print()
+        print(f"{'Job Title':<30} | {'Job Coverage':<12} | {'Curriculum Relevance':<20} | {'Matches':<7} | {'Gaps':<4}")
+        print("-" * 85)
+        
+        for j in jobs:
+            # Skip blacklisted jobs in debug too (optional, keeps log clean)
+            if (j.query or j.title or "").lower().strip() in BLACKLIST_JOBS:
+                continue
+
             j_name = j.query or j.title or f"Job {j.job_id}"
             try:
                 res = _calculate_gap_analysis(c.curriculum_id, j.job_id, db)
                 print(f"{j_name:<30} | {res['coverage']:<12} | {res['relevance']:<20} | {res['matchingSkills']:<7} | {res['missingSkills']:<4}")
             except Exception as e:
-                # Silently skip errors
+                # pass silently
                 pass
         print("\n")
 
@@ -366,11 +367,18 @@ class RecommendationRequest(BaseModel):
     curriculum_title: str
     missing_skills: List[str]
     coverage_score: float
+    relevance_score: float
 
 @router.post("/api/recommend")
 def generate_recommendation(request: RecommendationRequest):
     # Lazy import to avoid slowing down startup
     import google.generativeai as genai
+    
+    # Check cache first (reduces API calls significantly)
+    cache_key = f"{request.curriculum_title}_{request.job_title}_{request.coverage_score}_{request.relevance_score}"
+    if cache_key in _RECOMMENDATION_CACHE:
+        print(f"✓ Returning cached recommendation for {request.curriculum_title} vs {request.job_title}")
+        return {"recommendation": _RECOMMENDATION_CACHE[cache_key]}
     
     # Check if API key is present
     if not os.getenv("GOOGLE_API_KEY"):
@@ -386,70 +394,143 @@ def generate_recommendation(request: RecommendationRequest):
     prompt = f"""
     You are a curriculum advisor for CICS analyzing gap between "{request.curriculum_title}" and "{request.job_title}" roles.
 
-    Match Score: {request.coverage_score}%
+    Job Coverage Score: {request.coverage_score}%
+    Curriculum Relevance Score: {request.relevance_score}%
     Top Missing Skills: {skills_list}
 
-    Provide a scan-friendly response with this EXACT structure:
+    Provide a response in this EXACT format:
 
-    **Gap Summary:**
-    (3-4 sentences) - Analyze the alignment issue:
-    - What categories of skills are missing? (e.g., cloud platforms, statistical methods, tools)
-    - Why does this gap matter for graduates entering this role?
-    - What's the strategic impact on curriculum competitiveness?
-    
-    **Top 3 Actions:**
-    List ONLY 3 specific syllabus updates:
-    - Start each with a verb (Add, Integrate, Update, Include)
-    - Keep each to 1 line
-    - Focus on course content/labs only (NO internships, seminars, or general education)
-    - Be specific to technical topics
+**Job Coverage Analysis ({request.coverage_score}%):**
+[Write paragraph here - 3-4 sentences explaining: what this score means, which technical categories are covered vs missing, and root cause. Use transition words. Bold only the 2-3 most critical missing skills or gaps.]
 
-    Use bullet points. Bold key terms only. Do NOT add a title or heading before "Gap Summary".
+**Curriculum Relevance Analysis ({request.relevance_score}%):**
+[Write paragraph here - 3-4 sentences explaining: what this score reveals, which topics are relevant vs less applicable, and why. Use transition words. Bold only the 2-3 most important technical areas needing updates.]
+
+**Top 3 Actions:**
+- **[Action Verb]** [specific, actionable technical recommendation]
+- **[Action Verb]** [specific, actionable technical recommendation]  
+- **[Action Verb]** [specific, actionable technical recommendation]
+
+CRITICAL FORMATTING:
+- Use exactly **two asterisks** before and after bold text
+- In paragraphs: Bold only 2-3 most critical technical terms per section
+- In actions: Bold only the action verb at the start of each bullet
+- Do NOT add blank lines anywhere
     """
     # -------------------------------------------------------
     
-    # Recommended models by Gemini (in priority order)
-    FALLBACK_MODELS = [
-        'gemini-2.5-flash-lite',  # Fastest, separate quota pool
-        'gemini-2.5-flash',       # Balanced performance
-        'gemini-2.5-pro',         # Most capable
-    ]
-    
-    # Try each model in sequence until one succeeds
     last_error = None
-    for model_name in FALLBACK_MODELS:
-        try:
-            if hasattr(genai, "GenerativeModel"):
-                model = genai.GenerativeModel(model_name)
-                response = model.generate_content(prompt)
-                text = getattr(response, "text", None) or str(response)
-                return {"recommendation": text}
-            else:
-                # Legacy fallback (for older SDK versions)
-                response = genai.generate_text(
-                    model="models/text-bison-001",
-                    prompt=prompt
-                )
-                text = getattr(response, "result", None)
-                if not text and isinstance(response, dict):
-                    text = response.get("generated_text") or response.get("result")
-                if not text:
-                    text = str(response)
-                return {"recommendation": text}
-                
-        except Exception as e:
-            error_msg = str(e).lower()
-            last_error = e
-            
-            # If it's a quota/rate limit error, try next model
-            if any(keyword in error_msg for keyword in ['quota', 'limit', 'rate', 'resource_exhausted']):
-                print(f"⚠️ {model_name} quota exceeded, trying next model...")
-                continue
-            else:
-                # If it's a different error, fail immediately
-                print(f"❌ Gemini API Error ({model_name}): {e}")
-                break
     
-    # All models failed
-    print(f"❌ All models failed. Last error: {last_error}")
-    return {"recommendation": "Unable to generate AI recommendations at this time. Please try again later."}
+    # STRATEGY: Groq first (fastest), then Gemini as backup
+    
+    # ═══════════════════════════════════════════════════════════════
+    # TIER 1: GROQ API (Primary - Fast & Reliable)
+    # ═══════════════════════════════════════════════════════════════
+    
+    # 1. Groq (Llama 3.3 70B - Very fast, 30 req/min = 43,200/day, truly free)
+    groq_key = os.getenv("GROQ_API_KEY")
+    if groq_key:
+        try:
+            print("🚀 Trying Groq API (Llama 3.3 70B - fastest inference)...")
+            import requests
+            
+            response = requests.post(
+                "https://api.groq.com/openai/v1/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {groq_key}",
+                    "Content-Type": "application/json"
+                },
+                json={
+                    "model": "llama-3.3-70b-versatile",
+                    "messages": [{"role": "user", "content": prompt}],
+                    "temperature": 0.7,
+                    "max_tokens": 600
+                },
+                timeout=10
+            )
+            
+            if response.ok:
+                text = response.json()["choices"][0]["message"]["content"]
+                _RECOMMENDATION_CACHE[cache_key] = text
+                print("✅ Groq API succeeded!")
+                return {"recommendation": text}
+        except Exception as e:
+            last_error = e
+            print(f"⚠️ Groq API failed: {str(e)[:100]}...")
+    
+    # ═══════════════════════════════════════════════════════════════
+    # TIER 2: GEMINI (Backup - has quota limits but good quality)
+    # ═══════════════════════════════════════════════════════════════
+    
+    if os.getenv("GOOGLE_API_KEY"):
+        import google.generativeai as genai
+        genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+        
+        GEMINI_MODELS = [
+            'gemini-2.5-flash-lite',         # Fastest, separate quota pool
+            'gemini-2.5-flash',              # Balanced performance
+            'gemini-2.5-pro',                # Most capable
+            'gemini-2.0-flash-lite',         # Older lite version
+            'gemini-2.0-flash',              # Older flash version
+            'gemini-flash-lite-latest',      # Latest lite alias
+            'gemini-flash-latest',           # Latest flash alias
+            'gemini-pro-latest',             # Latest pro alias
+        ]
+        
+        for model_name in GEMINI_MODELS:
+            try:
+                if hasattr(genai, "GenerativeModel"):
+                    model = genai.GenerativeModel(model_name)
+                    response = model.generate_content(prompt)
+                    
+                    # Check if response was blocked by safety filters
+                    if hasattr(response, 'prompt_feedback') and response.prompt_feedback:
+                        if hasattr(response.prompt_feedback, 'block_reason'):
+                            print(f"⚠️ {model_name} blocked content (safety filters), trying next model...")
+                            continue
+                    
+                    # Try to extract text from response
+                    text = None
+                    if hasattr(response, 'text'):
+                        try:
+                            text = response.text
+                        except:
+                            pass
+                    
+                    if not text and hasattr(response, 'candidates') and response.candidates:
+                        try:
+                            text = response.candidates[0].content.parts[0].text
+                        except:
+                            pass
+                    
+                    if text:
+                        _RECOMMENDATION_CACHE[cache_key] = text
+                        print(f"✅ {model_name} succeeded!")
+                        return {"recommendation": text}
+                    else:
+                        print(f"⚠️ {model_name} returned empty response, trying next model...")
+                        continue
+                        
+            except Exception as e:
+                error_msg = str(e).lower()
+                last_error = e
+                
+                # Check for quota/rate limit errors
+                if any(keyword in error_msg for keyword in ['quota', 'limit', 'rate', 'resource_exhausted', '429']):
+                    print(f"⚠️ {model_name} quota exceeded, trying next model...")
+                    continue
+                else:
+                    print(f"⚠️ {model_name} error: {str(e)[:100]}... Trying next model...")
+                    continue
+    
+    # All APIs failed
+    print(f"❌ All 10 models failed. Last error: {last_error}")
+    return {"recommendation": "Unable to generate AI recommendations at this time. All models are currently unavailable. Please try again later."}
+
+# Clear cache endpoint (useful for testing or when cache gets stale)
+@router.post("/api/recommend/clear-cache")
+def clear_recommendation_cache():
+    global _RECOMMENDATION_CACHE
+    cache_size = len(_RECOMMENDATION_CACHE)
+    _RECOMMENDATION_CACHE = {}
+    return {"message": f"Cleared {cache_size} cached recommendations"}
