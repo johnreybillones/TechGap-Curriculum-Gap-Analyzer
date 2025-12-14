@@ -285,28 +285,35 @@ def debug_full_matrix(db: Session = Depends(get_db)):
         if key not in seen:
             unique_curricula.append(c)
             seen.add(key)
+    
+    # Filter unique jobs
+    unique_jobs = []
+    seen_jobs = set()
+    for j in jobs:
+        label = (j.query or j.title or "").lower().strip()
+        if label in BLACKLIST_JOBS:
+            continue
+        key = normalize_string(label)
+        if key not in seen_jobs:
+            unique_jobs.append(j)
+            seen_jobs.add(key)
 
+    print(f"Processing {len(unique_curricula)} unique curricula vs {len(unique_jobs)} unique jobs\n")
     header = f"{'Job Title':<30} | {'Cov':<6} | {'Rel':<6} | {'Mat':<3} | {'Gap':<3}"
     
     for i, c in enumerate(unique_curricula):
-        if i >= 4: break 
-        
         c_name = c.track or c.course_title or f"Curriculum {c.curriculum_id}"
-        print(f"--- {c_name} ---")
+        print(f"--- [{i+1}/{len(unique_curricula)}] ID: {c.curriculum_id} | {c_name} ---")
         print(header)
         print("-" * 80)
         
-        for j in jobs:
-            # Skip blacklisted jobs in debug too (optional, keeps log clean)
-            if (j.query or j.title or "").lower().strip() in BLACKLIST_JOBS:
-                continue
-
+        for j in unique_jobs:
             j_name = j.query or j.title or f"Job {j.job_id}"
             try:
                 res = _calculate_gap_analysis(c.curriculum_id, j.job_id, db)
                 print(f"{j_name:<30} | {res['coverage']:<6} | {res['relevance']:<6} | {res['matchingSkills']:<3} | {res['missingSkills']:<3}")
             except Exception as e:
-                # pass silently
+                # Silently skip errors
                 pass
         print("\n")
 
