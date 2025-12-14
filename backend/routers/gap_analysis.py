@@ -41,7 +41,7 @@ BLACKLIST_JOBS = {
     "data architect",
     "machine learning",
     "deep learning",
-    "business intelligence analyst"
+    "business intelligence analyst",
     "data quality manager"
 }
 
@@ -273,7 +273,7 @@ def get_options(db: Session = Depends(get_db)):
 @router.get("/api/debug/full_matrix")
 def debug_full_matrix(db: Session = Depends(get_db)):
     print("\n" + "="*80)
-    print(f"{'FULL MATRIX GAP ANALYSIS (Strict DB)':^80}")
+    print(f"{'FULL MATRIX GAP ANALYSIS':^80}")
     print("="*80 + "\n")
     
     active_c_ids = [r[0] for r in db.query(distinct(SkillMatchDetail.curriculum_id)).all()]
@@ -304,19 +304,18 @@ def debug_full_matrix(db: Session = Depends(get_db)):
             seen_jobs.add(key)
 
     print(f"Processing {len(unique_curricula)} unique curricula vs {len(unique_jobs)} unique jobs\n")
-    header = f"{'Job Title':<30} | {'Cov':<6} | {'Rel':<6} | {'Mat':<3} | {'Gap':<3}"
     
     for i, c in enumerate(unique_curricula):
         c_name = c.track or c.course_title or f"Curriculum {c.curriculum_id}"
         print(f"--- [{i+1}/{len(unique_curricula)}] ID: {c.curriculum_id} | {c_name} ---")
-        print(header)
-        print("-" * 80)
+        print(f"{'Job Title':<30} | {'Job Coverage':<12} | {'Curriculum Relevance':<20} | {'Matches':<7} | {'Gaps':<4}")
+        print("-" * 95)
         
         for j in unique_jobs:
             j_name = j.query or j.title or f"Job {j.job_id}"
             try:
                 res = _calculate_gap_analysis(c.curriculum_id, j.job_id, db)
-                print(f"{j_name:<30} | {res['coverage']:<6} | {res['relevance']:<6} | {res['matchingSkills']:<3} | {res['missingSkills']:<3}")
+                print(f"{j_name:<30} | {res['coverage']:<12} | {res['relevance']:<20} | {res['matchingSkills']:<7} | {res['missingSkills']:<4}")
             except Exception as e:
                 # Silently skip errors
                 pass
