@@ -41,6 +41,7 @@ BLACKLIST_JOBS = {
     "data architect",
     "machine learning",
     "deep learning",
+    "business intelligence analyst"
     "data quality manager"
 }
 
