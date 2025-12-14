@@ -269,8 +269,213 @@ def get_options(db: Session = Depends(get_db)):
 
 
 # -----------------------
-# Debug Endpoint
+# Debug Endpoints
 # -----------------------
+@router.get("/api/debug/detailed_skills_csv")
+def debug_detailed_skills_csv(db: Session = Depends(get_db)):
+    """
+    Generate CSV file with detailed matched and gap skills for each curriculum-job combination
+    """
+    import csv
+    from pathlib import Path
+    from datetime import datetime
+    
+    print("\n" + "="*100)
+    print(f"{'GENERATING DETAILED SKILLS CSV':^100}")
+    print("="*100 + "\n")
+    
+    active_c_ids = [r[0] for r in db.query(distinct(SkillMatchDetail.curriculum_id)).all()]
+    active_j_ids = [r[0] for r in db.query(distinct(SkillMatchDetail.job_id)).all()]
+
+    curricula = db.query(Curriculum).filter(Curriculum.curriculum_id.in_(active_c_ids)).all()
+    jobs = db.query(JobRole).filter(JobRole.job_id.in_(active_j_ids)).all()
+    
+    # Filter unique curricula
+    unique_curricula = []
+    seen = set()
+    for c in curricula:
+        key = normalize_string(c.track or c.course_title)
+        if key not in seen:
+            unique_curricula.append(c)
+            seen.add(key)
+    
+    # Filter unique jobs
+    unique_jobs = []
+    seen_jobs = set()
+    for j in jobs:
+        label = (j.query or j.title or "").lower().strip()
+        if label in BLACKLIST_JOBS:
+            continue
+        key = normalize_string(label)
+        if key not in seen_jobs:
+            unique_jobs.append(j)
+            seen_jobs.add(key)
+
+    # Prepare CSV file
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    output_path = Path(__file__).resolve().parent.parent / "csvs" / f"detailed_skills_analysis_{timestamp}.csv"
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    
+    rows_written = 0
+    
+    with output_path.open('w', newline='', encoding='utf-8') as csvfile:
+        fieldnames = [
+            'Curriculum_Name', 
+            'Job_Title', 
+            'Coverage', 'Relevance', 
+            'Matches_Count', 'Gaps_Count',
+            'Matched_Skills', 'Gap_Skills'
+        ]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        
+        for c in unique_curricula:
+            c_name = c.track or c.course_title or f"Curriculum {c.curriculum_id}"
+            
+            for j in unique_jobs:
+                j_name = j.query or j.title or f"Job {j.job_id}"
+                
+                try:
+                    res = _calculate_gap_analysis(c.curriculum_id, j.job_id, db)
+                    
+                    writer.writerow({
+                        'Curriculum_Name': c_name,
+                        'Job_Title': j_name,
+                        'Coverage': res['coverage'],
+                        'Relevance': res['relevance'],
+                        'Matches_Count': res['matchingSkills'],
+                        'Gaps_Count': res['missingSkills'],
+                        'Matched_Skills': ', '.join(res['exact']) if res['exact'] else '',
+                        'Gap_Skills': ', '.join(res['gaps']) if res['gaps'] else ''
+                    })
+                    rows_written += 1
+                    
+                except Exception as e:
+                    print(f"ERROR: {c_name} vs {j_name}: {str(e)}")
+    
+    print(f"\n✅ CSV generated successfully!")
+    print(f"   File: {output_path}")
+    print(f"   Rows: {rows_written}")
+    print(f"   Size: {output_path.stat().st_size:,} bytes")
+    print("="*100 + "\n")
+    
+    return {
+        "message": "CSV file generated successfully",
+        "file_path": str(output_path),
+        "rows_written": rows_written,
+        "curricula_count": len(unique_curricula),
+        "jobs_count": len(unique_jobs)
+    }
+
+
+@router.get("/api/debug/detailed_skills")
+def debug_detailed_skills(db: Session = Depends(get_db)):
+    """
+    Show detailed matched and gap skills for each curriculum-job combination
+    """
+    print("\n" + "="*100)
+    print(f"{'DETAILED SKILLS ANALYSIS':^100}")
+    print("="*100 + "\n")
+    
+    active_c_ids = [r[0] for r in db.query(distinct(SkillMatchDetail.curriculum_id)).all()]
+    active_j_ids = [r[0] for r in db.query(distinct(SkillMatchDetail.job_id)).all()]
+
+    curricula = db.query(Curriculum).filter(Curriculum.curriculum_id.in_(active_c_ids)).all()
+    jobs = db.query(JobRole).filter(JobRole.job_id.in_(active_j_ids)).all()
+    
+    # Filter unique curricula
+    unique_curricula = []
+    seen = set()
+    for c in curricula:
+        key = normalize_string(c.track or c.course_title)
+        if key not in seen:
+            unique_curricula.append(c)
+            seen.add(key)
+    
+    # Filter unique jobs
+    unique_jobs = []
+    seen_jobs = set()
+    for j in jobs:
+        label = (j.query or j.title or "").lower().strip()
+        if label in BLACKLIST_JOBS:
+            continue
+        key = normalize_string(label)
+        if key not in seen_jobs:
+            unique_jobs.append(j)
+            seen_jobs.add(key)
+
+    print(f"Processing {len(unique_curricula)} unique curricula vs {len(unique_jobs)} unique jobs\n")
+    
+    full_report = []
+    
+    for i, c in enumerate(unique_curricula):
+        c_name = c.track or c.course_title or f"Curriculum {c.curriculum_id}"
+        print(f"\n{'='*100}")
+        print(f"[{i+1}/{len(unique_curricula)}] CURRICULUM: {c_name} (ID: {c.curriculum_id})")
+        print(f"{'='*100}\n")
+        
+        curriculum_results = []
+        
+        for j in unique_jobs:
+            j_name = j.query or j.title or f"Job {j.job_id}"
+            
+            try:
+                res = _calculate_gap_analysis(c.curriculum_id, j.job_id, db)
+                
+                # Print summary
+                print(f"\n{'-'*100}")
+                print(f"JOB: {j_name}")
+                print(f"{'-'*100}")
+                print(f"Coverage: {res['coverage']} | Relevance: {res['relevance']} | "
+                      f"Matches: {res['matchingSkills']} | Gaps: {res['missingSkills']}")
+                
+                # Print matched skills
+                print(f"\n✓ MATCHED SKILLS ({len(res['exact'])}):")
+                if res['exact']:
+                    print(f"  {', '.join(res['exact'])}")
+                else:
+                    print("  (none)")
+                
+                # Print gap skills
+                print(f"\n✗ MISSING SKILLS ({len(res['gaps'])}):")
+                if res['gaps']:
+                    print(f"  {', '.join(res['gaps'])}")
+                else:
+                    print("  (none)")
+                
+                curriculum_results.append({
+                    "job_title": j_name,
+                    "job_id": j.job_id,
+                    "metrics": {
+                        "coverage": res['coverage'],
+                        "relevance": res['relevance'],
+                        "matchingSkills": res['matchingSkills'],
+                        "missingSkills": res['missingSkills']
+                    },
+                    "matched_skills": res['exact'],
+                    "gap_skills": res['gaps']
+                })
+                
+            except Exception as e:
+                print(f"\n{'-'*100}")
+                print(f"JOB: {j_name}")
+                print(f"{'-'*100}")
+                print(f"ERROR: {str(e)}")
+                curriculum_results.append({"job_title": j_name, "error": str(e)})
+        
+        full_report.append({
+            "curriculum": c_name,
+            "curriculum_id": c.curriculum_id,
+            "results": curriculum_results
+        })
+    
+    print(f"\n{'='*100}")
+    print("ANALYSIS COMPLETE")
+    print(f"{'='*100}\n")
+    
+    return full_report
+
+
 @router.get("/api/debug/full_matrix")
 def debug_full_matrix(db: Session = Depends(get_db)):
     print("\n" + "="*80)
