@@ -1,20 +1,50 @@
-# App Description
+# TechGap Curriculum Gap Analyzer
 
-TechGap is a platform designed to help De La Salle University-Dasmariñas (DLSU-D) align their academic programs with the current needs of the job market.
+TechGap is a web application that compares academic curriculum skills with job-market skill requirements.
+It helps identify matched skills, missing skills, and overall curriculum-job alignment to support curriculum improvement decisions.
 
-## React + Vite
+## Results You Get
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+After selecting a curriculum and a job role, TechGap returns actionable outputs:
 
-Currently, two official plugins are available:
+- **Curriculum-job alignment score** to quickly see fit against industry demand.
+- **Skill coverage metrics** showing how much of the target role is currently covered.
+- **Matched skills list** to highlight strengths already present in the curriculum.
+- **Missing skill list** to reveal concrete competency gaps.
+- **Priority insights via charts** to make high-impact gaps easier to identify.
+- **Recommendation text** that translates analysis findings into improvement suggestions.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Core Features
 
-## React Compiler
+- Analyze curriculum vs job-role requirements in a single workflow.
+- Surface measurable outputs (coverage, relevance, and alignment indicators).
+- Present both summary KPIs and detailed skill-level breakdowns.
+- Support evidence-based curriculum updates using gap-focused recommendations.
 
-The React Compiler is not enabled on this template. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Quick Start
 
-## Expanding the ESLint configuration
+### 1) Frontend (React + Vite)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm install
+npm run dev
+```
+
+### 2) Backend (FastAPI)
+
+```bash
+cd backend
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+Backend default URL: `http://127.0.0.1:8000`
+
+## How to Use
+
+1. Open the web app.
+2. Choose a curriculum.
+3. Choose a job role.
+4. Run analysis.
+5. Review alignment score, coverage metrics, matched skills, and missing skills.
+6. Use the generated recommendations as input for curriculum enhancement planning.
